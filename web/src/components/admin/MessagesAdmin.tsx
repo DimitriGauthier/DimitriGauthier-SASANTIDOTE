@@ -20,7 +20,7 @@ export default function MessagesAdmin({ locale, messages }: { locale: Locale; me
   }
 
   if (messages.length === 0) {
-    return <p className="text-sm text-neutral-500">{pick(locale, "Aucun message.", "No messages.")}</p>;
+    return <p className="text-sm text-muted-foreground">{pick(locale, "Aucun message.", "No messages.")}</p>;
   }
 
   return (
@@ -28,21 +28,21 @@ export default function MessagesAdmin({ locale, messages }: { locale: Locale; me
       {messages.map((m) => (
         <div
           key={m.id}
-          className={`rounded-lg border p-4 ${m.status === "new" ? "border-neutral-300 bg-neutral-50" : "border-neutral-200"}`}
+          className={`rounded-2xl border bg-card p-5 shadow-card ${m.status === "new" ? "border-primary/40" : "border-border/60"}`}
         >
           <div className="flex items-center justify-between gap-3">
-            <div className="font-medium text-neutral-800">
-              {m.name} <span className="text-xs font-normal text-neutral-500">· {m.email}</span>
+            <div className="font-medium text-foreground">
+              {m.name} <span className="text-xs font-normal text-muted-foreground">· {m.email}</span>
             </div>
-            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">{m.status}</span>
+            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{m.status}</span>
           </div>
-          {m.subject ? <div className="mt-1 text-sm font-medium text-neutral-600">{m.subject}</div> : null}
-          {m.phone ? <div className="text-xs text-neutral-500">{m.phone}</div> : null}
-          <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-700">{m.message}</p>
+          {m.subject ? <div className="mt-1 text-sm font-medium text-foreground">{m.subject}</div> : null}
+          {m.phone ? <div className="text-xs text-muted-foreground">{m.phone}</div> : null}
+          <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">{m.message}</p>
           <div className="mt-3 flex gap-2">
             <a
               href={`mailto:${m.email}`}
-              className="rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-white hover:bg-neutral-700"
+              className="rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-all hover:brightness-105"
             >
               {pick(locale, "Répondre", "Reply")}
             </a>
@@ -51,7 +51,7 @@ export default function MessagesAdmin({ locale, messages }: { locale: Locale; me
                 type="button"
                 disabled={busy === m.id}
                 onClick={() => setStatus(m.id, "read")}
-                className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs hover:bg-neutral-100 disabled:opacity-50"
+                className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted disabled:opacity-50"
               >
                 {pick(locale, "Marquer lu", "Mark read")}
               </button>
@@ -61,7 +61,7 @@ export default function MessagesAdmin({ locale, messages }: { locale: Locale; me
                 type="button"
                 disabled={busy === m.id}
                 onClick={() => setStatus(m.id, "archived")}
-                className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs hover:bg-neutral-100 disabled:opacity-50"
+                className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted disabled:opacity-50"
               >
                 {pick(locale, "Archiver", "Archive")}
               </button>

@@ -38,13 +38,13 @@ export default async function ArticlePage({
 
   return (
     <article className="mx-auto max-w-3xl">
-      <Link href={href(l, "blog")} className="text-sm text-neutral-500 hover:text-neutral-800">
+      <Link href={href(l, "blog")} className="story-link text-sm text-muted-foreground hover:text-primary">
         ← {pick(l, "Tous les articles", "All articles")}
       </Link>
-      <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+      <h1 className="mt-4 font-serif text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
         {pick(l, article.title, article.title_en)}
       </h1>
-      <p className="mt-2 text-sm text-neutral-500">
+      <p className="mt-2 text-sm text-muted-foreground">
         {article.published_at ? formatDayLabel(article.published_at, l) : ""}
         {article.reading_minutes ? ` · ${article.reading_minutes} min` : ""}
       </p>
@@ -53,11 +53,11 @@ export default async function ArticlePage({
         <img
           src={article.cover_image_url}
           alt=""
-          className="mt-6 w-full rounded-lg border border-neutral-200 object-cover"
+          className="mt-6 w-full rounded-2xl border border-border object-cover shadow-card"
         />
       ) : null}
       <div className="mt-8">
-        {body ? <Prose html={body} /> : <p className="text-neutral-600">{pick(l, "Contenu à venir.", "Content coming soon.")}</p>}
+        {body ? <Prose html={body} /> : <p className="text-muted-foreground">{pick(l, "Contenu à venir.", "Content coming soon.")}</p>}
       </div>
     </article>
   );

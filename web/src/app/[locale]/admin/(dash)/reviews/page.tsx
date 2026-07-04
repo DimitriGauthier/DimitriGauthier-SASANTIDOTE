@@ -23,8 +23,8 @@ export default async function AdminReviewsPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Avis", "Reviews")}</h1>
-      <p className="mb-4 text-sm text-neutral-500">
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Avis", "Reviews")}</h1>
+      <p className="mb-4 text-sm text-muted-foreground">
         {pick(
           l,
           "Les avis soumis n'apparaissent sur le site qu'une fois publiés.",

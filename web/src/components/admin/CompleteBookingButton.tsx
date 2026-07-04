@@ -40,11 +40,11 @@ export default function CompleteBookingButton({
         type="button"
         onClick={onClick}
         disabled={loading}
-        className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs hover:bg-neutral-100 disabled:opacity-50"
+        className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted disabled:opacity-50"
       >
         {loading ? "…" : pick(locale, "Marquer terminé + inviter à laisser un avis", "Mark completed + invite review")}
       </button>
-      {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
+      {error ? <p className="mt-1 text-xs text-destructive">{error}</p> : null}
     </div>
   );
 }

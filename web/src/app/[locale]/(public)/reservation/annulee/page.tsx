@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale, pick, getDict } from "@/lib/i18n";
 import { href } from "@/lib/site";
-import { PageTitle, CTAButton } from "@/components/ui";
+import { CTAButton } from "@/components/ui";
+import { RotateCcw } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -24,9 +25,14 @@ export default async function CancelledPage({
   const t = getDict(l);
 
   return (
-    <div className="mx-auto max-w-xl text-center">
-      <PageTitle>{t.booking.cancelledTitle}</PageTitle>
-      <p className="mt-2 text-neutral-600">{t.booking.cancelledBody}</p>
+    <div className="mx-auto max-w-xl py-10 text-center sm:py-16">
+      <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-primary shadow-soft">
+        <RotateCcw className="h-7 w-7" />
+      </div>
+      <h1 className="font-serif text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+        {t.booking.cancelledTitle}
+      </h1>
+      <p className="mt-3 leading-relaxed text-muted-foreground">{t.booking.cancelledBody}</p>
       <div className="mt-8">
         <CTAButton href={href(l, "reservation")}>{pick(l, "Reprendre une réservation", "Start a new booking")}</CTAButton>
       </div>

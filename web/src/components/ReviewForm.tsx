@@ -36,19 +36,20 @@ export default function ReviewForm({ locale, token }: { locale: Locale; token: s
 
   if (status === "ok") {
     return (
-      <div className="rounded-lg border border-green-200 bg-green-50 p-6 text-green-800">
+      <div className="rounded-2xl border border-primary/20 bg-secondary/40 p-6 text-foreground shadow-card">
         {t.review.thanks}
       </div>
     );
   }
 
-  const inputCls = "w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-500";
+  const inputCls =
+    "w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20";
 
   return (
     <form onSubmit={submit} className="space-y-5">
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-700">{t.review.rating}</label>
-        <div className="flex gap-1 text-2xl">
+        <label className="mb-1.5 block text-sm font-medium text-foreground">{t.review.rating}</label>
+        <div className="flex gap-1 text-3xl">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
@@ -57,7 +58,7 @@ export default function ReviewForm({ locale, token }: { locale: Locale; token: s
               onMouseEnter={() => setHover(n)}
               onMouseLeave={() => setHover(0)}
               aria-label={`${n}/5`}
-              className={(hover || rating) >= n ? "text-amber-500" : "text-neutral-300"}
+              className={`transition-transform hover:scale-110 ${(hover || rating) >= n ? "text-gold" : "text-border"}`}
             >
               ★
             </button>
@@ -66,7 +67,7 @@ export default function ReviewForm({ locale, token }: { locale: Locale; token: s
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="displayName">
+        <label className="mb-1.5 block text-sm font-medium text-foreground" htmlFor="displayName">
           {pick(locale, "Nom affiché (facultatif)", "Display name (optional)")}
         </label>
         <input
@@ -79,14 +80,14 @@ export default function ReviewForm({ locale, token }: { locale: Locale; token: s
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-neutral-700" htmlFor="comment">
+        <label className="mb-1.5 block text-sm font-medium text-foreground" htmlFor="comment">
           {t.review.comment}
         </label>
         <textarea id="comment" rows={5} className={inputCls} value={comment} onChange={(e) => setComment(e.target.value)} />
       </div>
 
       {status === "error" ? (
-        <p className="text-sm text-red-600">
+        <p className="text-sm text-destructive">
           {rating < 1
             ? pick(locale, "Merci de choisir une note.", "Please choose a rating.")
             : pick(locale, "Une erreur est survenue. Réessaie.", "Something went wrong. Please try again.")}
@@ -96,7 +97,7 @@ export default function ReviewForm({ locale, token }: { locale: Locale; token: s
       <button
         type="submit"
         disabled={status === "sending"}
-        className="inline-flex items-center rounded-md bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-60"
       >
         {status === "sending" ? t.common.loading : t.review.submit}
       </button>

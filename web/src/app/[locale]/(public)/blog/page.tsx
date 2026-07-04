@@ -35,7 +35,10 @@ export default async function BlogPage({
 
   return (
     <div>
-      <PageTitle sub={pick(l, "Réflexions & ressources", "Reflections & resources")}>
+      <PageTitle
+        eyebrow={pick(l, "Le journal", "The journal")}
+        sub={pick(l, "Réflexions & ressources", "Reflections & resources")}
+      >
         {pick(l, "Blog", "Blog")}
       </PageTitle>
 
@@ -44,17 +47,17 @@ export default async function BlogPage({
           {articles.map((a) => {
             const slug = pick(l, a.slug, a.slug_en) ?? a.slug;
             return (
-              <Card key={a.id}>
+              <Card key={a.id} className="group transition-shadow hover:shadow-soft">
                 <Link href={href(l, `blog/${slug}`)} className="block">
-                  <h2 className="text-lg font-semibold hover:underline">{pick(l, a.title, a.title_en)}</h2>
-                  <p className="mt-1 text-xs text-neutral-500">
+                  <h2 className="font-serif text-xl font-medium text-foreground transition-colors group-hover:text-primary">{pick(l, a.title, a.title_en)}</h2>
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {a.published_at ? formatDayLabel(a.published_at, l) : ""}
                     {a.reading_minutes ? ` · ${a.reading_minutes} min` : ""}
                   </p>
                   {pick(l, a.excerpt, a.excerpt_en) ? (
-                    <p className="mt-2 text-sm text-neutral-600">{pick(l, a.excerpt, a.excerpt_en)}</p>
+                    <p className="mt-2 text-sm text-muted-foreground">{pick(l, a.excerpt, a.excerpt_en)}</p>
                   ) : null}
-                  <span className="mt-3 inline-block text-sm font-medium underline">
+                  <span className="story-link mt-3 inline-block text-sm font-medium text-primary">
                     {pick(l, "Lire la suite", "Read more")} →
                   </span>
                 </Link>

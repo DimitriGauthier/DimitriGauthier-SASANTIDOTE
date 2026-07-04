@@ -140,7 +140,8 @@ export default function RecordsManager({ locale, table, fields, rows, titleKey, 
     router.refresh();
   }
 
-  const inputCls = "w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-500";
+  const inputCls =
+    "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20";
 
   return (
     <div>
@@ -148,19 +149,19 @@ export default function RecordsManager({ locale, table, fields, rows, titleKey, 
         <button
           type="button"
           onClick={startCreate}
-          className="mb-4 rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700"
+          className="mb-4 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:brightness-105"
         >
           + {pick(locale, "Ajouter", "Add")}
         </button>
       ) : null}
 
       {editing ? (
-        <div className="mb-6 rounded-lg border border-neutral-300 bg-neutral-50 p-5">
+        <div className="mb-6 rounded-2xl border border-border/60 bg-card p-6 shadow-card">
           <div className="grid gap-4 sm:grid-cols-2">
             {fields.map((field) => (
               <div key={field.key} className={field.colSpan === 2 ? "sm:col-span-2" : ""}>
-                <label className="mb-1 block text-sm font-medium text-neutral-700">{field.label}</label>
-                {field.help ? <p className="mb-1 text-xs text-neutral-400">{field.help}</p> : null}
+                <label className="mb-1 block text-sm font-medium text-foreground">{field.label}</label>
+                {field.help ? <p className="mb-1 text-xs text-muted-foreground">{field.help}</p> : null}
 
                 {field.type === "textarea" || field.type === "json" ? (
                   <textarea
@@ -204,7 +205,7 @@ export default function RecordsManager({ locale, table, fields, rows, titleKey, 
                               [field.key]: on ? arr.filter((x) => x !== o.value) : [...arr, o.value],
                             })
                           }
-                          className={`rounded-md border px-3 py-1.5 text-sm ${on ? "border-neutral-900 bg-white" : "border-neutral-300"}`}
+                          className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${on ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-muted"}`}
                         >
                           {o.label}
                         </button>
@@ -225,21 +226,21 @@ export default function RecordsManager({ locale, table, fields, rows, titleKey, 
             ))}
           </div>
 
-          {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
+          {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
           <div className="mt-4 flex gap-2">
             <button
               type="button"
               onClick={save}
               disabled={busy}
-              className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-60"
+              className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-60"
             >
               {busy ? pick(locale, "Enregistrement…", "Saving…") : pick(locale, "Enregistrer", "Save")}
             </button>
             <button
               type="button"
               onClick={cancel}
-              className="rounded-md border border-neutral-300 px-4 py-2 text-sm hover:bg-neutral-100"
+              className="rounded-full border border-border px-4 py-2 text-sm text-foreground transition-colors hover:bg-muted"
             >
               {pick(locale, "Annuler", "Cancel")}
             </button>
@@ -247,30 +248,30 @@ export default function RecordsManager({ locale, table, fields, rows, titleKey, 
         </div>
       ) : null}
 
-      <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-200">
+      <div className="divide-y divide-border/60 overflow-hidden rounded-2xl border border-border/60 bg-card">
         {rows.length === 0 ? (
-          <p className="px-4 py-6 text-sm text-neutral-500">{pick(locale, "Aucun élément.", "No items.")}</p>
+          <p className="px-4 py-6 text-sm text-muted-foreground">{pick(locale, "Aucun élément.", "No items.")}</p>
         ) : (
           rows.map((row) => (
-            <div key={String((row as { id?: string }).id)} className="flex items-center justify-between gap-4 px-4 py-3">
+            <div key={String((row as { id?: string }).id)} className="flex items-center justify-between gap-4 px-4 py-3 transition-colors hover:bg-muted/40">
               <div className="min-w-0">
-                <div className="truncate text-sm font-medium text-neutral-800">{String(row[titleKey] ?? "—")}</div>
+                <div className="truncate text-sm font-medium text-foreground">{String(row[titleKey] ?? "—")}</div>
                 {subtitleKey && row[subtitleKey] ? (
-                  <div className="truncate text-xs text-neutral-500">{String(row[subtitleKey])}</div>
+                  <div className="truncate text-xs text-muted-foreground">{String(row[subtitleKey])}</div>
                 ) : null}
               </div>
               <div className="flex shrink-0 gap-2">
                 <button
                   type="button"
                   onClick={() => startEdit(row)}
-                  className="rounded-md border border-neutral-300 px-3 py-1.5 text-xs hover:bg-neutral-100"
+                  className="rounded-full border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted"
                 >
                   {pick(locale, "Modifier", "Edit")}
                 </button>
                 <button
                   type="button"
                   onClick={() => remove(row)}
-                  className="rounded-md border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
+                  className="rounded-full border border-destructive/30 px-3 py-1.5 text-xs text-destructive transition-colors hover:bg-destructive/10"
                 >
                   {pick(locale, "Supprimer", "Delete")}
                 </button>

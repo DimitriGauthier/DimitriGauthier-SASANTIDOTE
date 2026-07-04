@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, CTAButton } from "@/components/ui";
+import { PageTitle, Section, Prose, CTASection } from "@/components/ui";
+import { Check } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,10 @@ export default async function AboutPage({
 
   return (
     <article>
-      <PageTitle sub={pick(l, "Sexothérapeute — La Réunion & métropole", "Sex therapist — Réunion Island & mainland France")}>
+      <PageTitle
+        eyebrow={pick(l, "Qui je suis", "Who I am")}
+        sub={pick(l, "Sexothérapeute — La Réunion & métropole", "Sex therapist — Réunion Island & mainland France")}
+      >
         {pick(l, "À propos", "About")}
       </PageTitle>
 
@@ -60,31 +64,41 @@ export default async function AboutPage({
           </Section>
 
           <Section title={pick(l, "Mon parcours & mes certifications", "My background & certifications")}>
-            <ul className="list-disc space-y-1 pl-6">
-              <li>{pick(l, "Certification de sexothérapeute", "Sex therapy certification")}</li>
-              <li>{pick(l, "Praticien certifié La TRAME®", "Certified TRAME® practitioner")}</li>
-              <li>{pick(l, "Numérologue certifié", "Certified numerologist")}</li>
-              <li>{pick(l, "Brevet d'État de coach sportif", "State diploma in sports coaching")}</li>
+            <ul className="space-y-3">
+              {[
+                pick(l, "Certification de sexothérapeute", "Sex therapy certification"),
+                pick(l, "Praticien certifié La TRAME®", "Certified TRAME® practitioner"),
+                pick(l, "Numérologue certifié", "Certified numerologist"),
+                pick(l, "Brevet d'État de coach sportif", "State diploma in sports coaching"),
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                    <Check className="h-3 w-3" />
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </Section>
 
           <Section title={pick(l, "Ma vision", "My vision")}>
-            <p>
+            <blockquote className="border-l-2 border-primary/40 pl-5 font-serif text-xl italic leading-relaxed text-foreground">
               {pick(
                 l,
                 "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi. L'objectif ? T'aider à t'accomplir pleinement — dans ta vie comme dans ton intimité.",
                 "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you. The goal? Helping you fully flourish — in your life as in your intimacy.",
               )}
-            </p>
+            </blockquote>
           </Section>
         </>
       )}
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Faisons connaissance", "Let's get to know each other")}
+        sub={pick(l, "Réserve une première séance, en toute confidentialité.", "Book a first session, in full confidentiality.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </article>
   );
 }

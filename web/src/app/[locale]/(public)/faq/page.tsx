@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
-import { PageTitle, CTAButton } from "@/components/ui";
+import { PageTitle, CTASection } from "@/components/ui";
 
 export async function generateMetadata({
   params,
@@ -71,27 +71,33 @@ export default async function FaqPage({
 
   return (
     <div>
-      <PageTitle sub={pick(l, "Tout ce que tu veux savoir avant de commencer", "Everything you want to know before starting")}>
+      <PageTitle
+        eyebrow={pick(l, "FAQ", "FAQ")}
+        sub={pick(l, "Tout ce que tu veux savoir avant de commencer", "Everything you want to know before starting")}
+      >
         {pick(l, "Questions fréquentes", "Frequently asked questions")}
       </PageTitle>
 
-      <div className="divide-y divide-neutral-200 border-y border-neutral-200">
+      <div className="space-y-3">
         {FAQ.map((item, i) => (
-          <details key={i} className="group py-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-medium text-neutral-800">
+          <details key={i} className="group rounded-2xl border border-border/60 bg-card px-5 py-4 shadow-card transition-colors open:border-primary/30">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-lg text-foreground">
               {pick(l, item.q.fr, item.q.en)}
-              <span className="text-neutral-400 transition group-open:rotate-45">+</span>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary text-primary transition-transform duration-300 group-open:rotate-45">
+                +
+              </span>
             </summary>
-            <p className="mt-3 text-neutral-600">{pick(l, item.a.fr, item.a.en)}</p>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{pick(l, item.a.fr, item.a.en)}</p>
           </details>
         ))}
       </div>
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Une autre question ?", "Another question?")}
+        sub={pick(l, "Écris-moi ou réserve directement ta première séance.", "Write to me or book your first session directly.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </div>
   );
 }

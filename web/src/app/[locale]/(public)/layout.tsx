@@ -19,7 +19,7 @@ export default async function PublicLayout({
   return (
     <>
       <SiteHeader locale={l} settings={settings} />
-      <main className="mx-auto max-w-6xl px-4 py-10">{children}</main>
+      <main className="mx-auto max-w-6xl px-4 py-16">{children}</main>
       <SiteFooter locale={l} settings={settings} />
       <WhatsAppButton settings={settings} />
     </>

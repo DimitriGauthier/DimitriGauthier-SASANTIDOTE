@@ -36,8 +36,8 @@ export default async function AdminBlogPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Blog", "Blog")}</h1>
-      <p className="mb-4 text-sm text-neutral-500">
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Blog", "Blog")}</h1>
+      <p className="mb-4 text-sm text-muted-foreground">
         {pick(
           l,
           "Un article n'apparaît en anglais que si son slug et son contenu EN sont renseignés.",

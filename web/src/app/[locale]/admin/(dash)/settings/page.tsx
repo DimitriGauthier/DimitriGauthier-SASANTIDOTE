@@ -20,17 +20,17 @@ export default async function AdminSettingsPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Paramètres", "Settings")}</h1>
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Paramètres", "Settings")}</h1>
 
       <section className="mb-10">
-        <h2 className="mb-3 text-lg font-semibold">{pick(l, "Informations du site", "Site information")}</h2>
+        <h2 className="mb-3 font-serif text-xl font-medium text-foreground">{pick(l, "Informations du site", "Site information")}</h2>
         <SettingsForm locale={l} initial={data ?? null} />
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-semibold">{pick(l, "Google Agenda", "Google Calendar")}</h2>
-        <div className="max-w-2xl rounded-lg border border-neutral-200 p-5">
-          <p className="text-sm text-neutral-600">
+        <h2 className="mb-3 font-serif text-xl font-medium text-foreground">{pick(l, "Google Agenda", "Google Calendar")}</h2>
+        <div className="max-w-2xl rounded-2xl border border-border/60 bg-card p-6 shadow-card">
+          <p className="text-sm text-muted-foreground">
             {pick(
               l,
               "La connexion à Google Agenda permet de lire tes disponibilités et de créer les événements de rendez-vous. Elle s'effectue via une autorisation Google (OAuth).",
@@ -41,17 +41,17 @@ export default async function AdminSettingsPage({
             {googleStart ? (
               <a
                 href={googleStart}
-                className="inline-flex items-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700"
+                className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:brightness-105"
               >
                 {pick(l, "Connecter Google Agenda", "Connect Google Calendar")}
               </a>
             ) : (
-              <span className="inline-flex items-center rounded-md border border-neutral-300 px-4 py-2 text-sm text-neutral-400">
+              <span className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm text-muted-foreground">
                 {pick(l, "Backend non configuré", "Backend not configured")}
               </span>
             )}
           </div>
-          <p className="mt-3 text-xs text-neutral-400">
+          <p className="mt-3 text-xs text-muted-foreground">
             {pick(
               l,
               "Note technique : le jeton de rafraîchissement est stocké côté serveur (Supabase Vault) et n'est jamais exposé au navigateur.",

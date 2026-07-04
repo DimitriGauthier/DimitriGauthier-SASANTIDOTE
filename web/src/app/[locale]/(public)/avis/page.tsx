@@ -4,7 +4,7 @@ import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getPublishedReviews } from "@/lib/data";
 import { formatDayLabel } from "@/lib/format";
-import { PageTitle, Card, EmptyState, CTAButton } from "@/components/ui";
+import { PageTitle, Card, EmptyState, CTASection } from "@/components/ui";
 
 export async function generateMetadata({
   params,
@@ -25,9 +25,9 @@ export async function generateMetadata({
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <div className="text-amber-500" aria-label={`${rating}/5`}>
+    <div className="text-lg text-gold" aria-label={`${rating}/5`}>
       {"★".repeat(rating)}
-      <span className="text-neutral-300">{"★".repeat(5 - rating)}</span>
+      <span className="text-border">{"★".repeat(5 - rating)}</span>
     </div>
   );
 }
@@ -48,25 +48,28 @@ export default async function ReviewsPage({
 
   return (
     <div>
-      <PageTitle sub={pick(l, "La confiance de celles et ceux que j'accompagne", "The trust of those I support")}>
+      <PageTitle
+        eyebrow={pick(l, "Témoignages", "Testimonials")}
+        sub={pick(l, "La confiance de celles et ceux que j'accompagne", "The trust of those I support")}
+      >
         {pick(l, "Avis", "Reviews")}
       </PageTitle>
 
       {reviews.length > 0 ? (
         <>
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-8 flex items-center gap-3">
             <Stars rating={Math.round(avg)} />
-            <span className="text-sm text-neutral-600">
-              {avg.toFixed(1)}/5 · {reviews.length}{" "}
-              {pick(l, reviews.length > 1 ? "avis" : "avis", reviews.length > 1 ? "reviews" : "review")}
+            <span className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">{avg.toFixed(1)}/5</span> · {reviews.length}{" "}
+              {pick(l, "avis", reviews.length > 1 ? "reviews" : "review")}
             </span>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
             {reviews.map((r) => (
               <Card key={r.id}>
                 {r.rating ? <Stars rating={r.rating} /> : null}
-                {r.comment ? <p className="mt-2 text-neutral-700">« {r.comment} »</p> : null}
-                <p className="mt-3 text-xs text-neutral-500">
+                {r.comment ? <p className="mt-3 font-serif text-lg italic leading-relaxed text-foreground">« {r.comment} »</p> : null}
+                <p className="mt-4 text-xs text-muted-foreground">
                   {r.client_display_name ?? pick(l, "Anonyme", "Anonymous")}
                   {r.published_at ? ` · ${formatDayLabel(r.published_at, l)}` : ""}
                 </p>
@@ -84,11 +87,12 @@ export default async function ReviewsPage({
         </EmptyState>
       )}
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Envie de commencer ton chemin ?", "Ready to begin your journey?")}
+        sub={pick(l, "Réserve ta première séance en toute confidentialité.", "Book your first session in full confidentiality.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </div>
   );
 }

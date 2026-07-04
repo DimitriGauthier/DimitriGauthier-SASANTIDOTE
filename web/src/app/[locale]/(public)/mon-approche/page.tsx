@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, Card, CTAButton } from "@/components/ui";
+import { PageTitle, Section, Prose, IconCard, CTASection } from "@/components/ui";
+import { Brain, Waves, Heart } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,10 @@ export default async function ApproachPage({
 
   return (
     <article>
-      <PageTitle sub={pick(l, "Une approche globale : tête, corps et cœur", "A holistic approach: mind, body and heart")}>
+      <PageTitle
+        eyebrow={pick(l, "Ma méthode", "My method")}
+        sub={pick(l, "Une approche globale : tête, corps et cœur", "A holistic approach: mind, body and heart")}
+      >
         {pick(l, "Mon approche", "My approach")}
       </PageTitle>
 
@@ -60,39 +64,30 @@ export default async function ApproachPage({
           </Section>
 
           <Section title={pick(l, "Trois outils, une synergie", "Three tools, one synergy")}>
-            <div className="grid gap-5 sm:grid-cols-3">
-              <Card>
-                <h3 className="mb-1 font-semibold">{pick(l, "La tête", "The mind")}</h3>
-                <p className="text-sm text-neutral-600">
-                  {pick(
-                    l,
-                    "La sexothérapie pour comprendre, mettre des mots et déposer ce qui pèse.",
-                    "Sex therapy to understand, put words to things and set down what weighs on you.",
-                  )}
-                </p>
-              </Card>
-              <Card>
-                <h3 className="mb-1 font-semibold">{pick(l, "Le corps", "The body")}</h3>
-                <p className="text-sm text-neutral-600">
-                  {pick(
-                    l,
-                    "La TRAME® pour libérer les tensions et remettre l'énergie en mouvement.",
-                    "TRAME® to release tension and set the energy back in motion.",
-                  )}
-                </p>
-              </Card>
-              <Card>
-                <h3 className="mb-1 font-semibold">{pick(l, "Le cœur", "The heart")}</h3>
-                <p className="text-sm text-neutral-600">
-                  {pick(
-                    l,
-                    "La numérologie pour éclairer ton chemin et ce qui te ressemble vraiment.",
-                    "Numerology to light up your path and what truly resembles you.",
-                  )}
-                </p>
-              </Card>
+            <div className="mb-5 grid gap-5 sm:grid-cols-3">
+              <IconCard icon={<Brain className="h-5 w-5" />} title={pick(l, "La tête", "The mind")}>
+                {pick(
+                  l,
+                  "La sexothérapie pour comprendre, mettre des mots et déposer ce qui pèse.",
+                  "Sex therapy to understand, put words to things and set down what weighs on you.",
+                )}
+              </IconCard>
+              <IconCard icon={<Waves className="h-5 w-5" />} title={pick(l, "Le corps", "The body")}>
+                {pick(
+                  l,
+                  "La TRAME® pour libérer les tensions et remettre l'énergie en mouvement.",
+                  "TRAME® to release tension and set the energy back in motion.",
+                )}
+              </IconCard>
+              <IconCard icon={<Heart className="h-5 w-5" />} title={pick(l, "Le cœur", "The heart")}>
+                {pick(
+                  l,
+                  "La numérologie pour éclairer ton chemin et ce qui te ressemble vraiment.",
+                  "Numerology to light up your path and what truly resembles you.",
+                )}
+              </IconCard>
             </div>
-            <p className="text-neutral-600">
+            <p>
               {pick(
                 l,
                 "Le principe : aligner ces trois dimensions pour que ta vie soit plus juste, plus fluide, plus toi.",
@@ -113,11 +108,12 @@ export default async function ApproachPage({
         </>
       )}
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Prêt·e à te réaligner ?", "Ready to realign?")}
+        sub={pick(l, "Réserve une première séance et avançons ensemble, à ton rythme.", "Book a first session and let's move forward together, at your own pace.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </article>
   );
 }

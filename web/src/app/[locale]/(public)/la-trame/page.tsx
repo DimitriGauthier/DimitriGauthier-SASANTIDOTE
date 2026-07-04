@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, CTAButton } from "@/components/ui";
+import { PageTitle, Section, Prose, CTASection } from "@/components/ui";
+import { Check } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,10 @@ export default async function TramePage({
 
   return (
     <article>
-      <PageTitle sub={pick(l, "Libérer le corps, remettre l'énergie en mouvement", "Freeing the body, setting energy back in motion")}>
+      <PageTitle
+        eyebrow={pick(l, "Travail énergétique", "Energy work")}
+        sub={pick(l, "Libérer le corps, remettre l'énergie en mouvement", "Freeing the body, setting energy back in motion")}
+      >
         {pick(l, "La TRAME®", "The TRAME®")}
       </PageTitle>
 
@@ -60,20 +64,30 @@ export default async function TramePage({
           </Section>
 
           <Section title={pick(l, "Comment se déroule une séance", "How a session unfolds")}>
-            <ul className="list-disc space-y-1 pl-6">
-              <li>{pick(l, "Un temps d'échange pour comprendre ce que tu traverses", "A time to talk and understand what you're going through")}</li>
-              <li>{pick(l, "Le soin énergétique, doux et non intrusif", "The energy treatment, gentle and non-intrusive")}</li>
-              <li>{pick(l, "Un temps pour ressentir et intégrer", "A time to feel and integrate")}</li>
+            <ul className="space-y-3">
+              {[
+                pick(l, "Un temps d'échange pour comprendre ce que tu traverses", "A time to talk and understand what you're going through"),
+                pick(l, "Le soin énergétique, doux et non intrusif", "The energy treatment, gentle and non-intrusive"),
+                pick(l, "Un temps pour ressentir et intégrer", "A time to feel and integrate"),
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                    <Check className="h-3 w-3" />
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </Section>
         </>
       )}
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Envie de relâcher ce qui pèse ?", "Ready to release what weighs on you?")}
+        sub={pick(l, "Réserve une séance de TRAME® et remets ton énergie en mouvement.", "Book a TRAME® session and set your energy back in motion.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </article>
   );
 }

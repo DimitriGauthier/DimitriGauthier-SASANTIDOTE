@@ -35,21 +35,21 @@ export default async function AdminDashboard({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Tableau de bord", "Dashboard")}</h1>
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Tableau de bord", "Dashboard")}</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
           <Link
             key={c.label}
             href={c.href}
-            className="rounded-lg border border-neutral-200 p-5 transition hover:border-neutral-400"
+            className="hover-lift rounded-2xl border border-border/60 bg-card p-5 shadow-card"
           >
-            <div className="text-3xl font-semibold">{c.value}</div>
-            <div className="mt-1 text-sm text-neutral-500">{c.label}</div>
+            <div className="font-serif text-4xl font-medium text-primary">{c.value}</div>
+            <div className="mt-1 text-sm text-muted-foreground">{c.label}</div>
           </Link>
         ))}
       </div>
 
-      <h2 className="mt-10 mb-3 text-lg font-semibold">{pick(l, "Gérer le contenu", "Manage content")}</h2>
+      <h2 className="mt-12 mb-3 font-serif text-xl font-medium text-foreground">{pick(l, "Gérer le contenu", "Manage content")}</h2>
       <div className="flex flex-wrap gap-2 text-sm">
         {[
           { slug: "blog", fr: "Blog", en: "Blog" },
@@ -62,7 +62,7 @@ export default async function AdminDashboard({
           <Link
             key={x.slug}
             href={`${base}/${x.slug}`}
-            className="rounded-md border border-neutral-300 px-3 py-2 hover:bg-neutral-100"
+            className="rounded-full border border-border px-4 py-2 text-foreground transition-colors hover:bg-muted"
           >
             {pick(l, x.fr, x.en)}
           </Link>

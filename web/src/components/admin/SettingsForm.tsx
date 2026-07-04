@@ -62,8 +62,9 @@ export default function SettingsForm({ locale, initial }: { locale: Locale; init
     router.refresh();
   }
 
-  const inputCls = "w-full rounded-md border border-neutral-300 px-3 py-2 text-sm outline-none focus:border-neutral-500";
-  const labelCls = "mb-1 block text-sm font-medium text-neutral-700";
+  const inputCls =
+    "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20";
+  const labelCls = "mb-1 block text-sm font-medium text-foreground";
 
   return (
     <div className="max-w-2xl space-y-4">
@@ -110,14 +111,14 @@ export default function SettingsForm({ locale, initial }: { locale: Locale; init
         </div>
       </div>
 
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      {saved ? <p className="text-sm text-green-600">{pick(locale, "Enregistré.", "Saved.")}</p> : null}
+      {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      {saved ? <p className="text-sm text-primary">{pick(locale, "Enregistré.", "Saved.")}</p> : null}
 
       <button
         type="button"
         onClick={save}
         disabled={busy}
-        className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-60"
+        className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-soft transition-all hover:-translate-y-0.5 hover:brightness-105 disabled:opacity-60"
       >
         {busy ? pick(locale, "Enregistrement…", "Saving…") : pick(locale, "Enregistrer", "Save")}
       </button>

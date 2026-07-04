@@ -38,18 +38,21 @@ export default async function ReviewInvitePage({
 
   return (
     <div className="mx-auto max-w-xl">
-      <PageTitle sub={pick(l, "Ton retour compte beaucoup", "Your feedback matters")}>
+      <PageTitle
+        eyebrow={pick(l, "Ton avis", "Your review")}
+        sub={pick(l, "Ton retour compte beaucoup", "Your feedback matters")}
+      >
         {t.review.title}
       </PageTitle>
 
       {state === "form" ? (
         <ReviewForm locale={l} token={token} />
       ) : state === "already" ? (
-        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-6 text-neutral-700">
+        <div className="rounded-2xl border border-primary/20 bg-secondary/40 p-6 text-foreground shadow-card">
           {t.review.thanks}
         </div>
       ) : (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-800">
+        <div className="rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-destructive">
           {t.review.invalid}
         </div>
       )}

@@ -2,7 +2,8 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale, pick, getDict } from "@/lib/i18n";
 import { href } from "@/lib/site";
-import { PageTitle, CTAButton } from "@/components/ui";
+import { CTAButton } from "@/components/ui";
+import { Check } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -24,10 +25,14 @@ export default async function ConfirmedPage({
   const t = getDict(l);
 
   return (
-    <div className="mx-auto max-w-xl text-center">
-      <div className="mb-4 text-4xl">✓</div>
-      <PageTitle>{t.booking.confirmedTitle}</PageTitle>
-      <p className="mt-2 text-neutral-600">{t.booking.confirmedBody}</p>
+    <div className="mx-auto max-w-xl py-10 text-center sm:py-16">
+      <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-primary shadow-soft">
+        <Check className="h-8 w-8" />
+      </div>
+      <h1 className="font-serif text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+        {t.booking.confirmedTitle}
+      </h1>
+      <p className="mt-3 leading-relaxed text-muted-foreground">{t.booking.confirmedBody}</p>
       <div className="mt-8">
         <CTAButton href={href(l)}>{pick(l, "Retour à l'accueil", "Back to home")}</CTAButton>
       </div>

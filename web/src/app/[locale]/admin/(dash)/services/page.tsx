@@ -45,7 +45,7 @@ export default async function AdminServicesPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Accompagnements", "Sessions")}</h1>
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Accompagnements", "Sessions")}</h1>
       <RecordsManager
         locale={l}
         table="services"

@@ -22,7 +22,7 @@ type BookingRow = {
 const STATUS_LABEL: Record<string, { fr: string; en: string; cls: string }> = {
   hold: { fr: "En attente de paiement", en: "Awaiting payment", cls: "bg-amber-100 text-amber-700" },
   scheduled: { fr: "Confirmé", en: "Scheduled", cls: "bg-green-100 text-green-700" },
-  completed: { fr: "Terminé", en: "Completed", cls: "bg-neutral-200 text-neutral-700" },
+  completed: { fr: "Terminé", en: "Completed", cls: "bg-muted text-foreground" },
   cancelled: { fr: "Annulé", en: "Cancelled", cls: "bg-red-100 text-red-700" },
   no_show: { fr: "Absent", en: "No-show", cls: "bg-red-100 text-red-700" },
 };
@@ -47,14 +47,14 @@ export default async function AdminBookingsPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Rendez-vous", "Appointments")}</h1>
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Rendez-vous", "Appointments")}</h1>
 
       {bookings.length === 0 ? (
-        <p className="text-sm text-neutral-500">{pick(l, "Aucun rendez-vous pour l'instant.", "No appointments yet.")}</p>
+        <p className="text-sm text-muted-foreground">{pick(l, "Aucun rendez-vous pour l'instant.", "No appointments yet.")}</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-neutral-200">
+        <div className="overflow-x-auto rounded-2xl border border-border/60 bg-card shadow-card">
           <table className="w-full min-w-[820px] text-left text-sm">
-            <thead className="bg-neutral-50 text-neutral-500">
+            <thead className="bg-muted text-muted-foreground">
               <tr>
                 <th className="px-4 py-3 font-medium">{pick(l, "Créneau", "Slot")}</th>
                 <th className="px-4 py-3 font-medium">{pick(l, "Client", "Client")}</th>
@@ -64,43 +64,43 @@ export default async function AdminBookingsPage({
                 <th className="px-4 py-3 font-medium">{pick(l, "Action", "Action")}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-border/60">
               {bookings.map((b) => {
-                const st = STATUS_LABEL[b.status] ?? { fr: b.status, en: b.status, cls: "bg-neutral-100 text-neutral-600" };
+                const st = STATUS_LABEL[b.status] ?? { fr: b.status, en: b.status, cls: "bg-muted text-muted-foreground" };
                 return (
-                  <tr key={b.id} className="align-top">
-                    <td className="px-4 py-3 text-neutral-700">
+                  <tr key={b.id} className="align-top transition-colors hover:bg-muted/40">
+                    <td className="px-4 py-3 text-foreground">
                       {formatDateTime(b.slot_start, l)}
                       {b.google_event_link ? (
-                        <a href={b.google_event_link} target="_blank" rel="noopener noreferrer" className="mt-1 block text-xs underline">
+                        <a href={b.google_event_link} target="_blank" rel="noopener noreferrer" className="mt-1 block text-xs text-primary underline">
                           {pick(l, "Événement agenda", "Calendar event")}
                         </a>
                       ) : null}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-neutral-800">
+                      <div className="font-medium text-foreground">
                         {b.client_first_name} {b.client_last_name}
                       </div>
-                      <div className="text-xs text-neutral-500">{b.client_email}</div>
-                      {b.client_phone ? <div className="text-xs text-neutral-500">{b.client_phone}</div> : null}
+                      <div className="text-xs text-muted-foreground">{b.client_email}</div>
+                      {b.client_phone ? <div className="text-xs text-muted-foreground">{b.client_phone}</div> : null}
                     </td>
-                    <td className="px-4 py-3 text-neutral-700">
+                    <td className="px-4 py-3 text-foreground">
                       {b.services?.title ?? "—"}
-                      <span className="block text-xs text-neutral-400">{b.audience}</span>
+                      <span className="block text-xs text-muted-foreground">{b.audience}</span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-block rounded-full px-2 py-0.5 text-xs ${st.cls}`}>
                         {pick(l, st.fr, st.en)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right text-neutral-700">
+                    <td className="px-4 py-3 text-right text-foreground">
                       {formatPrice(b.price_cents, b.currency, l)}
                     </td>
                     <td className="px-4 py-3">
                       {b.status === "scheduled" ? (
                         <CompleteBookingButton locale={l} bookingId={b.id} />
                       ) : (
-                        <span className="text-xs text-neutral-400">—</span>
+                        <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </td>
                   </tr>

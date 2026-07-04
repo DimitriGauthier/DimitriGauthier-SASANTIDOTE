@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, CTAButton } from "@/components/ui";
+import { PageTitle, Section, Prose, CTASection } from "@/components/ui";
+import { Check } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,10 @@ export default async function NumerologyPage({
 
   return (
     <article>
-      <PageTitle sub={pick(l, "Un éclairage sur ton chemin de vie", "Insight into your life path")}>
+      <PageTitle
+        eyebrow={pick(l, "Symboles & sens", "Symbols & meaning")}
+        sub={pick(l, "Un éclairage sur ton chemin de vie", "Insight into your life path")}
+      >
         {pick(l, "Numérologie & sexualité", "Numerology & sexuality")}
       </PageTitle>
 
@@ -60,21 +64,31 @@ export default async function NumerologyPage({
           </Section>
 
           <Section title={pick(l, "Ce que la numérologie apporte", "What numerology brings")}>
-            <ul className="list-disc space-y-1 pl-6">
-              <li>{pick(l, "Mieux comprendre tes cycles et tes moments-clés", "Better understanding your cycles and key moments")}</li>
-              <li>{pick(l, "Repérer ce qui te ressemble vraiment", "Spotting what truly resembles you")}</li>
-              <li>{pick(l, "Donner du sens à tes blocages et à tes élans", "Giving meaning to your blocks and drives")}</li>
-              <li>{pick(l, "Poser des choix plus alignés, dans ta vie et ton couple", "Making more aligned choices, in your life and your relationship")}</li>
+            <ul className="space-y-3">
+              {[
+                pick(l, "Mieux comprendre tes cycles et tes moments-clés", "Better understanding your cycles and key moments"),
+                pick(l, "Repérer ce qui te ressemble vraiment", "Spotting what truly resembles you"),
+                pick(l, "Donner du sens à tes blocages et à tes élans", "Giving meaning to your blocks and drives"),
+                pick(l, "Poser des choix plus alignés, dans ta vie et ton couple", "Making more aligned choices, in your life and your relationship"),
+              ].map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
+                    <Check className="h-3 w-3" />
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </Section>
         </>
       )}
 
-      <div className="mt-10">
-        <CTAButton href={href(l, "reservation")}>
-          {pick(l, "Prendre rendez-vous", "Book an appointment")}
-        </CTAButton>
-      </div>
+      <CTASection
+        href={href(l, "reservation")}
+        title={pick(l, "Envie d'y voir plus clair ?", "Want to see more clearly?")}
+        sub={pick(l, "Réserve une séance et donnons du sens à ton chemin.", "Book a session and let's give meaning to your path.")}
+        cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
+      />
     </article>
   );
 }

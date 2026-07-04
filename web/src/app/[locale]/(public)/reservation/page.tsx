@@ -33,7 +33,10 @@ export default async function ReservationPage({
 
   return (
     <div>
-      <PageTitle sub={pick(l, "Simple, guidé et confidentiel", "Simple, guided and confidential")}>
+      <PageTitle
+        eyebrow={pick(l, "Réservation", "Booking")}
+        sub={pick(l, "Simple, guidé et confidentiel", "Simple, guided and confidential")}
+      >
         {pick(l, "Prendre rendez-vous", "Book an appointment")}
       </PageTitle>
 

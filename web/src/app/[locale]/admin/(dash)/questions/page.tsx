@@ -50,8 +50,8 @@ export default async function AdminQuestionsPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Questionnaire d'admission", "Intake questionnaire")}</h1>
-      <p className="mb-4 text-sm text-neutral-500">
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Questionnaire d'admission", "Intake questionnaire")}</h1>
+      <p className="mb-4 text-sm text-muted-foreground">
         {pick(
           l,
           "Les questions sans motif s'affichent pour tous les parcours (tronc commun).",

@@ -34,7 +34,7 @@ export default async function AdminTopicsPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold">{pick(l, "Motifs de consultation", "Consultation topics")}</h1>
+      <h1 className="mb-6 font-serif text-3xl font-medium text-foreground">{pick(l, "Motifs de consultation", "Consultation topics")}</h1>
       <RecordsManager
         locale={l}
         table="topics"
