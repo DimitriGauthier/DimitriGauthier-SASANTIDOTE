@@ -12,7 +12,7 @@ import {
   Compass,
 } from "lucide-react";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
-import { siteConfig, href } from "@/lib/site";
+import { siteConfig, href, experienceHref } from "@/lib/site";
 import { getServices, getPublishedReviews } from "@/lib/data";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { CTAButton } from "@/components/ui";
@@ -152,14 +152,14 @@ export default async function HomePage({
             )}
           </p>
           <div className="animate-fade-up mt-10 flex flex-col items-center gap-4">
-            <Link
-              href={href(l, "reservation")}
+            <a
+              href={experienceHref(l)}
               className="experience-btn group inline-flex items-center gap-3 rounded-full px-9 py-4 text-base font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-1 sm:px-12 sm:py-5 sm:text-lg"
             >
               <Sparkles className="h-5 w-5" />
               {pick(l, "Tente l'expérience", "Try the experience")}
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
+            </a>
             <p className="text-xs text-muted-foreground">
               {pick(l, "Un parcours guidé de 2 minutes — simple, confidentiel, sans engagement", "A 2-minute guided journey — simple, confidential, no commitment")}
             </p>
@@ -521,7 +521,7 @@ export default async function HomePage({
 
       {/* ── Invitation flottante ──────────────────────────── */}
       <ExperienceCTA
-        href={href(l, "reservation")}
+        href={experienceHref(l)}
         label={pick(l, "Tente l'expérience", "Try the experience")}
         hint={pick(l, "Ton parcours guidé t'attend", "Your guided journey awaits")}
         closeLabel={pick(l, "Fermer", "Close")}

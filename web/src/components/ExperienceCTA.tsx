@@ -5,7 +5,6 @@
 // Reprend la mascotte Dimitri pour rester cohérent avec le guide du tunnel.
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { ArrowRight, X } from "lucide-react";
 import { DimitriAvatar } from "@/components/DimitriAvatar";
 
@@ -47,7 +46,7 @@ export default function ExperienceCTA({
         >
           <X className="h-3.5 w-3.5" />
         </button>
-        <Link
+        <a
           href={href}
           className="group flex items-center gap-3 rounded-full border border-primary/20 bg-card/90 py-2 pl-2 pr-4 shadow-soft backdrop-blur transition-transform duration-300 hover:-translate-y-0.5"
         >
@@ -59,7 +58,7 @@ export default function ExperienceCTA({
               <ArrowRight className="h-4 w-4 text-primary transition-transform duration-300 group-hover:translate-x-0.5" />
             </span>
           </span>
-        </Link>
+        </a>
       </div>
     </div>
   );
