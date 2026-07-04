@@ -1,0 +1,16 @@
+# Config Supabase CLI — backend site Dimitri Gauthier
+project_id = "dimitri-sexo"
+
+# Endpoints publics (pas de JWT) : la sécurité est assurée dans le code (signature Stripe, token, captcha).
+[functions.get-slots]
+verify_jwt = false
+
+[functions.create-hold]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+# Action réservée à l'admin connecté : on exige un JWT + on revérifie is_admin() dans le code.
+[functions.complete-booking]
+verify_jwt = true

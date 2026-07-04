@@ -1,0 +1,24 @@
+# ── Dépendances / build (web/.gitignore couvre déjà le détail) ──
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# ── Secrets — JAMAIS committer ──
+.env
+.env.*
+
+# ── Docs, devis, assets internes : NE PAS publier sur le repo client ──
+Documentation/
+PDF/
+prototype/
+assets/
+build_pdf.py
+*.pdf
+
+# ── OS / éditeurs ──
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
