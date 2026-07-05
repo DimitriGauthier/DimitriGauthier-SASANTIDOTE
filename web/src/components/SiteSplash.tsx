@@ -15,7 +15,7 @@ import SplashCupid from "./SplashCupid";
 const useIso = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const SEEN_KEY = "intimy_splash_seen";
-const TOTAL_MS = 3500; // durée totale avant démontage (l'ouverture finit ~3.45 s)
+const TOTAL_MS = 4050; // durée totale avant démontage (l'ouverture finit ~4.0 s)
 
 type CSSVars = React.CSSProperties & Record<string, string | number>;
 
@@ -101,27 +101,31 @@ function Arrow() {
 // (découpé depuis /img/logo.png → /img/cupid.png). Il vise à gauche dans le logo,
 // on le retourne horizontalement (scaleX(-1)) pour qu'il décoche vers le centre.
 
-// Traînée de cœurs & roses le long de la trajectoire de la flèche.
+// Traînée de cœurs & roses le long de la trajectoire de la flèche (vers le centre).
 const TRAIL: { left: string; top: string; kind: "heart" | "rose" | "petal"; delay: number }[] = [
-  { left: "26%", top: "49%", kind: "heart", delay: 1.0 },
-  { left: "31%", top: "53%", kind: "rose", delay: 1.08 },
-  { left: "36%", top: "48%", kind: "petal", delay: 1.16 },
-  { left: "40%", top: "52%", kind: "heart", delay: 1.24 },
-  { left: "44%", top: "49%", kind: "rose", delay: 1.32 },
-  { left: "47%", top: "51%", kind: "petal", delay: 1.4 },
+  { left: "26%", top: "49%", kind: "heart", delay: 1.55 },
+  { left: "31%", top: "53%", kind: "rose", delay: 1.63 },
+  { left: "36%", top: "48%", kind: "petal", delay: 1.71 },
+  { left: "40%", top: "52%", kind: "heart", delay: 1.79 },
+  { left: "44%", top: "49%", kind: "rose", delay: 1.87 },
+  { left: "47%", top: "51%", kind: "petal", delay: 1.95 },
 ];
 
-// Explosion au point d'impact (cercle de cœurs / roses / pétales).
-const BURST = Array.from({ length: 15 }).map((_, i) => {
-  const ang = (i / 15) * Math.PI * 2;
-  const dist = 92 + (i % 3) * 30;
+// Explosion plein écran au point d'impact : les cœurs fusent vers les bords (donc
+// « vers l'utilisateur »), en grossissant, comme s'ils sortaient de l'écran.
+// Distances en vmin pour couvrir l'écran quelle que soit sa taille.
+const IMPACT_MS = 2200; // moment où la flèche « touche l'écran »
+const BURST = Array.from({ length: 22 }).map((_, i) => {
+  const ang = (i / 22) * Math.PI * 2 + (i % 2 ? 0.14 : 0);
+  const dist = 30 + (i % 4) * 9; // en vmin
   const kind = (i % 3 === 0 ? "rose" : i % 3 === 1 ? "heart" : "petal") as "heart" | "rose" | "petal";
   return {
-    tx: Math.round(Math.cos(ang) * dist),
-    ty: Math.round(Math.sin(ang) * dist),
-    r: (i % 2 ? 1 : -1) * (120 + i * 9),
+    tx: +(Math.cos(ang) * dist).toFixed(1),
+    ty: +(Math.sin(ang) * dist).toFixed(1),
+    r: (i % 2 ? 1 : -1) * (120 + i * 11),
+    sc: 1.8 + (i % 3) * 0.35,
     kind,
-    delay: (i % 5) * 0.03,
+    delay: (i % 6) * 0.028,
   };
 });
 
@@ -188,14 +192,10 @@ export default function SiteSplash({
         />
       </div>
 
-      {/* Acteurs (Cupidon + flèche + traînée + explosion) — s'effacent avant l'ouverture */}
+      {/* Cupidon + traînée — s'effacent une fois la flèche décochée */}
       <div className="splash-actors">
         <div className="splash-cupid">
           <SplashCupid />
-        </div>
-
-        <div className="splash-arrow">
-          <Arrow />
         </div>
 
         {TRAIL.map((it, i) => (
@@ -207,8 +207,21 @@ export default function SiteSplash({
             <Icon kind={it.kind} />
           </div>
         ))}
+      </div>
 
+      {/* La flèche fonce vers le centre puis grossit droit sur l'utilisateur */}
+      <div className="splash-arrow">
+        <Arrow />
+      </div>
+
+      {/* Impact « sur l'écran » : flash, onde de choc, gros cœur qui jaillit,
+          puis explosion plein écran de cœurs vers les bords */}
+      <div className="splash-impact">
+        <div className="splash-flash" />
         <div className="splash-ring" />
+        <div className="splash-hit">
+          <Heart />
+        </div>
         <div className="splash-burst">
           {BURST.map((b, i) => (
             <span
@@ -216,10 +229,11 @@ export default function SiteSplash({
               className={`splash-burst-item splash-burst-${b.kind}`}
               style={
                 {
-                  "--tx": `${b.tx}px`,
-                  "--ty": `${b.ty}px`,
+                  "--tx": `${b.tx}vmin`,
+                  "--ty": `${b.ty}vmin`,
                   "--r": `${b.r}deg`,
-                  animationDelay: `${1.75 + b.delay}s`,
+                  "--sc": b.sc,
+                  animationDelay: `${IMPACT_MS / 1000 + b.delay}s`,
                 } as CSSVars
               }
             >
@@ -255,34 +269,45 @@ const CSS = `
 
 /* Panneaux */
 .splash-door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--gradient-warm);overflow:hidden;will-change:transform}
-.splash-door-l{left:0;box-shadow:inset -34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-l .85s cubic-bezier(.7,0,.25,1) 2.6s both}
-.splash-door-r{right:0;box-shadow:inset 34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-r .85s cubic-bezier(.7,0,.25,1) 2.6s both}
+.splash-door-l{left:0;box-shadow:inset -34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-l .85s cubic-bezier(.7,0,.25,1) 3.15s both}
+.splash-door-r{right:0;box-shadow:inset 34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-r .85s cubic-bezier(.7,0,.25,1) 3.15s both}
 .splash-blob{position:absolute;width:min(46vw,420px);aspect-ratio:1;border-radius:9999px;background:hsl(var(--primary) / 0.35)}
 
-/* Acteurs */
-.splash-actors{position:absolute;inset:0;animation:sp-fade-out .5s ease 2.35s both}
-
+/* Cupidon + traînée (s'effacent après le tir) */
+.splash-actors{position:absolute;inset:0;animation:sp-fade-out .5s ease 2.05s both}
 .splash-cupid{position:absolute;left:14%;top:50%;width:clamp(150px,25vw,250px);transform:translate(-50%,-50%)}
-
-.splash-arrow{position:absolute;left:20%;top:50%;width:clamp(66px,13vw,120px);opacity:1;
-  animation:sp-arrow-x 2s cubic-bezier(.5,0,.2,1) .4s both, sp-arrow-pose 2s cubic-bezier(.5,0,.2,1) .4s both;will-change:left,transform,opacity}
-.splash-arrow-svg{display:block;filter:drop-shadow(0 4px 10px hsl(var(--primary) / 0.25))}
-
 .splash-trail-item{position:absolute;width:clamp(16px,3vw,26px);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:sp-trail .8s ease-out both}
 
-.splash-ring{position:absolute;left:50%;top:50%;width:clamp(120px,26vw,240px);aspect-ratio:1;border-radius:9999px;border:2px solid hsl(var(--primary) / 0.5);transform:translate(-50%,-50%) scale(.2);opacity:0;animation:sp-ring .9s ease-out 1.75s both}
+/* Flèche : décochée vers le centre, puis grossit droit sur l'utilisateur */
+.splash-arrow{position:absolute;left:20%;top:50%;width:clamp(70px,14vw,132px);opacity:0;
+  animation:sp-arrow-fly .7s cubic-bezier(.42,.02,.72,1) 1.5s both;will-change:left,transform,opacity}
+.splash-arrow-svg{display:block;filter:drop-shadow(0 4px 12px hsl(var(--primary) / 0.3))}
+
+/* Couche d'impact « sur l'écran » (au-dessus des panneaux) */
+.splash-impact{position:absolute;inset:0;pointer-events:none;z-index:6}
+.splash-flash{position:absolute;left:50%;top:50%;width:64vmin;height:64vmin;border-radius:9999px;opacity:0;
+  transform:translate(-50%,-50%) scale(.2);
+  background:radial-gradient(circle, hsl(var(--primary) / 0.5) 0%, hsl(var(--gold) / 0.18) 38%, transparent 70%);
+  animation:sp-flash .6s ease-out 2.2s both}
+.splash-ring{position:absolute;left:50%;top:50%;width:clamp(120px,26vw,240px);aspect-ratio:1;border-radius:9999px;
+  border:2px solid hsl(var(--primary) / 0.55);transform:translate(-50%,-50%) scale(.2);opacity:0;
+  animation:sp-ring 1s ease-out 2.2s both}
+.splash-hit{position:absolute;left:50%;top:50%;width:clamp(80px,18vw,180px);aspect-ratio:1;opacity:0;
+  transform:translate(-50%,-50%) scale(.3);filter:drop-shadow(0 10px 26px hsl(var(--primary) / 0.4));
+  animation:sp-hit .62s cubic-bezier(.3,.7,.4,1) 2.2s both}
 
 .splash-burst{position:absolute;left:50%;top:50%}
-.splash-burst-item{position:absolute;left:0;top:0;aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:sp-burst .95s ease-out both;will-change:transform,opacity}
-.splash-burst-heart{width:clamp(16px,2.8vw,26px)}
-.splash-burst-rose{width:clamp(18px,3.2vw,30px)}
-.splash-burst-petal{width:clamp(12px,2.2vw,20px)}
+.splash-burst-item{position:absolute;left:0;top:0;aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;
+  animation:sp-burst 1.15s cubic-bezier(.2,.6,.3,1) both;will-change:transform,opacity}
+.splash-burst-heart{width:clamp(18px,3.4vw,32px)}
+.splash-burst-rose{width:clamp(20px,3.8vw,36px)}
+.splash-burst-petal{width:clamp(14px,2.6vw,24px)}
 
 /* Logo */
-.splash-logo-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;animation:sp-fade-out .45s ease 2.95s both}
-.splash-logo{opacity:0;display:flex;flex-direction:column;align-items:center;gap:.7rem;animation:sp-logo-in .7s cubic-bezier(.16,1,.3,1) 1.8s both}
+.splash-logo-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;z-index:8;animation:sp-fade-out .45s ease 3.3s both}
+.splash-logo{opacity:0;display:flex;flex-direction:column;align-items:center;gap:.7rem;animation:sp-logo-in .65s cubic-bezier(.16,1,.3,1) 2.5s both}
 .splash-logo-img{width:clamp(190px,44vw,330px);height:auto}
-.splash-tag{margin:0;opacity:0;font-size:clamp(.7rem,1.6vw,.9rem);letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:hsl(var(--primary));animation:sp-tag-in .6s ease-out 2.15s both}
+.splash-tag{margin:0;opacity:0;font-size:clamp(.7rem,1.6vw,.9rem);letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:hsl(var(--primary));animation:sp-tag-in .55s ease-out 2.85s both}
 
 /* Bouton passer */
 .splash-skip{position:absolute;left:50%;bottom:clamp(1.4rem,5vh,3rem);transform:translateX(-50%);z-index:20;
@@ -291,22 +316,24 @@ const CSS = `
   opacity:0;animation:sp-fade-in-late .5s ease 1s both}
 .splash-skip:hover{color:hsl(var(--primary));border-color:hsl(var(--primary) / 0.5)}
 
-@keyframes sp-arrow-x{0%{left:20%}22%{left:18%}32%{left:18%}68%{left:50%}100%{left:50%}}
-@keyframes sp-arrow-pose{
-  0%{transform:translate(-50%,-50%) rotate(0) scale(1);opacity:1}
-  22%{transform:translate(-50%,-50%) rotate(-4deg) scale(1)}
-  32%{transform:translate(-50%,-50%) rotate(0) scale(1)}
-  68%{transform:translate(-50%,-52%) rotate(0) scale(1.22);opacity:1}
-  76%{opacity:1}
-  84%{transform:translate(-50%,-52%) rotate(0) scale(1.32);opacity:0}
-  100%{opacity:0}
+@keyframes sp-arrow-fly{
+  0%  {left:22%;transform:translate(-50%,-50%) scale(.7) rotate(6deg);opacity:0}
+  16% {opacity:1}
+  58% {left:50%;transform:translate(-50%,-50%) scale(1.15) rotate(-2deg);opacity:1}
+  100%{left:50%;transform:translate(-50%,-52%) scale(3.5) rotate(-9deg);opacity:0}
 }
 @keyframes sp-trail{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-120%) scale(1)}}
-@keyframes sp-ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}20%{opacity:.6}100%{opacity:0;transform:translate(-50%,-50%) scale(2.4)}}
+@keyframes sp-flash{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}22%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) scale(1.9)}}
+@keyframes sp-ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}18%{opacity:.7}100%{opacity:0;transform:translate(-50%,-50%) scale(3.3)}}
+@keyframes sp-hit{
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(.3)}
+  32% {opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-52%) scale(4.3)}
+}
 @keyframes sp-burst{
-  0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}
-  25%{opacity:1}
-  100%{opacity:0;transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(1) rotate(var(--r))}
+  0%  {opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}
+  22% {opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(var(--sc)) rotate(var(--r))}
 }
 @keyframes sp-logo-in{0%{opacity:0;transform:scale(.6)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
 @keyframes sp-tag-in{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
