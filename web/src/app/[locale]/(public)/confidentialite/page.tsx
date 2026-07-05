@@ -35,7 +35,7 @@ export default async function PrivacyPage({
         <>
           <Section title={pick(l, "Responsable du traitement", "Data controller")}>
             <p className="text-sm text-muted-foreground">
-              {siteConfig.legalEntity.name} — {siteConfig.practitionerName}, {siteConfig.email}.
+              {siteConfig.legalEntity.name} · {siteConfig.practitionerName}, {siteConfig.email}.
             </p>
           </Section>
 

@@ -17,7 +17,7 @@ export const siteConfig = {
   legalEntity: {
     name: "ANTIDOTE SAS",
     capital: "1 000 €",
-    address: "5 chemin Grand Canal — Immeuble Thalès A, 2ᵉ étage · ZAC Triangle · 97490 Sainte-Clotilde · La Réunion",
+    address: "5 chemin Grand Canal · Immeuble Thalès A, 2ᵉ étage · ZAC Triangle · 97490 Sainte-Clotilde · La Réunion",
     rcs: "RCS Saint-Denis 902 472 117",
   },
 } as const;

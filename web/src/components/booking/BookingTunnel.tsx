@@ -132,8 +132,8 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   // Petite phrase d'encouragement — esprit « jeu / parcours ».
   const encouragement = useMemo(() => {
     if (screen.k === "slot") return pick(locale, "Dernière étape : choisis ton moment.", "Last step: choose your moment.");
-    if (screen.k === "contact") return pick(locale, "On y est presque — juste tes coordonnées.", "Almost there — just your details.");
-    if (safeIndex === 0) return pick(locale, "C'est parti — on avance ensemble, à ton rythme.", "Here we go — we move forward together, at your pace.");
+    if (screen.k === "contact") return pick(locale, "On y est presque, juste tes coordonnées.", "Almost there, just your details.");
+    if (safeIndex === 0) return pick(locale, "C'est parti, on avance ensemble, à ton rythme.", "Here we go, we move forward together, at your pace.");
     const ratio = stepNum / stepTotal;
     if (ratio < 0.5) return pick(locale, "Tu avances bien, continue.", "You're doing great, keep going.");
     return pick(locale, "Plus que quelques pas.", "Just a few more steps.");

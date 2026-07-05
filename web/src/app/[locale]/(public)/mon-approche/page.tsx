@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "Mon approche — tête, corps & cœur", "My approach — mind, body & heart"),
+    title: pick(l, "Mon approche · tête, corps & cœur", "My approach · mind, body & heart"),
     description: pick(
       l,
       "Une synergie unique entre sexothérapie, TRAME® et numérologie pour aligner la tête, le corps et le cœur.",
@@ -100,8 +100,8 @@ export default async function ApproachPage({
             <p>
               {pick(
                 l,
-                "Je ne fais pas de miracles. Je ne te promets pas une solution magique. Je t'accompagne, avec honnêteté et bienveillance. Le vrai thérapeute, c'est toi — je marche à tes côtés pour que tu trouves ton propre chemin.",
-                "I don't perform miracles. I won't promise you a magic fix. I support you, honestly and with care. The real therapist is you — I walk beside you so you find your own path.",
+                "Je ne fais pas de miracles. Je ne te promets pas une solution magique. Je t'accompagne, avec honnêteté et bienveillance. Le vrai thérapeute, c'est toi : je marche à tes côtés pour que tu trouves ton propre chemin.",
+                "I don't perform miracles. I won't promise you a magic fix. I support you, honestly and with care. The real therapist is you: I walk beside you so you find your own path.",
               )}
             </p>
           </Section>

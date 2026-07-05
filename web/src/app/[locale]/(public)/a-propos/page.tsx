@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "À propos — Dimitri Gauthier", "About — Dimitri Gauthier"),
+    title: pick(l, "À propos · Dimitri Gauthier", "About · Dimitri Gauthier"),
     description: pick(
       l,
       "Sexothérapeute depuis 2006, certifié en TRAME® et numérologie. Un métier d'accompagnement, une vocation.",
@@ -37,7 +37,7 @@ export default async function AboutPage({
     <article>
       <PageTitle
         eyebrow={pick(l, "Qui je suis", "Who I am")}
-        sub={pick(l, "Sexothérapeute — La Réunion & métropole", "Sex therapist — Réunion Island & mainland France")}
+        sub={pick(l, "Sexothérapeute · La Réunion & métropole", "Sex therapist · Réunion Island & mainland France")}
       >
         {pick(l, "À propos", "About")}
       </PageTitle>
@@ -50,15 +50,15 @@ export default async function AboutPage({
             <p>
               {pick(
                 l,
-                "Je m'appelle Dimitri Gauthier. Depuis 2006, j'exerce des métiers d'accompagnement — c'est le fil rouge de ma vie. J'ai toujours aimé être aux côtés des gens pour les aider à avancer.",
-                "My name is Dimitri Gauthier. Since 2006 I've worked in support professions — it's the common thread of my life. I've always loved being alongside people to help them move forward.",
+                "Je m'appelle Dimitri Gauthier. Depuis 2006, j'exerce des métiers d'accompagnement, c'est le fil rouge de ma vie. J'ai toujours aimé être aux côtés des gens pour les aider à avancer.",
+                "My name is Dimitri Gauthier. Since 2006 I've worked in support professions, and it's the common thread of my life. I've always loved being alongside people to help them move forward.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "Aujourd'hui, j'accompagne les hommes, les femmes et les couples sur leur sexualité et leur intimité. Mais je ne m'arrête pas là : quand quelqu'un va mal sexuellement, la cause est souvent ailleurs — dans le sentimental, le professionnel, le rapport à soi.",
-                "Today I support men, women and couples with their sexuality and intimacy. But I don't stop there: when someone struggles sexually, the cause is often elsewhere — in their emotional life, their work, their relationship with themselves.",
+                "Aujourd'hui, j'accompagne les hommes, les femmes et les couples sur leur sexualité et leur intimité. Mais je ne m'arrête pas là : quand quelqu'un va mal sexuellement, la cause est souvent ailleurs, dans le sentimental, le professionnel, le rapport à soi.",
+                "Today I support men, women and couples with their sexuality and intimacy. But I don't stop there: when someone struggles sexually, the cause is often elsewhere, in their emotional life, their work, their relationship with themselves.",
               )}
             </p>
           </Section>
@@ -85,8 +85,8 @@ export default async function AboutPage({
             <blockquote className="border-l-2 border-primary/40 pl-5 font-serif text-xl italic leading-relaxed text-foreground">
               {pick(
                 l,
-                "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi. L'objectif ? T'aider à t'accomplir pleinement — dans ta vie comme dans ton intimité.",
-                "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you. The goal? Helping you fully flourish — in your life as in your intimacy.",
+                "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi. L'objectif ? T'aider à t'accomplir pleinement, dans ta vie comme dans ton intimité.",
+                "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you. The goal? Helping you fully flourish, in your life as in your intimacy.",
               )}
             </blockquote>
           </Section>

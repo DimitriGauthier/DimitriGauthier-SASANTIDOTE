@@ -12,7 +12,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "FAQ — Questions fréquentes", "FAQ — Frequently asked questions"),
+    title: pick(l, "FAQ · Questions fréquentes", "FAQ · Frequently asked questions"),
     description: pick(
       l,
       "Les réponses aux questions les plus fréquentes sur les séances, le déroulé, la confidentialité et le paiement.",
@@ -27,8 +27,8 @@ const FAQ: QA[] = [
   {
     q: { fr: "Comment se déroule une séance ?", en: "How does a session work?" },
     a: {
-      fr: "Chaque séance a lieu en visio. On commence par un temps d'écoute, puis on avance avec les outils les plus adaptés à ta situation — sexothérapie, TRAME® ou numérologie.",
-      en: "Each session is online. We start with a time of listening, then move forward with the tools best suited to your situation — sex therapy, TRAME® or numerology.",
+      fr: "Chaque séance a lieu en visio. On commence par un temps d'écoute, puis on avance avec les outils les plus adaptés à ta situation : sexothérapie, TRAME® ou numérologie.",
+      en: "Each session is online. We start with a time of listening, then move forward with the tools best suited to your situation: sex therapy, TRAME® or numerology.",
     },
   },
   {

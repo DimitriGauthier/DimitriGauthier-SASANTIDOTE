@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "La TRAME® — travail énergétique", "The TRAME® — energy work"),
+    title: pick(l, "La TRAME® · travail énergétique", "The TRAME® · energy work"),
     description: pick(
       l,
       "La TRAME® : un travail énergétique doux qui libère les tensions du corps et remet en mouvement ce qui était figé.",
@@ -50,8 +50,8 @@ export default async function TramePage({
             <p>
               {pick(
                 l,
-                "La TRAME® est un soin énergétique. Par des gestes précis le long de la colonne, elle relance la circulation de l'énergie vitale et aide le corps à relâcher les tensions qu'il retient — parfois depuis longtemps.",
-                "The TRAME® is an energy treatment. Through precise gestures along the spine, it revives the flow of vital energy and helps the body release the tensions it holds — sometimes for a long time.",
+                "La TRAME® est un soin énergétique. Par des gestes précis le long de la colonne, elle relance la circulation de l'énergie vitale et aide le corps à relâcher les tensions qu'il retient, parfois depuis longtemps.",
+                "The TRAME® is an energy treatment. Through precise gestures along the spine, it revives the flow of vital energy and helps the body release the tensions it holds, sometimes for a long time.",
               )}
             </p>
             <p>

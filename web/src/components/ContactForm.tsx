@@ -48,7 +48,7 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         type: "tel",
         required: false,
         title: pick(locale, "Un numéro où te joindre ?", "A number to reach you?"),
-        help: pick(locale, "Facultatif — seulement si tu préfères qu'on t'appelle.", "Optional — only if you'd rather be called."),
+        help: pick(locale, "Facultatif, seulement si tu préfères qu'on t'appelle.", "Optional, only if you'd rather be called."),
         placeholder: pick(locale, "Téléphone (facultatif)", "Phone (optional)"),
         autoComplete: "tel",
       },

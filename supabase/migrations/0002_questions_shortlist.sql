@@ -1,107 +1,28 @@
--- seed.sql — Données initiales du site Dimitri Gauthier (sexothérapie · TRAME · numérologie)
--- ---------------------------------------------------------------------------------------------
--- ⚠️ À exécuter UNE FOIS sur une base fraîche (après 0001_init.sql).
---    Les sections `settings`, `services`, `topics`, `content_pages` sont ré-exécutables
---    (upsert par slug / id). Les sections `availability_rules` et `questions` NE le sont PAS :
---    elles ré-insèrent sans dédoublonner. Ne pas rejouer ce fichier après la mise en ligne.
+-- 0002_questions_shortlist.sql
+-- =============================================================================
+-- Réduit le questionnaire du tunnel à la version COURTE « prospect » validée
+-- (doc 07 « Questionnaires — questions retenues », sélection ● de Dimitri).
 --
--- Contenus repris du cahier des charges rempli par Dimitri :
---   Documentation/04b_Reponses_Dimitri_Cahier_des_Charges.md
---   Documentation/06_Questionnaires_Client_Draft.md   (⚠️ BROUILLON clinique — à valider par Dimitri)
---   Documentation/11_Questionnaire_Couple_Dallaire.md
+-- Pourquoi : le brouillon initial (doc 06) posait ~39 à 54 questions selon le
+-- motif — trop long pour un premier contact. La version courte en pose ~19 à 22.
+-- La version longue reste un usage cabinet / séance (hors formulaire web).
 --
--- Convention i18n : les variantes `_en` sont laissées vides -> fallback FR (voir pick() côté front).
--- Les prix (price_cents) sont des PLACEHOLDERS : Dimitri annonce ses tarifs « au moment du paiement ».
---   -> à confirmer avec lui avant la mise en ligne (TODO PRIX).
--- ---------------------------------------------------------------------------------------------
+-- Sécurité (⚠️ prod) : on ne SUPPRIME que les questions qu'aucune réponse ne
+-- référence (booking_answers). Les questions déjà répondues sont seulement
+-- DÉSACTIVÉES (conservées pour l'historique). Idempotent tant qu'aucune réponse
+-- ne pointe vers la nouvelle version.
+-- =============================================================================
 
 begin;
 
--- ========================= 1) Paramètres (singleton id = 1) =========================
-insert into settings (id, practitioner_name, email, phone, whatsapp, address,
-                      timezone, currency, default_locale, supported_locales,
-                      min_notice_hours, max_advance_days, buffer_min)
-values (1, 'Dimitri Gauthier', 'dimitrigauthier974@gmail.com',
-        '+262 692 52 72 86', '+262 692 52 72 86',
-        null,                       -- exercice en visio ; adresse à compléter au 1er RDV
-        'Indian/Reunion', 'EUR', 'fr', '{fr,en}',
-        24,   -- délai minimum avant un créneau (h)
-        60,   -- horizon de réservation (jours)
-        15)   -- battement entre deux RDV (min)
-on conflict (id) do update set
-  practitioner_name = excluded.practitioner_name,
-  email             = excluded.email,
-  phone             = excluded.phone,
-  whatsapp          = excluded.whatsapp,
-  timezone          = excluded.timezone,
-  currency          = excluded.currency,
-  default_locale    = excluded.default_locale,
-  supported_locales = excluded.supported_locales,
-  min_notice_hours  = excluded.min_notice_hours,
-  max_advance_days  = excluded.max_advance_days,
-  buffer_min        = excluded.buffer_min,
-  updated_at        = now();
+-- 1) Purge des questions sans réponse liée, puis désactivation des survivantes.
+delete from questions q
+where not exists (select 1 from booking_answers ba where ba.question_id = q.id);
+update questions set is_active = false where is_active;
 
--- ========================= 2) Services (visio) =========================
--- Cahier D. : lieu d'exercice = visio ; profils homme / femme / couple (+ adolescent -> mappé « tous »).
--- TODO PRIX : montants placeholders, à confirmer avec Dimitri.
-insert into services (slug, title, subtitle, description, audiences, duration_min, price_cents, currency, location_type, is_active, sort_order)
-values
-  ('seance-individuelle',
-   'Séance individuelle',
-   'Sexothérapie · TRAME® · numérologie',
-   'Un accompagnement individuel pour éclairer ta problématique et avancer, en articulant sexothérapie, TRAME® et numérologie. En visioconférence.',
-   '{homme,femme}'::audience_type[], 60, 9000, 'EUR', 'visio', true, 1),
-  ('seance-couple',
-   'Séance de couple',
-   'Retrouver du lien et du désir',
-   'Une séance pour le couple : mettre des mots sur ce qui coince, restaurer la communication et le désir. En visioconférence.',
-   '{couple}'::audience_type[], 90, 15000, 'EUR', 'visio', true, 2),
-  ('seance-decouverte',
-   'Séance découverte',
-   'Premier échange pour faire connaissance',
-   'Un premier temps d''échange pour clarifier ta demande et voir comment l''accompagnement peut t''aider. En visioconférence.',
-   '{tous}'::audience_type[], 45, 6000, 'EUR', 'visio', true, 3)
-on conflict (slug) do update set
-  title        = excluded.title,
-  subtitle     = excluded.subtitle,
-  description  = excluded.description,
-  audiences    = excluded.audiences,
-  duration_min = excluded.duration_min,
-  price_cents  = excluded.price_cents,
-  location_type= excluded.location_type,
-  is_active    = excluded.is_active,
-  sort_order   = excluded.sort_order,
-  updated_at   = now();
+-- 2) Réinsertion de la version courte validée (miroir de supabase/seed.sql §4).
 
--- ========================= 3) Problématiques (motifs -> pilotent le questionnaire) =========================
-insert into topics (slug, title, description, audiences, is_active, sort_order)
-values
-  ('troubles-erectiles',     'Troubles de l''érection',        'Difficultés à obtenir ou maintenir une érection.',                 '{homme}'::audience_type[], true, 1),
-  ('ejaculation-precoce',    'Éjaculation précoce / rapide',   'Éjaculation qui survient plus tôt que souhaité.',                  '{homme}'::audience_type[], true, 2),
-  ('ejaculation-tardive',    'Éjaculation tardive / anéjaculation', 'Difficulté ou impossibilité à éjaculer lors des rapports.',   '{homme}'::audience_type[], true, 3),
-  ('troubles-du-desir',      'Troubles du désir',              'Baisse ou absence de désir.',                                      '{femme}'::audience_type[], true, 4),
-  ('anorgasmie',             'Anorgasmie',                     'Difficulté à atteindre l''orgasme.',                               '{femme}'::audience_type[], true, 5),
-  ('vaginisme',              'Vaginisme',                      'Contraction involontaire empêchant la pénétration.',               '{femme}'::audience_type[], true, 6),
-  ('dyspareunies',           'Dyspareunies (douleurs)',        'Douleurs pendant les rapports.',                                   '{femme}'::audience_type[], true, 7),
-  ('addiction-masturbation', 'Addiction à la masturbation',    'Besoin ressenti comme compulsif, avec perte de contrôle.',         '{tous}'::audience_type[], true, 8),
-  ('addiction-pornographie', 'Addiction à la pornographie',    'Consommation vécue comme envahissante.',                           '{tous}'::audience_type[], true, 9),
-  ('couple',                 'Accompagnement de couple',       'Difficultés relationnelles et/ou sexuelles dans le couple.',       '{couple}'::audience_type[], true, 10)
-on conflict (slug) do update set
-  title       = excluded.title,
-  description = excluded.description,
-  audiences   = excluded.audiences,
-  is_active   = excluded.is_active,
-  sort_order  = excluded.sort_order,
-  updated_at  = now();
-
--- ========================= 4) Questions d'admission =========================
--- Version COURTE « prospect » validée (doc 07 « Questionnaires — questions retenues »).
---    Seules les questions marquées ● (essentielles, premier contact) sont conservées ici,
---    pour ne pas décourager le prospect. La version longue reste un usage cabinet / séance.
---    Les questions « travail sur les parts » (🔒 doc 06) sont volontairement EXCLUES du formulaire web.
-
--- ---- 4.0 Tronc commun (topic_id = null : posé à tous les motifs) ----
+-- ---- Tronc commun (topic_id = null : posé à tous les motifs) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select null, '{tous}'::audience_type[], q.section, q.label, q.type::question_type, q.options, q.required, q.ord
 from (values
@@ -126,7 +47,7 @@ from (values
   ('Santé', $Q$Alcool / drogues ?$Q$,                                                                     'single_choice', '[{"value":"non","label":"Non"},{"value":"occasionnel","label":"Occasionnelle"},{"value":"reguliere","label":"Régulière"},{"value":"quotidienne","label":"Quotidienne"}]'::jsonb, false, 230)
 ) as q(section, label, type, options, required, ord);
 
--- ---- 4.1 Troubles de l'érection (homme) ----
+-- ---- Troubles de l'érection (homme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{homme}'::audience_type[], 'Troubles de l''érection', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -139,7 +60,7 @@ from topics, (values
 ) as q(label, type, options, required, ord)
 where topics.slug = 'troubles-erectiles';
 
--- ---- 4.2 Éjaculation précoce / rapide (homme) ----
+-- ---- Éjaculation précoce / rapide (homme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{homme}'::audience_type[], q.section, q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -151,7 +72,7 @@ from topics, (values
 ) as q(section, label, type, options, required, ord)
 where topics.slug = 'ejaculation-precoce';
 
--- ---- 4.3 Éjaculation tardive / anéjaculation (homme) ----
+-- ---- Éjaculation tardive / anéjaculation (homme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{homme}'::audience_type[], 'Éjaculation tardive / anéjaculation', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -163,7 +84,7 @@ from topics, (values
 ) as q(label, type, options, required, ord)
 where topics.slug = 'ejaculation-tardive';
 
--- ---- 4.4 Troubles du désir (femme) ----
+-- ---- Troubles du désir (femme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{femme}'::audience_type[], 'Troubles du désir', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -175,7 +96,7 @@ from topics, (values
 ) as q(label, type, options, required, ord)
 where topics.slug = 'troubles-du-desir';
 
--- ---- 4.5 Anorgasmie (femme) ----
+-- ---- Anorgasmie (femme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{femme}'::audience_type[], 'Anorgasmie', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -187,7 +108,7 @@ from topics, (values
 ) as q(label, type, options, required, ord)
 where topics.slug = 'anorgasmie';
 
--- ---- 4.6 Vaginisme (femme) ----
+-- ---- Vaginisme (femme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{femme}'::audience_type[], 'Vaginisme', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -199,7 +120,7 @@ from topics, (values
 ) as q(label, type, options, required, ord)
 where topics.slug = 'vaginisme';
 
--- ---- 4.7 Dyspareunies / douleurs (femme) ----
+-- ---- Dyspareunies / douleurs (femme) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{femme}'::audience_type[], 'Dyspareunies (douleurs)', q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -212,9 +133,9 @@ from topics, (values
 where topics.slug = 'dyspareunies';
 
 update questions set help_text = '0 = aucune douleur · 4 = douleur très intense'
-where topic_id = (select id from topics where slug = 'dyspareunies') and type = 'scale';
+where topic_id = (select id from topics where slug = 'dyspareunies') and type = 'scale' and is_active;
 
--- ---- 4.8 Addiction à la masturbation (tous) ----
+-- ---- Addiction à la masturbation (tous) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{tous}'::audience_type[], q.section, q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -226,7 +147,7 @@ from topics, (values
 ) as q(section, label, type, options, required, ord)
 where topics.slug = 'addiction-masturbation';
 
--- ---- 4.9 Addiction à la pornographie (tous) ----
+-- ---- Addiction à la pornographie (tous) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{tous}'::audience_type[], q.section, q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -236,7 +157,7 @@ from topics, (values
 ) as q(section, label, type, options, required, ord)
 where topics.slug = 'addiction-pornographie';
 
--- ---- 4.10 Couple : demande (version courte prospect ; le test Dallaire se fait en séance) ----
+-- ---- Couple : demande (version courte prospect ; le test Dallaire se fait en séance) ----
 insert into questions (topic_id, audiences, section, label, type, options, required, sort_order)
 select id, '{couple}'::audience_type[], q.section, q.label, q.type::question_type, q.options, q.required, q.ord
 from topics, (values
@@ -248,64 +169,4 @@ from topics, (values
 ) as q(section, label, type, options, required, ord)
 where topics.slug = 'couple';
 
--- ========================= 5) Horaires d'ouverture (availability_rules) =========================
--- ⚠️ Plages PLACEHOLDER (heure locale Réunion) — à ajuster avec Dimitri (disponibilités non fournies au cahier).
---    Les congés se gèrent dans Google Agenda (comptés « occupé »).
-insert into availability_rules (weekday, start_time, end_time, is_active) values
-  (1, '09:00', '12:00', true), (1, '14:00', '18:00', true),  -- lundi
-  (2, '09:00', '12:00', true), (2, '14:00', '18:00', true),  -- mardi
-  (3, '09:00', '12:00', true), (3, '14:00', '18:00', true),  -- mercredi
-  (4, '09:00', '12:00', true), (4, '14:00', '18:00', true),  -- jeudi
-  (5, '09:00', '12:00', true), (5, '14:00', '18:00', true),  -- vendredi
-  (6, '09:00', '12:00', true);                               -- samedi matin
-
--- ========================= 6) Pages de contenu (légal) =========================
--- Éditeur : SAS ANTIDOTE (forme juridique déclarée par Dimitri). Directeur de publication : Dimitri Gauthier.
-insert into content_pages (slug, title, body_html)
-values
-  ('mentions-legales', 'Mentions légales',
-   $H$<h2>Éditeur du site</h2>
-<p>Le présent site est édité par <strong>SAS ANTIDOTE</strong>, société par actions simplifiée au capital de 1 000 €,
-immatriculée au RCS de Saint-Denis sous le numéro 902 472 117, dont le siège social est situé
-5 chemin Grand Canal — Immeuble Thalès A, 97490 Sainte-Clotilde (La Réunion).</p>
-<p><strong>Directeur de la publication :</strong> Dimitri Gauthier.<br/>
-<strong>Contact :</strong> dimitrigauthier974@gmail.com — +262 692 52 72 86.</p>
-<h2>Hébergement</h2>
-<p>Le site est hébergé par Vercel Inc. (frontend) et Supabase (base de données et fonctions serveur).
-Coordonnées complètes de l'hébergeur à compléter avant la mise en ligne.</p>
-<h2>Propriété intellectuelle</h2>
-<p>L'ensemble des contenus (textes, images, éléments graphiques) est protégé par le droit d'auteur.
-Toute reproduction sans autorisation préalable est interdite.</p>$H$),
-  ('confidentialite', 'Politique de confidentialité',
-   $H$<h2>Responsable du traitement</h2>
-<p>Les données collectées sur ce site sont traitées par SAS ANTIDOTE (Dimitri Gauthier), à des fins de prise
-de rendez-vous, de suivi de consultation et de facturation.</p>
-<h2>Données collectées</h2>
-<p>Selon votre parcours : identité et coordonnées, réponses au questionnaire d'admission (données de santé,
-traitées avec une vigilance particulière), informations de rendez-vous et de paiement. Le paiement est traité
-par Stripe ; aucune donnée bancaire n'est stockée sur nos serveurs.</p>
-<h2>Finalités et base légale</h2>
-<p>Les données servent exclusivement à l'accompagnement thérapeutique et à la gestion des rendez-vous.
-Elles ne sont ni vendues ni cédées à des tiers à des fins commerciales.</p>
-<h2>Durée de conservation</h2>
-<p>Les données sont conservées le temps nécessaire au suivi, puis archivées ou supprimées conformément
-aux obligations légales applicables.</p>
-<h2>Vos droits (RGPD)</h2>
-<p>Vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition. Pour l'exercer :
-dimitrigauthier974@gmail.com.</p>$H$)
-on conflict (slug) do update set
-  title     = excluded.title,
-  body_html = excluded.body_html,
-  updated_at = now();
-
 commit;
-
--- ========================= 7) Administrateur (à faire manuellement) =========================
--- app_admins référence auth.users(id). Il faut donc d'abord créer le compte de Dimitri
--- (Dashboard Supabase > Authentication > Add user, ou via l'API), puis l'enregistrer comme admin :
---
---   insert into app_admins (user_id)
---   select id from auth.users where email = 'dimitrigauthier974@gmail.com'
---   on conflict do nothing;
---
--- (Volontairement laissé en commentaire : le compte auth n'existe pas encore.)

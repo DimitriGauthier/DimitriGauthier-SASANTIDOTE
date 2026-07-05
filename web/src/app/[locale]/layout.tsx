@@ -33,7 +33,7 @@ export async function generateMetadata({
   const l = isLocale(locale) ? locale : "fr";
   return {
     title: {
-      default: `${siteConfig.practitionerName} — ${siteConfig.tagline[l]}`,
+      default: `${siteConfig.practitionerName} · ${siteConfig.tagline[l]}`,
       template: `%s · ${siteConfig.practitionerName}`,
     },
     description: siteConfig.tagline[l],

@@ -17,8 +17,8 @@ export async function generateMetadata({
     title: pick(l, "Tente l'expérience", "Try the experience"),
     description: pick(
       l,
-      "Un parcours guidé, simple et confidentiel — Dimitri t'accompagne pas à pas jusqu'à ton rendez-vous.",
-      "A guided, simple and confidential journey — Dimitri walks you step by step to your appointment.",
+      "Un parcours guidé, simple et confidentiel. Dimitri t'accompagne pas à pas jusqu'à ton rendez-vous.",
+      "A guided, simple and confidential journey. Dimitri walks you step by step to your appointment.",
     ),
   };
 }

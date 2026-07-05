@@ -29,13 +29,13 @@ export async function generateMetadata({
   return {
     title: pick(
       l,
-      "Dimitri Gauthier — Sexothérapie, TRAME® & numérologie",
-      "Dimitri Gauthier — Sex therapy, TRAME® & numerology",
+      "Dimitri Gauthier · Sexothérapie, TRAME® & numérologie",
+      "Dimitri Gauthier · Sex therapy, TRAME® & numerology",
     ),
     description: pick(
       l,
-      "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur — sexothérapie, TRAME® et numérologie. Consultations en visio.",
-      "Sex therapist for men, women and couples. An approach connecting mind, body and heart — sex therapy, TRAME® and numerology. Online sessions.",
+      "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur : sexothérapie, TRAME® et numérologie. Consultations en visio.",
+      "Sex therapist for men, women and couples. An approach connecting mind, body and heart: sex therapy, TRAME® and numerology. Online sessions.",
     ),
   };
 }
@@ -147,8 +147,8 @@ export default async function HomePage({
           <p className="animate-fade-up mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             {pick(
               l,
-              "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à retrouver un équilibre — tête, corps et cœur.",
-              "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and finding balance again — mind, body and heart.",
+              "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à retrouver un équilibre entre la tête, le corps et le cœur.",
+              "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and finding balance again between mind, body and heart.",
             )}
           </p>
           <div className="animate-fade-up mt-10 flex flex-col items-center gap-4">
@@ -161,7 +161,7 @@ export default async function HomePage({
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
             <p className="text-xs text-muted-foreground">
-              {pick(l, "Un parcours guidé de 2 minutes — simple, confidentiel, sans engagement", "A 2-minute guided journey — simple, confidential, no commitment")}
+              {pick(l, "Un parcours guidé de 2 minutes, simple, confidentiel et sans engagement", "A 2-minute guided journey: simple, confidential, no commitment")}
             </p>
             <Link href={href(l, "mon-approche")} className="story-link text-sm font-medium text-primary">
               {pick(l, "Ou découvrir mon approche d'abord", "Or discover my approach first")}
@@ -255,8 +255,8 @@ export default async function HomePage({
             <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Je considère la sexualité comme une dimension globale de l'identité, du bien-être et des relations humaines — dans un cadre éthique, confidentiel et sans jugement.",
-                "I see sexuality as a global dimension of identity, well-being and human relationships — within an ethical, confidential and non-judgmental framework.",
+                "Je considère la sexualité comme une dimension globale de l'identité, du bien-être et des relations humaines, dans un cadre éthique, confidentiel et sans jugement.",
+                "I see sexuality as a global dimension of identity, well-being and human relationships, within an ethical, confidential and non-judgmental framework.",
               )}
             </p>
           </Reveal>
@@ -269,8 +269,8 @@ export default async function HomePage({
               <p>
                 {pick(
                   l,
-                  "C'est un compagnon de service, un assistant dévoué. Celui qui vient soutenir l'autre — non pour le dominer ni le guérir de force, mais pour l'accompagner avec présence et attention.",
-                  "A companion in service, a devoted assistant. Someone who comes to support the other — not to dominate them, nor to cure them by force, but to walk beside them with presence and attention.",
+                  "C'est un compagnon de service, un assistant dévoué. Celui qui vient soutenir l'autre, non pour le dominer ni le guérir de force, mais pour l'accompagner avec présence et attention.",
+                  "A companion in service, a devoted assistant. Someone who comes to support the other, not to dominate them, nor to cure them by force, but to walk beside them with presence and attention.",
                 )}
               </p>
               <p className="font-serif text-xl italic leading-relaxed text-foreground">
@@ -288,8 +288,8 @@ export default async function HomePage({
               <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl">
                 {pick(
                   l,
-                  "Mon rôle, en tant qu'accompagnant, est d'accueillir, d'écouter, d'observer, d'éclairer ton chemin — et de libérer le mouvement de l'ÊTRE bien qui vient de l'intérieur de toi.",
-                  "My role, as a companion, is to welcome, to listen, to observe, to light up your path — and to free the movement of the well-BEING that comes from within you.",
+                  "Mon rôle, en tant qu'accompagnant, est d'accueillir, d'écouter, d'observer, d'éclairer ton chemin, et de libérer le mouvement de l'ÊTRE bien qui vient de l'intérieur de toi.",
+                  "My role, as a companion, is to welcome, to listen, to observe, to light up your path, and to free the movement of the well-BEING that comes from within you.",
                 )}
               </p>
               <p className="mt-5 text-sm font-medium text-primary">— {siteConfig.practitionerName}</p>

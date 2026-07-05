@@ -95,7 +95,7 @@ export default async function PricingPage({
       <CTASection
         href={href(l, "reservation")}
         title={pick(l, "Réserve ta séance", "Book your session")}
-        sub={pick(l, "Le tarif s'affiche clairement avant le paiement — aucune surprise.", "The price is shown clearly before payment — no surprises.")}
+        sub={pick(l, "Le tarif s'affiche clairement avant le paiement, aucune surprise.", "The price is shown clearly before payment, no surprises.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </div>
