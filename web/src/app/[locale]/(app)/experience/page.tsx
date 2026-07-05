@@ -1,4 +1,4 @@
-// Expérience — application plein écran (sous-domaine intime.), sans menu.
+// Expérience INTIMY — application plein écran (sous-domaine intimy.), sans menu.
 // Charge les données d'admission côté serveur puis monte le tunnel guidé par Dimitri.
 import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";

@@ -1,5 +1,6 @@
 // Middleware —
-//  1) Sous-domaine « intime. » → application « expérience » plein écran (sans menu).
+//  1) Sous-domaine « intimy. » (marque INTIMY) → application « expérience » plein écran (sans menu).
+//     L'ancien « intime. » reste accepté le temps de la bascule DNS (aucune rupture de lien).
 //  2) Sinon : force le préfixe de langue (/fr par défaut, /en).
 import { NextRequest, NextResponse } from "next/server";
 import { locales, defaultLocale } from "@/lib/i18n";
@@ -24,9 +25,9 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── 1) Sous-domaine dédié « intime. » : tout mène à l'expérience ──
+  // ── 1) Sous-domaine dédié « intimy. » (+ ancien « intime. ») : tout mène à l'expérience ──
   // (l'URL visible reste celle du sous-domaine ; on réécrit vers /<loc>/experience)
-  if (host.startsWith("intime.")) {
+  if (host.startsWith("intimy.") || host.startsWith("intime.")) {
     const loc = localeFromPath(pathname);
     const target = `/${loc}/experience`;
     if (pathname !== target) {

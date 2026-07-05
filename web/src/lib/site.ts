@@ -57,9 +57,9 @@ export function href(locale: Locale, slug = ""): string {
   return `/${locale}${slug ? `/${slug}` : ""}`;
 }
 
-// ── Application « expérience » (sous-domaine intime.dimitrigauthier.com) ──
+// ── Application « expérience » INTIMY (sous-domaine intimy.dimitrigauthier.com) ──
 // Configurables par variable d'env pour basculer sans changer le code :
-//   NEXT_PUBLIC_EXPERIENCE_URL = https://intime.dimitrigauthier.com
+//   NEXT_PUBLIC_EXPERIENCE_URL = https://intimy.dimitrigauthier.com
 //   NEXT_PUBLIC_SITE_URL       = https://dimitrigauthier.com
 // En local (envs vides), on retombe sur les routes internes.
 const EXPERIENCE_BASE = (process.env.NEXT_PUBLIC_EXPERIENCE_URL ?? "").replace(/\/$/, "");

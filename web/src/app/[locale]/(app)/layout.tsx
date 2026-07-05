@@ -1,4 +1,4 @@
-// Layout « application » plein écran pour l'expérience (sous-domaine intime.).
+// Layout « application » plein écran pour l'expérience INTIMY (sous-domaine intimy.).
 // Volontairement dépouillé : pas de menu ni de footer riche — immersif, comme une app.
 import Link from "next/link";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
