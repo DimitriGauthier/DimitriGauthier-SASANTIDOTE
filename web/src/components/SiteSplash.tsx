@@ -9,6 +9,7 @@
 // Bouton « Entrer » pour passer. Aucune dépendance externe.
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import SplashCupid from "./SplashCupid";
 
 // SSR-safe : useLayoutEffect côté client, useEffect au rendu serveur.
 const useIso = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -190,12 +191,7 @@ export default function SiteSplash({
       {/* Acteurs (Cupidon + flèche + traînée + explosion) — s'effacent avant l'ouverture */}
       <div className="splash-actors">
         <div className="splash-cupid">
-          <div className="splash-cupid-in">
-            <div className="splash-cupid-bob">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/img/cupid.png" alt="Cupidon" className="splash-cupid-img" />
-            </div>
-          </div>
+          <SplashCupid />
         </div>
 
         <div className="splash-arrow">
@@ -266,11 +262,7 @@ const CSS = `
 /* Acteurs */
 .splash-actors{position:absolute;inset:0;animation:sp-fade-out .5s ease 2.35s both}
 
-.splash-cupid{position:absolute;left:14%;top:50%;width:clamp(140px,24vw,240px);transform:translate(-50%,-50%)}
-.splash-cupid-in{animation:sp-cupid-in .6s ease-out both;will-change:transform,opacity}
-.splash-cupid-bob{animation:sp-bob 3s ease-in-out .6s infinite}
-/* Le cupidon du logo vise à gauche : on le retourne pour qu'il décoche vers le centre. */
-.splash-cupid-img{display:block;width:100%;height:auto;transform:scaleX(-1);filter:drop-shadow(0 10px 22px hsl(var(--deep) / 0.18))}
+.splash-cupid{position:absolute;left:14%;top:50%;width:clamp(150px,25vw,250px);transform:translate(-50%,-50%)}
 
 .splash-arrow{position:absolute;left:20%;top:50%;width:clamp(66px,13vw,120px);opacity:1;
   animation:sp-arrow-x 2s cubic-bezier(.5,0,.2,1) .4s both, sp-arrow-pose 2s cubic-bezier(.5,0,.2,1) .4s both;will-change:left,transform,opacity}
@@ -299,8 +291,6 @@ const CSS = `
   opacity:0;animation:sp-fade-in-late .5s ease 1s both}
 .splash-skip:hover{color:hsl(var(--primary));border-color:hsl(var(--primary) / 0.5)}
 
-@keyframes sp-cupid-in{0%{opacity:0;transform:translateX(-60px)}100%{opacity:1;transform:translateX(0)}}
-@keyframes sp-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes sp-arrow-x{0%{left:20%}22%{left:18%}32%{left:18%}68%{left:50%}100%{left:50%}}
 @keyframes sp-arrow-pose{
   0%{transform:translate(-50%,-50%) rotate(0) scale(1);opacity:1}
