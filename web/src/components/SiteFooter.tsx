@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Lock } from "lucide-react";
 import { getDict, type Locale } from "@/lib/i18n";
 import { navItems, href, siteConfig } from "@/lib/site";
 import type { PublicSettings } from "@/lib/types";
@@ -70,6 +71,13 @@ export default function SiteFooter({
               className="transition-colors hover:text-primary"
             >
               {locale === "en" ? "Privacy policy" : "Confidentialité"}
+            </Link>
+            <Link
+              href={href(locale, "admin/login")}
+              className="mt-1 inline-flex w-fit items-center gap-1 text-xs text-muted-foreground/70 transition-colors hover:text-primary"
+            >
+              <Lock className="h-3 w-3" />
+              {locale === "en" ? "Admin area" : "Espace admin"}
             </Link>
           </div>
         </div>

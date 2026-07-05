@@ -1,10 +1,13 @@
-// Habillage des pages publiques (header + footer + bouton WhatsApp).
+// Habillage des pages publiques (splash d'entrée + header + footer + bouton WhatsApp).
 // Le groupe de route (public) n'apparaît pas dans l'URL ; l'admin a son propre layout.
-import { isLocale, type Locale } from "@/lib/i18n";
+import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { getPublicSettings } from "@/lib/data";
+import { siteConfig } from "@/lib/site";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SiteSplash from "@/components/SiteSplash";
+import FloatingHearts from "@/components/FloatingHearts";
 
 export default async function PublicLayout({
   children,
@@ -16,8 +19,15 @@ export default async function PublicLayout({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   const settings = await getPublicSettings();
+  const name = settings?.practitioner_name ?? siteConfig.practitionerName;
   return (
     <>
+      <FloatingHearts />
+      <SiteSplash
+        name={name}
+        tagline={siteConfig.tagline[l]}
+        skipLabel={pick(l, "Entrer", "Enter")}
+      />
       <SiteHeader locale={l} settings={settings} />
       <main className="mx-auto max-w-6xl px-4 py-16">{children}</main>
       <SiteFooter locale={l} settings={settings} />

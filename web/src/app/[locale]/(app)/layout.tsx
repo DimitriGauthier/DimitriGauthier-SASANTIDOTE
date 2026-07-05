@@ -4,6 +4,7 @@ import Link from "next/link";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { siteConfig, mainSiteHref } from "@/lib/site";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
+import FloatingHearts from "@/components/FloatingHearts";
 
 export default async function AppLayout({
   children,
@@ -17,6 +18,9 @@ export default async function AppLayout({
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-gradient-soft">
+      {/* Cœurs flottants (au-dessus du fond dégradé, sous le contenu en z-10) */}
+      <FloatingHearts zIndex={1} />
+
       {/* Décor discret */}
       <span aria-hidden className="blob animate-blob absolute -left-24 top-8 h-72 w-72 rounded-full bg-primary/15" />
       <span

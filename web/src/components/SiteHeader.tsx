@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { getDict, type Locale } from "@/lib/i18n";
-import { navItems, href, siteConfig, type NavKey } from "@/lib/site";
+import { navItems, href, experienceHref, siteConfig, type NavKey } from "@/lib/site";
 import type { PublicSettings } from "@/lib/types";
 import LocaleSwitcher from "./LocaleSwitcher";
 
@@ -68,7 +68,7 @@ export default function SiteHeader({
         <div className="flex items-center gap-2 md:gap-3">
           <LocaleSwitcher current={locale} />
           <Link
-            href={href(locale, "reservation")}
+            href={experienceHref(locale)}
             className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:brightness-105 sm:inline-flex"
           >
             {t.nav.book}
@@ -101,7 +101,7 @@ export default function SiteHeader({
               </Link>
             ))}
             <Link
-              href={href(locale, "reservation")}
+              href={experienceHref(locale)}
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-soft"
             >

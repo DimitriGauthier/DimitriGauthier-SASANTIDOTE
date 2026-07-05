@@ -1,14 +1,16 @@
 "use client";
 
 // Tunnel de réservation guidé, une question à la fois (auto-advance style Typeform).
-// Flux : profil → accompagnement → motif → questionnaire (1 écran/question) → coordonnées → créneau → paiement.
+// Flux : intro → profil → motif → questionnaire (1 écran/question) → accompagnement → coordonnées → créneau → paiement.
+// L'accompagnement (formule + prix) est choisi APRÈS le questionnaire, pas au début.
 // Les réponses à choix unique / oui-non / échelle passent AUTOMATIQUEMENT à l'écran suivant.
 // Les champs texte et choix multiples gardent un bouton « Continuer ».
 // Données (services, topics, questions) chargées côté serveur puis filtrées ici.
 // get-slots / create-hold sont des Edge Functions (clé anon). Redirige vers Stripe au paiement.
 
-import { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Heart, User, Users } from "lucide-react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { Ref } from "react";
+import { ArrowLeft, ArrowRight, Check, ShieldCheck, Clock, Heart } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { pick, getDict } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
@@ -16,6 +18,8 @@ import type { Audience, Service, Topic, Question, Slot } from "@/lib/types";
 import { getSlots, createHold } from "@/lib/edge";
 import { formatPrice, formatDuration, formatDayLabel, formatTime, reunionDayKey } from "@/lib/format";
 import DimitriGuide from "@/components/booking/DimitriGuide";
+import { HommeAvatar, FemmeAvatar, CoupleAvatar } from "@/components/booking/ProfileAvatars";
+import { DimitriAvatar } from "@/components/DimitriAvatar";
 
 type Props = {
   locale: Locale;
@@ -40,8 +44,8 @@ type Screen =
   | { k: "contact" }
   | { k: "slot" };
 
-const AUDIENCES: Audience[] = ["homme", "femme", "couple"];
-const AUDIENCE_ICON: Record<Audience, typeof User> = { homme: User, femme: User, couple: Users, tous: Heart };
+const AUDIENCES = ["homme", "femme", "couple"] as const satisfies readonly Audience[];
+const AUDIENCE_AVATAR = { homme: HommeAvatar, femme: FemmeAvatar, couple: CoupleAvatar } as const;
 
 function matchesAudience(audiences: Audience[], a: Audience): boolean {
   return audiences.includes(a) || audiences.includes("tous");
@@ -58,9 +62,21 @@ function autoAdvances(type: Question["type"]): boolean {
   return type === "single_choice" || type === "boolean" || type === "scale";
 }
 
+// SSR-safe : useLayoutEffect côté client, useEffect au rendu serveur (évite le warning).
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+// Emplacement « d'arrivée » de Dimitri actuellement visible (sidebar desktop OU barre mobile).
+// On ignore les cibles masquées par media-query (display:none → aucun rect).
+function visibleDimitriTarget(): HTMLElement | null {
+  if (typeof document === "undefined") return null;
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>("[data-dimitri-target]"));
+  return nodes.find((n) => n.getClientRects().length > 0) ?? null;
+}
+
 export default function BookingTunnel({ locale, services, topics, questions }: Props) {
   const t = getDict(locale);
 
+  const [started, setStarted] = useState(false);
   const [index, setIndex] = useState(0);
   const [audience, setAudience] = useState<Audience | null>(null);
   const [serviceId, setServiceId] = useState<string | null>(null);
@@ -76,6 +92,12 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   const [error, setError] = useState<string | null>(null);
 
   const timer = useRef<number | null>(null);
+
+  // FLIP « hero » : Dimitri vole de l'accueil vers sa place de guide au clic sur « Commencer ».
+  const [flying, setFlying] = useState(false);
+  const introAvatarRef = useRef<HTMLSpanElement>(null);
+  const flyFromRect = useRef<DOMRect | null>(null);
+  const flyRef = useRef<HTMLDivElement>(null);
 
   // ---- Données filtrées selon le profil ----
   const availServices = useMemo(
@@ -97,10 +119,12 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
 
   // ---- Liste dynamique des écrans ----
   const screens = useMemo<Screen[]>(() => {
-    const arr: Screen[] = [{ k: "profile" }, { k: "service" }];
+    // Ordre : profil → motif → questionnaire → accompagnement → coordonnées → créneau.
+    // Le choix de l'accompagnement (formule + prix) vient APRÈS le questionnaire.
+    const arr: Screen[] = [{ k: "profile" }];
     if (availTopics.length > 0) arr.push({ k: "topic" });
     for (const q of availQuestions) arr.push({ k: "question", q });
-    arr.push({ k: "contact" }, { k: "slot" });
+    arr.push({ k: "service" }, { k: "contact" }, { k: "slot" });
     return arr;
   }, [availTopics.length, availQuestions]);
 
@@ -249,17 +273,90 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
     return [...map.entries()];
   }, [slots]);
 
+  // ---- FLIP « hero » Dimitri : de l'accueil vers sa place de guide ----
+  function handleStart() {
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const el = introAvatarRef.current;
+    if (!reduce && el) {
+      flyFromRect.current = el.getBoundingClientRect();
+      setFlying(true);
+    }
+    setStarted(true);
+  }
+
+  useIsoLayoutEffect(() => {
+    if (!started || !flying) return;
+    const from = flyFromRect.current;
+    const fly = flyRef.current;
+    const target = visibleDimitriTarget();
+    if (!from || !fly || !target) {
+      setFlying(false);
+      return;
+    }
+    const to = target.getBoundingClientRect();
+    const scale = to.width / from.width;
+    // First : le clone démarre pile sur l'avatar d'accueil (aucune transition).
+    fly.style.transition = "none";
+    fly.style.transformOrigin = "top left";
+    fly.style.transform = `translate(${from.left}px, ${from.top}px) scale(1)`;
+    void fly.getBoundingClientRect(); // force le reflow avant de jouer la transition
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      setFlying(false); // révèle l'avatar réel du guide (identique, même place → sans accroc)
+    };
+    const raf = requestAnimationFrame(() => {
+      // Play : il glisse et se met à l'échelle de sa place de guide.
+      fly.style.transition = "transform 700ms cubic-bezier(0.22, 1, 0.36, 1)";
+      fly.style.transform = `translate(${to.left}px, ${to.top}px) scale(${scale})`;
+    });
+    fly.addEventListener("transitionend", finish, { once: true });
+    const fallback = window.setTimeout(finish, 950);
+    return () => {
+      cancelAnimationFrame(raf);
+      fly.removeEventListener("transitionend", finish);
+      window.clearTimeout(fallback);
+    };
+  }, [started, flying]);
+
   const guideName = siteConfig.practitionerName.split(" ")[0];
-  const guideRole = pick(locale, "Ton accompagnant", "Your companion");
+  // Nom du prospect affiché sous le duo d'avatars : son prénom dès qu'il est saisi,
+  // sinon un « toi » (ou « vous deux » pour un couple) le temps qu'on le connaisse.
+  const companion =
+    client.first_name.trim() ||
+    (audience === "couple" ? pick(locale, "vous deux", "you two") : pick(locale, "toi", "you"));
+  const guideRole = audience
+    ? pick(locale, "Vous avancez ensemble", "Moving forward together")
+    : pick(locale, "Ton accompagnant", "Your companion");
+
+  // Écran d'accueil : on explique l'expérience avant de lancer le formulaire.
+  if (!started) {
+    return <IntroScreen locale={locale} name={guideName} onStart={handleStart} avatarRef={introAvatarRef} />;
+  }
 
   return (
+    <>
+    {/* Clone volant de Dimitri (FLIP) : pont visuel entre l'accueil et sa place de guide. */}
+    {flying ? (
+      <div
+        ref={flyRef}
+        aria-hidden
+        className="pointer-events-none fixed left-0 top-0 z-[60]"
+        style={{ transform: "translate(-9999px, -9999px)", transformOrigin: "top left" }}
+      >
+        <DimitriAvatar size={100} />
+      </div>
+    ) : null}
     <div className="mx-auto max-w-4xl lg:grid lg:grid-cols-[240px_1fr] lg:gap-12">
       {/* Guide « Dimitri » — colonne de gauche (desktop) */}
-      <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="sidebar" />
+      <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="sidebar" audience={audience} companion={companion} hideAvatar={flying} />
 
       <div>
       {/* Guide compact (mobile) */}
-      <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="bar" />
+      <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="bar" audience={audience} companion={companion} hideAvatar={flying} />
 
       {/* Progression — barre dégradée + encouragement (esprit « parcours ») */}
       <div className="mb-8">
@@ -282,12 +379,15 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
         {/* ── PROFIL ── */}
         {screen.k === "profile" ? (
           <section>
-            <h2 className="mb-6 font-serif text-2xl font-medium text-foreground sm:text-3xl">
+            <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">
               {pick(locale, "Pour qui est cet accompagnement ?", "Who is this session for?")}
             </h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              {pick(locale, "Aucune bonne ou mauvaise réponse, choisis ce qui te ressemble.", "No right or wrong answer, pick what feels like you.")}
+            </p>
             <div className="grid gap-3 sm:grid-cols-3">
               {AUDIENCES.map((a) => {
-                const Icon = AUDIENCE_ICON[a];
+                const Avatar = AUDIENCE_AVATAR[a];
                 const active = audience === a;
                 return (
                   <button
@@ -301,19 +401,17 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
                         setAnswers({});
                       })
                     }
-                    className={`flex flex-col items-center gap-3 rounded-2xl border-2 px-4 py-7 text-center transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${
+                    className={`group flex flex-col items-center gap-3 rounded-2xl border-2 px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${
                       active
                         ? "animate-pop border-primary bg-secondary/50 shadow-soft"
                         : "border-border bg-card hover:border-primary/40 hover:bg-secondary/30 hover:shadow-card"
                     }`}
                   >
-                    <span
-                      className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${
-                        active ? "bg-primary text-primary-foreground" : "bg-secondary text-primary"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </span>
+                    <Avatar
+                      size={92}
+                      active={active}
+                      className={`transition-transform duration-300 ${active ? "animate-float" : "group-hover:scale-105"}`}
+                    />
                     <span className="font-serif text-lg text-foreground">
                       {a === "homme" ? t.tunnel.profileMan : a === "femme" ? t.tunnel.profileWoman : t.tunnel.profileCouple}
                     </span>
@@ -529,6 +627,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
       </div>
       </div>
     </div>
+    </>
   );
 }
 
@@ -550,6 +649,83 @@ function BackBar({ locale, onBack }: { locale: Locale; onBack: () => void }) {
       <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
         <ArrowLeft className="h-4 w-4" /> {t.common.back}
       </button>
+    </div>
+  );
+}
+
+// Écran d'accueil de l'expérience : explique le parcours puis lance le formulaire.
+function IntroScreen({
+  locale,
+  name,
+  onStart,
+  avatarRef,
+}: {
+  locale: Locale;
+  name: string;
+  onStart: () => void;
+  avatarRef?: Ref<HTMLSpanElement>;
+}) {
+  const points = [
+    {
+      Icon: ShieldCheck,
+      title: pick(locale, "100 % confidentiel", "100% confidential"),
+      text: pick(locale, "Tes réponses restent entre toi et Dimitri.", "Your answers stay between you and Dimitri."),
+    },
+    {
+      Icon: Heart,
+      title: pick(locale, "À ton rythme", "At your pace"),
+      text: pick(locale, "Pas de bonne ou mauvaise réponse, tu peux revenir en arrière.", "No right or wrong answer, you can go back anytime."),
+    },
+    {
+      Icon: Clock,
+      title: pick(locale, "3 à 5 minutes", "3 to 5 minutes"),
+      text: pick(locale, "Quelques questions simples, puis le choix de ton créneau.", "A few simple questions, then pick your slot."),
+    },
+  ];
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-8 text-center shadow-soft sm:p-12">
+        <div aria-hidden className="blob pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-primary/40" />
+        <div className="relative">
+          {/* Span mesurable (ref) : point de départ du vol de Dimitri vers le guide. */}
+          <span ref={avatarRef} className="inline-block">
+            <DimitriAvatar size={100} className="animate-float" />
+          </span>
+          <p className="mt-5 text-xs font-medium uppercase tracking-[0.2em] text-primary">
+            {pick(locale, "L'expérience INTIMY", "The INTIMY experience")}
+          </p>
+          <h2 className="mt-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">
+            {pick(locale, `Bienvenue, je suis ${name}`, `Welcome, I'm ${name}`)}
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
+            {pick(
+              locale,
+              "Ce parcours confidentiel me permet de mieux te connaître avant notre séance. Je te pose quelques questions simples, en toute intimité. Rien n'est envoyé tant que tu n'as pas terminé.",
+              "This confidential journey helps me get to know you before our session. I'll ask a few simple questions, in full privacy. Nothing is sent until you're done.",
+            )}
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {points.map(({ Icon, title, text }) => (
+              <div key={title} className="rounded-2xl border border-border/60 bg-background/60 p-4 text-center">
+                <span className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <p className="mt-2 text-sm font-medium text-foreground">{title}</p>
+                <p className="mt-1 text-xs leading-snug text-muted-foreground">{text}</p>
+              </div>
+            ))}
+          </div>
+
+          <button type="button" onClick={onStart} className={`${primaryBtn} mt-9 justify-center`}>
+            {pick(locale, "Commencer", "Start")} <ArrowRight className="h-4 w-4" />
+          </button>
+          <p className="mt-3 text-xs text-muted-foreground">
+            {pick(locale, "Tu pourras t'arrêter et reprendre quand tu veux.", "You can pause and resume whenever you like.")}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
