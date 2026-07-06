@@ -10,6 +10,15 @@ export function fmtReunion(iso: string, lang: Lang): string {
   }).format(new Date(iso));
 }
 
+// Échappe une valeur (saisie utilisateur) destinée à du HTML d'email.
+export function esc(s: unknown): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 // Confirmation de RDV (client)
 export function bookingConfirmation(
   lang: Lang,
@@ -55,5 +64,25 @@ export function reviewInvite(
       <p><a href="${p.link}">Laisser un avis</a></p>
       <p>Votre retour est précieux (il sera relu avant publication).</p>
       <p>${p.practitioner}</p>`,
+  };
+}
+
+// Notification à Dimitri : NOUVEAU PROSPECT (questionnaire terminé, arrivé au paiement,
+// paiement pas encore confirmé). Toujours en FR. `answersHtml` est déjà échappé/sûr.
+export function practitionerNewProspect(p: {
+  firstName: string; lastName: string; email: string; phone: string | null;
+  audience: string; serviceTitle: string; when: string; amount: string; lang: Lang; answersHtml: string;
+}): { subject: string; html: string } {
+  return {
+    subject: `Nouveau prospect — ${p.firstName} ${p.lastName}`,
+    html: `<p>Un nouveau prospect vient de terminer le questionnaire et d'arriver au paiement :</p>
+      <ul>
+        <li><strong>${esc(p.firstName)} ${esc(p.lastName)}</strong> — ${esc(p.email)} — ${esc(p.phone ?? "—")}</li>
+        <li>Créneau visé : <strong>${esc(p.when)}</strong> (heure de La Réunion)</li>
+        <li>Accompagnement : ${esc(p.serviceTitle)} · ${esc(p.amount)}</li>
+        <li>Profil : ${esc(p.audience)} · Langue : ${p.lang.toUpperCase()}</li>
+      </ul>
+      ${p.answersHtml ? `<p><strong>Réponses au questionnaire</strong></p>${p.answersHtml}` : ""}
+      <p style="color:#888;font-size:12px">Paiement pas encore confirmé — vous recevrez un second email si le rendez-vous est payé.</p>`,
   };
 }

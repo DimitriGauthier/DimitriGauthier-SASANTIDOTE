@@ -7,8 +7,18 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@14?target=deno";
 import { cors, json } from "../_shared/cors.ts";
 import { adminClient } from "../_shared/supabase.ts";
+import { sendEmail } from "../_shared/resend.ts";
+import { practitionerNewProspect, fmtReunion, esc, Lang } from "../_shared/emails.ts";
 
 const HOLD_MINUTES = 10;
+
+// Réponse du questionnaire → texte lisible (Oui/Non, listes, échelles…).
+function fmtAnswer(v: unknown): string {
+  if (v === null || v === undefined || v === "") return "";
+  if (typeof v === "boolean") return v ? "Oui" : "Non";
+  if (Array.isArray(v)) return v.map((x) => String(x)).join(", ");
+  return String(v);
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -30,8 +40,8 @@ serve(async (req) => {
     const start = new Date(slot_start);
     const end = new Date(start.getTime() + service.duration_min * 60_000);
 
-    // Anti-réservation trop proche
-    const { data: settings } = await admin.from("settings").select("min_notice_hours").eq("id", 1).single();
+    // Anti-réservation trop proche (+ email praticien pour la notif "nouveau prospect")
+    const { data: settings } = await admin.from("settings").select("min_notice_hours, email, practitioner_name").eq("id", 1).single();
     const notBefore = new Date(Date.now() + (settings?.min_notice_hours ?? 24) * 3600_000);
     if (start < notBefore) return json({ error: "créneau trop proche" }, 409);
 
@@ -108,6 +118,34 @@ serve(async (req) => {
       currency: service.currency,
       status: "created",
     });
+
+    // --- Notification "nouveau prospect" à Dimitri (questionnaire terminé, au paiement) ---
+    // Non bloquant : n'impacte jamais le tunnel de paiement, même si Resend échoue.
+    if (settings?.email) {
+      const answersHtml = (Array.isArray(answers) && answers.length)
+        ? "<ul>" + answers
+            .map((a: { label: string; value: unknown }) => {
+              const val = fmtAnswer(a.value);
+              return val ? `<li><strong>${esc(a.label)} :</strong> ${esc(val)}</li>` : "";
+            })
+            .join("") + "</ul>"
+        : "";
+      const amount = new Intl.NumberFormat(lang === "en" ? "en-GB" : "fr-FR", {
+        style: "currency", currency: service.currency ?? "EUR",
+      }).format((service.price_cents ?? 0) / 100);
+      const msg = practitionerNewProspect({
+        firstName: client.first_name, lastName: client.last_name, email: client.email,
+        phone: client.phone ?? null, audience: aud, serviceTitle: productName,
+        when: fmtReunion(start.toISOString(), lang as Lang), amount, lang: lang as Lang, answersHtml,
+      });
+      const task = sendEmail(admin, {
+        to: settings.email, subject: msg.subject, type: "practitioner_new_prospect",
+        booking_id: booking.id, html: msg.html,
+      }).catch((e) => console.error("notif prospect échouée:", e));
+      // @ts-ignore EdgeRuntime est fourni par Supabase Edge Functions
+      if (typeof EdgeRuntime !== "undefined") EdgeRuntime.waitUntil(task);
+      else await task;
+    }
 
     return json({ checkout_url: session.url, booking_token: booking.token, hold_expires_at: holdExpires });
   } catch (e) {

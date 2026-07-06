@@ -87,16 +87,20 @@ serve(async (req) => {
         html: conf.html,
       });
 
-      // Notification à Dimitri (toujours en FR)
+      // Notification à Dimitri (toujours en FR) — nouveau RDV + paiement confirmé
       if (settings?.email) {
+        const montant = new Intl.NumberFormat("fr-FR", {
+          style: "currency", currency: booking.currency ?? "EUR",
+        }).format((booking.price_cents ?? 0) / 100);
         await sendEmail(admin, {
           to: settings.email,
-          subject: `Nouveau RDV — ${booking.client_first_name} ${booking.client_last_name}`,
+          subject: `Nouveau RDV payé (${montant}) — ${booking.client_first_name} ${booking.client_last_name}`,
           type: "practitioner_new_booking",
           booking_id: bookingId,
-          html: `<p>Nouveau rendez-vous payé :</p>
+          html: `<p>Nouveau rendez-vous <strong>payé</strong> :</p>
             <ul>
-              <li><strong>${fmtReunion(booking.slot_start, "fr")}</strong></li>
+              <li><strong>${fmtReunion(booking.slot_start, "fr")}</strong> (heure de La Réunion)</li>
+              <li>Montant réglé : <strong>${montant}</strong></li>
               <li>${booking.client_first_name} ${booking.client_last_name} — ${booking.client_email} — ${booking.client_phone ?? "—"}</li>
               <li>Profil : ${booking.audience} · Langue : ${lang.toUpperCase()}</li>
             </ul>`,
