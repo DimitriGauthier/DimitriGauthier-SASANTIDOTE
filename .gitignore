@@ -9,6 +9,10 @@ dist/
 .env
 .env.*
 
+# ── Supabase CLI (cache local) ──
+supabase/.temp/
+supabase/.branches/
+
 # ── Docs, devis, assets internes : NE PAS publier sur le repo client ──
 Documentation/
 PDF/

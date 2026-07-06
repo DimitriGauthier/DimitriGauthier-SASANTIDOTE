@@ -12,7 +12,20 @@ export const siteConfig = {
   whatsappDigits: "262692527286", // pour wa.me (sans + ni espaces)
   email: "dimitrigauthier974@gmail.com",
   instagram: "https://instagram.com/dimitrigauthier",
-  zone: { fr: "La Réunion & métropole", en: "Réunion Island & mainland France" },
+  // Positionnement : accompagnement en visio partout dans le monde (FR/EN), cabinet à La Réunion.
+  zone: {
+    fr: "En visio partout dans le monde · cabinet à La Réunion",
+    en: "Online worldwide · in-person in Réunion Island",
+  },
+  // Description de référence pour le SEO (balise <meta description>, Open Graph).
+  seoDescription: {
+    fr: "Dimitri Gauthier, sexothérapeute. Consultations en visioconférence partout dans le monde, en français ou en anglais : sexothérapie, La TRAME®, numérologie. Cabinet également à La Réunion.",
+    en: "Dimitri Gauthier, sex therapist. Online video sessions worldwide, in French or English: sex therapy, The TRAME®, numerology. In-person practice also in Réunion Island.",
+  },
+  keywords: {
+    fr: ["sexothérapeute", "sexothérapie", "consultation en visio", "thérapie de couple", "La TRAME", "numérologie", "en ligne", "français", "anglais", "La Réunion"],
+    en: ["sex therapist", "sex therapy", "online video session", "couples therapy", "The TRAME", "numerology", "online", "French", "English", "Réunion Island"],
+  },
   currency: "EUR",
   legalEntity: {
     name: "ANTIDOTE SAS",
@@ -74,6 +87,13 @@ function cleanBase(raw?: string | null): string {
 }
 const EXPERIENCE_BASE = cleanBase(process.env.NEXT_PUBLIC_EXPERIENCE_URL);
 const SITE_BASE = cleanBase(process.env.NEXT_PUBLIC_SITE_URL);
+
+/**
+ * Base canonique du site pour le SEO (metadataBase, sitemap, Open Graph, canonical).
+ * On préfère l'URL configurée (nettoyée des hébergements techniques) et on retombe
+ * sur le domaine de production. Ne dépend jamais d'une URL Vercel/localhost.
+ */
+export const CANONICAL_SITE = SITE_BASE || "https://www.dimitrigauthier.com";
 
 /** Lien vers l'expérience : sous-domaine dédié si configuré, sinon route interne. */
 export function experienceHref(locale: Locale): string {

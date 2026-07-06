@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, CANONICAL_SITE, href } from "@/lib/site";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,12 +35,46 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const l = isLocale(locale) ? locale : "fr";
+  // Positionnement mondial : Dimitri accompagne en visio partout dans le monde,
+  // en français ou en anglais, avec un cabinet physique à La Réunion.
   return {
+    metadataBase: new URL(CANONICAL_SITE),
     title: {
       default: `${siteConfig.practitionerName} · ${siteConfig.tagline[l]}`,
       template: `%s · ${siteConfig.practitionerName}`,
     },
-    description: siteConfig.tagline[l],
+    description: siteConfig.seoDescription[l],
+    keywords: [...siteConfig.keywords[l]],
+    applicationName: siteConfig.practitionerName,
+    authors: [{ name: siteConfig.practitionerName }],
+    creator: siteConfig.practitionerName,
+    alternates: {
+      canonical: href(l),
+      languages: {
+        fr: href("fr"),
+        en: href("en"),
+        "x-default": href("fr"),
+      },
+    },
+    openGraph: {
+      type: "website",
+      siteName: siteConfig.practitionerName,
+      title: `${siteConfig.practitionerName} · ${siteConfig.tagline[l]}`,
+      description: siteConfig.seoDescription[l],
+      url: href(l),
+      locale: l === "fr" ? "fr_FR" : "en_US",
+      alternateLocale: l === "fr" ? "en_US" : "fr_FR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${siteConfig.practitionerName} · ${siteConfig.tagline[l]}`,
+      description: siteConfig.seoDescription[l],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
   };
 }
 

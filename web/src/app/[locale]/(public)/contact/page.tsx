@@ -89,7 +89,10 @@ export default async function ContactPage({
               <MapPin className="h-4 w-4 text-primary" /> {pick(l, "Zone & format", "Area & format")}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {siteConfig.zone[l]} · {pick(l, "consultations en visio", "online sessions")}
+              {siteConfig.zone[l]}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {pick(l, "En français ou en anglais.", "In French or English.")}
             </p>
           </Card>
         </aside>

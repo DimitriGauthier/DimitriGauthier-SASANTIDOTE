@@ -34,7 +34,7 @@ export default function AdminSidebar({ locale, email }: { locale: Locale; email:
   }
 
   return (
-    <aside className="glass sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border/60 p-4">
+    <aside className="glass sticky top-0 flex h-screen w-60 shrink-0 flex-col border-r border-border/60 p-4 print:hidden">
       <div className="mb-6 px-2">
         <Link href={base} className="flex items-center gap-2">
           <Image

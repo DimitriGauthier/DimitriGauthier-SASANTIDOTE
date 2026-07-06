@@ -1,8 +1,10 @@
 // Admin — liste des rendez-vous. Action "terminer" (=> complete-booking + invitation avis).
+import Link from "next/link";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { requireAdmin } from "@/lib/admin";
 import { formatDateTime, formatPrice } from "@/lib/format";
 import CompleteBookingButton from "@/components/admin/CompleteBookingButton";
+import { FileText } from "lucide-react";
 
 type BookingRow = {
   id: string;
@@ -97,11 +99,17 @@ export default async function AdminBookingsPage({
                       {formatPrice(b.price_cents, b.currency, l)}
                     </td>
                     <td className="px-4 py-3">
-                      {b.status === "scheduled" ? (
-                        <CompleteBookingButton locale={l} bookingId={b.id} />
-                      ) : (
-                        <span className="text-xs text-muted-foreground">—</span>
-                      )}
+                      <div className="flex flex-col items-start gap-2">
+                        <Link
+                          href={`/${l}/admin/bookings/${b.id}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:underline"
+                        >
+                          <FileText className="h-3.5 w-3.5" /> {pick(l, "Fiche & questionnaire", "Record & answers")}
+                        </Link>
+                        {b.status === "scheduled" ? (
+                          <CompleteBookingButton locale={l} bookingId={b.id} />
+                        ) : null}
+                      </div>
                     </td>
                   </tr>
                 );

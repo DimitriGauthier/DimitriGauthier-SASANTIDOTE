@@ -18,7 +18,7 @@ export default async function AdminDashLayout({
   return (
     <div className="flex min-h-screen">
       <AdminSidebar locale={l} email={user.email ?? ""} />
-      <main className="flex-1 overflow-x-auto px-6 py-8">{children}</main>
+      <main className="flex-1 overflow-x-auto px-6 py-8 print:overflow-visible print:px-0 print:py-0">{children}</main>
     </div>
   );
 }
