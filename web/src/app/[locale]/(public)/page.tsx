@@ -18,6 +18,11 @@ import { formatPrice, formatDuration } from "@/lib/format";
 import { CTAButton } from "@/components/ui";
 import Reveal from "@/components/Reveal";
 import ExperienceCTA from "@/components/ExperienceCTA";
+import DimitriGuide from "@/components/DimitriGuide";
+
+// Motif « cœurs » en filigrane pour le fond du hero (posé à très faible opacité).
+const HEART_PATTERN =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54' viewBox='0 0 54 54'%3E%3Cpath d='M27 37C27 37 16 29.5 16 22C16 18.1 19 15.6 22.3 16.8C24.4 17.5 27 20 27 20C27 20 29.6 17.5 31.7 16.8C35 15.6 38 18.1 38 22C38 29.5 27 37 27 37Z' fill='%23AE5F47'/%3E%3C/svg%3E\")";
 
 export async function generateMetadata({
   params,
@@ -118,81 +123,110 @@ export default async function HomePage({
   return (
     <div className="-my-16">
       {/* ── Hero ───────────────────────────────────────────── */}
-      <section className="full-bleed relative flex min-h-[92vh] items-center overflow-hidden">
-        <Image
-          src="/img/hero.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="blob animate-blob absolute -left-24 top-24 h-72 w-72 rounded-full bg-primary/40" />
+      <section className="full-bleed relative flex min-h-[92vh] items-center overflow-hidden bg-gradient-warm">
+        {/* Motif « cœurs » très léger, en filigrane clair */}
         <div
-          className="blob animate-blob absolute -right-16 bottom-16 h-80 w-80 rounded-full bg-gold/40"
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.05]"
+          style={{ backgroundImage: HEART_PATTERN, backgroundSize: "54px 54px" }}
+        />
+        {/* Taches douces pour animer le dégradé */}
+        <div className="blob animate-blob absolute -left-24 top-20 h-72 w-72 rounded-full bg-primary/20" />
+        <div
+          className="blob animate-blob absolute -right-20 bottom-12 h-80 w-80 rounded-full bg-gold/25"
           style={{ animationDelay: "-6s" }}
         />
 
-        <div className="relative mx-auto w-full max-w-5xl px-4 py-28 text-center">
-          <p className="animate-fade-up mb-5 text-sm font-medium uppercase tracking-[0.2em] text-primary">
-            {siteConfig.tagline[l]}
-          </p>
-          <h1 className="animate-fade-up text-balance font-serif text-5xl font-medium leading-[1.05] text-foreground sm:text-6xl md:text-7xl">
-            {pick(l, "S'accomplir pleinement, dans sa vie comme dans son ", "Fully flourish, in your life as in your ")}
-            <em className="text-gradient not-italic">
-              {pick(l, "intimité", "intimacy")}
-            </em>
-          </h1>
-          <p className="animate-fade-up mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            {pick(
-              l,
-              "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à retrouver un équilibre entre la tête, le corps et le cœur.",
-              "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and finding balance again between mind, body and heart.",
-            )}
-          </p>
-          <div className="animate-fade-up mt-10 flex flex-col items-center gap-4">
-            <a
-              href={experienceHref(l)}
-              className="experience-btn group inline-flex items-center gap-3 rounded-full px-9 py-4 text-base font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-1 sm:px-12 sm:py-5 sm:text-lg"
-            >
-              <Sparkles className="h-5 w-5" />
-              {pick(l, "Tente l'expérience", "Try the experience")}
-              <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </a>
-            <p className="text-xs text-muted-foreground">
-              {pick(l, "Un parcours guidé de 2 minutes, simple, confidentiel et sans engagement", "A 2-minute guided journey: simple, confidential, no commitment")}
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-28 md:grid-cols-2 md:gap-14">
+          {/* Colonne texte */}
+          <div className="text-center md:text-left">
+            <p className="animate-fade-up mb-5 text-sm font-medium uppercase tracking-[0.2em] text-primary">
+              {siteConfig.tagline[l]}
             </p>
-            <Link href={href(l, "mon-approche")} className="story-link text-sm font-medium text-primary">
-              {pick(l, "Ou découvrir mon approche d'abord", "Or discover my approach first")}
-            </Link>
+            <h1 className="animate-fade-up text-balance font-serif text-5xl font-medium leading-[1.05] text-foreground sm:text-6xl">
+              {pick(l, "S'accomplir pleinement, dans sa vie comme dans son ", "Fully flourish, in your life as in your ")}
+              <em className="text-gradient not-italic">
+                {pick(l, "intimité", "intimacy")}
+              </em>
+            </h1>
+            <p className="animate-fade-up mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground md:mx-0">
+              {pick(
+                l,
+                "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à retrouver un équilibre entre la tête, le corps et le cœur.",
+                "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and finding balance again between mind, body and heart.",
+              )}
+            </p>
+            <div className="animate-fade-up mt-10 flex flex-col items-center gap-4 md:items-start">
+              <a
+                href={experienceHref(l)}
+                className="experience-btn group inline-flex items-center gap-3 rounded-full px-9 py-4 text-base font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-1 sm:px-12 sm:py-5 sm:text-lg"
+              >
+                <Sparkles className="h-5 w-5" />
+                {pick(l, "Tente l'expérience", "Try the experience")}
+                <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+              <p className="text-xs text-muted-foreground">
+                {pick(l, "Un parcours guidé de 2 minutes, simple, confidentiel et sans engagement", "A 2-minute guided journey: simple, confidential, no commitment")}
+              </p>
+              <Link href={href(l, "mon-approche")} className="story-link text-sm font-medium text-primary">
+                {pick(l, "Ou découvrir mon approche d'abord", "Or discover my approach first")}
+              </Link>
+            </div>
+
+            <div className="animate-fade-up mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-muted-foreground md:justify-start">
+              <span className="inline-flex items-center gap-2">
+                <MapPin size={16} className="text-primary" />
+                {pick(l, "Saint-Denis & Saint-Pierre", "Saint-Denis & Saint-Pierre")}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Video size={16} className="text-primary" />
+                {pick(l, "Consultations en visio", "Online sessions")}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <MessageCircle size={16} className="text-primary" />
+                {pick(l, "Échange par WhatsApp", "Chat on WhatsApp")}
+              </span>
+            </div>
           </div>
 
-          <div className="animate-fade-up mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-muted-foreground">
-            <span className="inline-flex items-center gap-2">
-              <MapPin size={16} className="text-primary" />
-              {pick(l, "Saint-Denis & Saint-Pierre", "Saint-Denis & Saint-Pierre")}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <Video size={16} className="text-primary" />
-              {pick(l, "Consultations en visio", "Online sessions")}
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <MessageCircle size={16} className="text-primary" />
-              {pick(l, "Échange par WhatsApp", "Chat on WhatsApp")}
-            </span>
+          {/* Colonne photo de Dimitri au premier plan + mascotte cupidon */}
+          <div className="animate-fade-up relative mx-auto w-full max-w-sm md:mx-0 md:justify-self-end">
+            {/* Halo doux derrière la photo */}
+            <div
+              aria-hidden
+              className="absolute -inset-6 -z-10 rounded-full bg-primary/10 blur-2xl"
+            />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border-4 border-card shadow-soft ring-1 ring-primary/10">
+              <Image
+                src="/img/coach.jpg"
+                alt={siteConfig.practitionerName}
+                fill
+                priority
+                sizes="(min-width: 768px) 42vw, 90vw"
+                className="object-cover"
+              />
+            </div>
+            {/* Cupidon : signature de marque, flotte au-dessus de la photo */}
+            <Image
+              src="/img/cupid.png"
+              alt=""
+              aria-hidden
+              width={190}
+              height={183}
+              className="animate-float absolute -left-8 -top-10 w-28 select-none drop-shadow-[0_10px_24px_hsl(14_42%_48%/0.25)] sm:w-32"
+            />
           </div>
         </div>
       </section>
 
       {/* ── Intro ──────────────────────────────────────────── */}
-      <section className="full-bleed bg-gradient-soft py-24">
+      <section id="guide-intro" className="full-bleed bg-gradient-soft py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 md:grid-cols-2">
           <Reveal direction="left">
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-soft">
               <Image
-                src="/img/coach.jpg"
-                alt={siteConfig.practitionerName}
+                src="/img/detail.jpg"
+                alt=""
                 fill
                 sizes="(min-width: 768px) 40vw, 90vw"
                 className="object-cover"
@@ -233,7 +267,7 @@ export default async function HomePage({
       </section>
 
       {/* ── Manifeste : ma vision de la sexothérapie ──────── */}
-      <section className="full-bleed relative overflow-hidden bg-gradient-warm py-24">
+      <section id="guide-manifeste" className="full-bleed relative overflow-hidden bg-gradient-warm py-24">
         <span aria-hidden className="blob animate-blob absolute -left-16 top-10 h-64 w-64 rounded-full bg-primary/20" />
         <span
           aria-hidden
@@ -299,7 +333,7 @@ export default async function HomePage({
       </section>
 
       {/* ── Les 3 piliers ─────────────────────────────────── */}
-      <section className="full-bleed py-24">
+      <section id="guide-piliers" className="full-bleed py-24">
         <div className="mx-auto max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
@@ -337,7 +371,7 @@ export default async function HomePage({
       </section>
 
       {/* ── Galerie ───────────────────────────────────────── */}
-      <section className="full-bleed pb-24">
+      <section id="guide-cadre" className="full-bleed pb-24">
         <div className="mx-auto max-w-6xl px-4">
           <Reveal className="mb-10 text-center">
             <h2 className="font-serif text-4xl font-medium text-foreground">
@@ -366,7 +400,7 @@ export default async function HomePage({
       </section>
 
       {/* ── Pour qui ? ────────────────────────────────────── */}
-      <section className="full-bleed bg-gradient-warm py-24">
+      <section id="guide-pourqui" className="full-bleed bg-gradient-warm py-24">
         <div className="mx-auto max-w-6xl px-4">
           <Reveal className="mx-auto max-w-2xl text-center">
             <h2 className="font-serif text-4xl font-medium text-foreground">
@@ -395,7 +429,7 @@ export default async function HomePage({
 
       {/* ── Accompagnements (services depuis la DB) ────────── */}
       {services.length > 0 ? (
-        <section className="full-bleed py-24">
+        <section id="guide-accompagnements" className="full-bleed py-24">
           <div className="mx-auto max-w-6xl px-4">
             <Reveal className="mb-12 text-center">
               <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
@@ -440,7 +474,7 @@ export default async function HomePage({
 
       {/* ── Avis ──────────────────────────────────────────── */}
       {reviews.length > 0 ? (
-        <section className="full-bleed bg-gradient-soft py-24">
+        <section id="guide-avis" className="full-bleed bg-gradient-soft py-24">
           <div className="mx-auto max-w-6xl px-4">
             <Reveal className="mb-12 text-center">
               <h2 className="font-serif text-4xl font-medium text-foreground">
@@ -518,6 +552,70 @@ export default async function HomePage({
           </Reveal>
         </div>
       </section>
+
+      {/* ── Dimitri accompagne le défilement (prise de confiance) ── */}
+      <DimitriGuide
+        name={siteConfig.practitionerName}
+        role={pick(l, "Ton accompagnant", "Your companion")}
+        steps={[
+          {
+            id: "guide-intro",
+            caption: pick(
+              l,
+              "Ravi de t'accueillir. Ici, on avance à ton rythme, sans jugement.",
+              "Glad to welcome you. Here, we move at your pace, without judgment.",
+            ),
+          },
+          {
+            id: "guide-manifeste",
+            caption: pick(
+              l,
+              "Mon rôle : créer les conditions pour que tu puisses te changer toi-même.",
+              "My role: creating the conditions for you to change yourself.",
+            ),
+          },
+          {
+            id: "guide-piliers",
+            caption: pick(
+              l,
+              "Tête, corps et cœur : trois clés que je combine selon qui tu es.",
+              "Mind, body and heart: three keys I combine to fit who you are.",
+            ),
+          },
+          {
+            id: "guide-cadre",
+            caption: pick(
+              l,
+              "Un cadre doux et confidentiel, en cabinet comme en visio.",
+              "A gentle, confidential setting, in person or online.",
+            ),
+          },
+          {
+            id: "guide-pourqui",
+            caption: pick(
+              l,
+              "Homme, femme ou couple : ton histoire guide l'accompagnement.",
+              "Man, woman or couple: your story guides the support.",
+            ),
+          },
+          {
+            id: "guide-accompagnements",
+            caption: pick(
+              l,
+              "On choisit ensemble l'accompagnement qui te correspond.",
+              "Together we choose the support that fits you.",
+            ),
+          },
+          {
+            id: "guide-avis",
+            caption: pick(
+              l,
+              "D'autres ont osé le premier pas. Leurs mots parlent pour eux.",
+              "Others dared the first step. Their words speak for them.",
+            ),
+          },
+        ]}
+      />
 
       {/* ── Invitation flottante ──────────────────────────── */}
       <ExperienceCTA

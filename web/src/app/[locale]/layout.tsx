@@ -2,7 +2,7 @@
 // est géré par des layouts imbriqués ((public) et /admin).
 import "../globals.css";
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Inter, Fraunces } from "next/font/google";
 import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
@@ -13,10 +13,14 @@ const inter = Inter({
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+// Fraunces : serif « Old Style » chaleureux, à empattements doux.
+// Plus incarné et rassurant que Cormorant — parfait pour installer la confiance
+// tout en gardant une élégance premium. Axe optique « soft » activé.
+const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-cormorant",
+  style: ["normal", "italic"],
+  axes: ["SOFT", "opsz"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
@@ -50,7 +54,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   return (
-    <html lang={locale} className={`${inter.variable} ${cormorant.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${fraunces.variable}`}>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         {/* Sans JS, les blocs à apparition restent visibles */}
         <noscript>

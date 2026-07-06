@@ -51,7 +51,7 @@ const SC_CSS = `
 
 .sc-body,.sc-wings{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
   -webkit-user-select:none;user-select:none;pointer-events:none}
-.sc-body{transform:translateZ(0);filter:drop-shadow(0 12px 24px hsl(var(--deep) / 0.20))}
+.sc-body{transform:translateZ(0);filter:drop-shadow(0 14px 30px hsl(var(--deep) / 0.34))}
 /* Aile en retrait + battement (pivot à la base de l'aile) */
 .sc-wings{transform-origin:61% 44%;
   animation:sc-flap 1s ease-in-out .7s infinite;will-change:transform;

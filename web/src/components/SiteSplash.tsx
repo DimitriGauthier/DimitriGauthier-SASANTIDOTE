@@ -180,17 +180,13 @@ export default function SiteSplash({
     <div className="splash-root" role="presentation">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
 
-      {/* Panneaux qui s'écartent pour « ouvrir » le site */}
-      <div className="splash-door splash-door-l">
-        <span aria-hidden className="blob animate-blob splash-blob" style={{ left: "-20%", top: "12%" }} />
-      </div>
-      <div className="splash-door splash-door-r">
-        <span
-          aria-hidden
-          className="blob animate-blob splash-blob"
-          style={{ right: "-20%", bottom: "10%", background: "hsl(var(--gold) / 0.4)", animationDelay: "-6s" }}
-        />
-      </div>
+      {/* Ambiance : taches douces sur le fond chaud (fond d'un seul tenant, sans couture) */}
+      <span aria-hidden className="blob animate-blob splash-blob" style={{ left: "-12%", top: "10%" }} />
+      <span
+        aria-hidden
+        className="blob animate-blob splash-blob"
+        style={{ right: "-12%", bottom: "8%", background: "hsl(var(--gold) / 0.4)", animationDelay: "-6s" }}
+      />
 
       {/* Cupidon + traînée — s'effacent une fois la flèche décochée */}
       <div className="splash-actors">
@@ -264,22 +260,24 @@ export default function SiteSplash({
 }
 
 const CSS = `
-.splash-root{position:fixed;inset:0;z-index:200;overflow:hidden;background:transparent}
+/* Fond d'un seul tenant (plus de « portes » → plus de couture au milieu).
+   Tout le splash se dissout en fondu + léger zoom pour révéler le site. */
+.splash-root{position:fixed;inset:0;z-index:200;overflow:hidden;background:var(--gradient-warm);
+  transform-origin:50% 46%;animation:sp-root-out .7s cubic-bezier(.6,0,.3,1) 3.25s both;will-change:opacity,transform}
 .splash-root *{box-sizing:border-box}
 
-/* Panneaux */
-.splash-door{position:absolute;top:0;bottom:0;width:50.5%;background:var(--gradient-warm);overflow:hidden;will-change:transform}
-.splash-door-l{left:0;box-shadow:inset -34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-l .85s cubic-bezier(.7,0,.25,1) 3.15s both}
-.splash-door-r{right:0;box-shadow:inset 34px 0 70px hsl(var(--deep) / 0.06);animation:sp-door-r .85s cubic-bezier(.7,0,.25,1) 3.15s both}
 .splash-blob{position:absolute;width:min(46vw,420px);aspect-ratio:1;border-radius:9999px;background:hsl(var(--primary) / 0.35)}
 
 /* Cupidon + traînée (s'effacent après le tir) */
 .splash-actors{position:absolute;inset:0;animation:sp-fade-out .5s ease 2.05s both}
-.splash-cupid{position:absolute;left:14%;top:50%;width:clamp(150px,25vw,250px);transform:translate(-50%,-50%)}
+.splash-cupid{position:absolute;left:27%;top:50%;width:clamp(190px,32vw,340px);transform:translate(-50%,-50%)}
+/* Halo chaud derrière le chérubin (clair sur clair → on doit le voir) */
+.splash-cupid::before{content:"";position:absolute;inset:-34% -30%;z-index:-1;border-radius:9999px;filter:blur(10px);
+  background:radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.30) 0%, hsl(var(--gold) / 0.16) 42%, transparent 72%)}
 .splash-trail-item{position:absolute;width:clamp(16px,3vw,26px);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:sp-trail .8s ease-out both}
 
 /* Flèche : décochée vers le centre, puis grossit droit sur l'utilisateur */
-.splash-arrow{position:absolute;left:20%;top:50%;width:clamp(70px,14vw,132px);opacity:0;
+.splash-arrow{position:absolute;left:30%;top:50%;width:clamp(70px,14vw,132px);opacity:0;
   animation:sp-arrow-fly .7s cubic-bezier(.42,.02,.72,1) 1.5s both;will-change:left,transform,opacity}
 .splash-arrow-svg{display:block;filter:drop-shadow(0 4px 12px hsl(var(--primary) / 0.3))}
 
@@ -304,7 +302,7 @@ const CSS = `
 .splash-burst-petal{width:clamp(14px,2.6vw,24px)}
 
 /* Logo */
-.splash-logo-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;z-index:8;animation:sp-fade-out .45s ease 3.3s both}
+.splash-logo-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;z-index:8}
 .splash-logo{opacity:0;display:flex;flex-direction:column;align-items:center;gap:.7rem;animation:sp-logo-in .65s cubic-bezier(.16,1,.3,1) 2.5s both}
 .splash-logo-img{width:clamp(190px,44vw,330px);height:auto}
 .splash-tag{margin:0;opacity:0;font-size:clamp(.7rem,1.6vw,.9rem);letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:hsl(var(--primary));animation:sp-tag-in .55s ease-out 2.85s both}
@@ -317,7 +315,7 @@ const CSS = `
 .splash-skip:hover{color:hsl(var(--primary));border-color:hsl(var(--primary) / 0.5)}
 
 @keyframes sp-arrow-fly{
-  0%  {left:22%;transform:translate(-50%,-50%) scale(.7) rotate(6deg);opacity:0}
+  0%  {left:30%;transform:translate(-50%,-50%) scale(.7) rotate(6deg);opacity:0}
   16% {opacity:1}
   58% {left:50%;transform:translate(-50%,-50%) scale(1.15) rotate(-2deg);opacity:1}
   100%{left:50%;transform:translate(-50%,-52%) scale(3.5) rotate(-9deg);opacity:0}
@@ -339,8 +337,7 @@ const CSS = `
 @keyframes sp-tag-in{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes sp-fade-out{to{opacity:0}}
 @keyframes sp-fade-in-late{to{opacity:1}}
-@keyframes sp-door-l{to{transform:translateX(-100%)}}
-@keyframes sp-door-r{to{transform:translateX(100%)}}
+@keyframes sp-root-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
 
 @media (prefers-reduced-motion: reduce){.splash-root{display:none}}
 `;
