@@ -33,7 +33,7 @@ export default function ExperienceCTA({
 
   return (
     <div
-      className={`fixed bottom-4 right-4 z-40 transition-all duration-500 ease-out sm:bottom-6 sm:right-6 ${
+      className={`fixed bottom-20 right-4 z-40 transition-all duration-500 ease-out sm:bottom-24 sm:right-6 ${
         show ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"
       }`}
     >

@@ -45,7 +45,6 @@ export const navItems: { slug: string; key: NavKey }[] = [
   { slug: "numerologie-sexualite", key: "numerology" },
   { slug: "la-trame", key: "trame" },
   { slug: "accompagnements", key: "services" },
-  { slug: "tarifs", key: "pricing" },
   { slug: "faq", key: "faq" },
   { slug: "avis", key: "reviews" },
   { slug: "blog", key: "blog" },
@@ -62,8 +61,19 @@ export function href(locale: Locale, slug = ""): string {
 //   NEXT_PUBLIC_EXPERIENCE_URL = https://intimy.dimitrigauthier.com
 //   NEXT_PUBLIC_SITE_URL       = https://dimitrigauthier.com
 // En local (envs vides), on retombe sur les routes internes.
-const EXPERIENCE_BASE = (process.env.NEXT_PUBLIC_EXPERIENCE_URL ?? "").replace(/\/$/, "");
-const SITE_BASE = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+//
+// Garde-fou : on ignore toute base d'hébergement technique (vercel.app, localhost…).
+// Ces URLs ne doivent jamais fuiter dans les liens publics. Comme les variables
+// NEXT_PUBLIC_* sont figées au build, ce filtre protège même si un ancien build
+// avait capté l'URL Vercel. En cas de base rejetée, on retombe sur la route interne.
+function cleanBase(raw?: string | null): string {
+  const b = (raw ?? "").trim().replace(/\/$/, "");
+  if (!b) return "";
+  if (b.includes("vercel.app") || b.includes("localhost") || b.includes("127.0.0.1")) return "";
+  return b;
+}
+const EXPERIENCE_BASE = cleanBase(process.env.NEXT_PUBLIC_EXPERIENCE_URL);
+const SITE_BASE = cleanBase(process.env.NEXT_PUBLIC_SITE_URL);
 
 /** Lien vers l'expérience : sous-domaine dédié si configuré, sinon route interne. */
 export function experienceHref(locale: Locale): string {
