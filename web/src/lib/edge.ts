@@ -49,3 +49,16 @@ export function completeBooking(
 ): Promise<{ ok: boolean; review_url?: string }> {
   return callFunction("complete-booking", { booking_id }, accessToken);
 }
+
+/** Report d'un RDV par le client — sécurisé par le token secret de la réservation. */
+export function rescheduleBooking(
+  token: string,
+  slot_start: string,
+): Promise<{ ok: boolean; slot_start?: string; slot_end?: string; unchanged?: boolean }> {
+  return callFunction("reschedule-booking", { token, slot_start });
+}
+
+/** Annulation d'un RDV par le client — sécurisé par le token secret de la réservation. */
+export function cancelBooking(token: string): Promise<{ ok: boolean; already?: boolean }> {
+  return callFunction("cancel-booking", { token });
+}

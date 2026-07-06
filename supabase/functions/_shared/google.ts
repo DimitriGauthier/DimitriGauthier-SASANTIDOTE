@@ -61,3 +61,28 @@ export async function createEvent(token: string, calendarId: string, ev: Record<
   if (!res.ok) throw new Error("createEvent: " + await res.text());
   return await res.json();
 }
+
+// Met à jour un événement existant (PATCH). Google renvoie une invitation .ics mise à jour au client.
+export async function updateEvent(token: string, calendarId: string, eventId: string, patch: Record<string, unknown>) {
+  const res = await fetch(
+    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
+    {
+      method: "PATCH",
+      headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+      body: JSON.stringify(patch),
+    },
+  );
+  if (!res.ok) throw new Error("updateEvent: " + await res.text());
+  return await res.json();
+}
+
+// Supprime un événement (le client reçoit l'annulation .ics). 404/410 = déjà supprimé => on tolère.
+export async function deleteEvent(token: string, calendarId: string, eventId: string) {
+  const res = await fetch(
+    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
+    { method: "DELETE", headers: { authorization: `Bearer ${token}` } },
+  );
+  if (!res.ok && res.status !== 404 && res.status !== 410) {
+    throw new Error("deleteEvent: " + await res.text());
+  }
+}

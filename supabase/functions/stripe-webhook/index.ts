@@ -9,7 +9,7 @@ import Stripe from "https://esm.sh/stripe@14?target=deno";
 import { adminClient } from "../_shared/supabase.ts";
 import { getAccessToken, createEvent } from "../_shared/google.ts";
 import { sendEmail } from "../_shared/resend.ts";
-import { bookingConfirmation, fmtReunion, Lang } from "../_shared/emails.ts";
+import { bookingConfirmation, practitionerNewBooking, fmtReunion, Lang } from "../_shared/emails.ts";
 
 const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
   httpClient: Stripe.createFetchHttpClient(),
@@ -76,9 +76,11 @@ serve(async (req) => {
       const lang = (booking.locale === "en" ? "en" : "fr") as Lang;
       const { data: settings } = await admin.from("settings").select("practitioner_name, email").eq("id", 1).single();
       const practitioner = settings?.practitioner_name ?? "Dimitri Gauthier";
+      const SITE = (Deno.env.get("SITE_URL") ?? "https://www.dimitrigauthier.com").replace(/\/$/, "");
+      const manageUrl = `${SITE}/${lang}/rdv/${booking.token}`;
 
-      // Email de confirmation au client (dans sa langue)
-      const conf = bookingConfirmation(lang, { firstName: booking.client_first_name, when: fmtReunion(booking.slot_start, lang), practitioner });
+      // Email de confirmation au client (dans sa langue) — avec bouton « Gérer mon rendez-vous »
+      const conf = bookingConfirmation(lang, { firstName: booking.client_first_name, when: fmtReunion(booking.slot_start, lang), practitioner, manageUrl });
       await sendEmail(admin, {
         to: booking.client_email,
         subject: conf.subject,
@@ -92,18 +94,22 @@ serve(async (req) => {
         const montant = new Intl.NumberFormat("fr-FR", {
           style: "currency", currency: booking.currency ?? "EUR",
         }).format((booking.price_cents ?? 0) / 100);
+        const notif = practitionerNewBooking({
+          firstName: booking.client_first_name,
+          lastName: booking.client_last_name,
+          email: booking.client_email,
+          phone: booking.client_phone ?? null,
+          audience: booking.audience,
+          when: fmtReunion(booking.slot_start, "fr"),
+          amount: montant,
+          lang,
+        });
         await sendEmail(admin, {
           to: settings.email,
-          subject: `Nouveau RDV payé (${montant}) — ${booking.client_first_name} ${booking.client_last_name}`,
+          subject: notif.subject,
           type: "practitioner_new_booking",
           booking_id: bookingId,
-          html: `<p>Nouveau rendez-vous <strong>payé</strong> :</p>
-            <ul>
-              <li><strong>${fmtReunion(booking.slot_start, "fr")}</strong> (heure de La Réunion)</li>
-              <li>Montant réglé : <strong>${montant}</strong></li>
-              <li>${booking.client_first_name} ${booking.client_last_name} — ${booking.client_email} — ${booking.client_phone ?? "—"}</li>
-              <li>Profil : ${booking.audience} · Langue : ${lang.toUpperCase()}</li>
-            </ul>`,
+          html: notif.html,
         });
       }
     }

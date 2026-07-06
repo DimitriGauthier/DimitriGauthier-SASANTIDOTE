@@ -11,6 +11,13 @@ verify_jwt = false
 [functions.stripe-webhook]
 verify_jwt = false
 
+# Gestion de réservation par le client : le token secret du booking fait foi.
+[functions.reschedule-booking]
+verify_jwt = false
+
+[functions.cancel-booking]
+verify_jwt = false
+
 # Action réservée à l'admin connecté : on exige un JWT + on revérifie is_admin() dans le code.
 [functions.complete-booking]
 verify_jwt = true
