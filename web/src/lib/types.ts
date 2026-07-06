@@ -79,6 +79,21 @@ export interface Question {
   required: boolean;
   sort_order: number;
   is_active: boolean;
+  // Questionnaire adaptatif (voir migrations 0003 / 0005) :
+  //  • code    : identifiant stable (slug) référencé par le show_if d'autres questions.
+  //  • show_if : condition d'affichage. null = toujours affichée.
+  code: string | null;
+  show_if: QuestionCondition | null;
+}
+
+// Condition d'affichage d'une question, évaluée contre la réponse d'une autre
+// question identifiée par son `code`. Formes supportées :
+//   { code: "affective_status", in: ["couple"] }  → visible si la réponse ∈ liste
+//   { code: "prior_support",     eq: true }        → visible si la réponse === valeur
+export interface QuestionCondition {
+  code: string;
+  in?: unknown[];
+  eq?: unknown;
 }
 
 export interface Review {

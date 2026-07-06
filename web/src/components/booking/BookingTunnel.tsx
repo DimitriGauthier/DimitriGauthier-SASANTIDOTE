@@ -1,7 +1,10 @@
 "use client";
 
 // Tunnel de réservation guidé, une question à la fois (auto-advance style Typeform).
-// Flux : intro → profil → motif → questionnaire (1 écran/question) → accompagnement → coordonnées → créneau → paiement.
+// Flux : intro → prénom+nom → profil → motif → questionnaire (1 écran/question) → accompagnement → coordonnées → créneau → paiement.
+// On demande le prénom+nom EN PREMIER : le guide « Dimitri » s'adresse ainsi à la
+// personne par son prénom pendant tout le parcours. Les coordonnées de fin ne
+// redemandent donc que l'e-mail / téléphone.
 // L'accompagnement (formule + prix) est choisi APRÈS le questionnaire, pas au début.
 // Les réponses à choix unique / oui-non / échelle passent AUTOMATIQUEMENT à l'écran suivant.
 // Les champs texte et choix multiples gardent un bouton « Continuer ».
@@ -14,7 +17,7 @@ import { ArrowLeft, ArrowRight, Check, ShieldCheck, Clock, Heart } from "lucide-
 import type { Locale } from "@/lib/i18n";
 import { pick, getDict } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
-import type { Audience, Service, Topic, Question, Slot } from "@/lib/types";
+import type { Audience, Service, Topic, Question, QuestionCondition, Slot } from "@/lib/types";
 import { getSlots, createHold } from "@/lib/edge";
 import { formatPrice, formatDuration, formatDayLabel, formatTime, reunionDayKey } from "@/lib/format";
 import DimitriGuide from "@/components/booking/DimitriGuide";
@@ -37,6 +40,7 @@ type ClientInfo = {
 };
 
 type Screen =
+  | { k: "identity" }
   | { k: "profile" }
   | { k: "service" }
   | { k: "topic" }
@@ -60,6 +64,36 @@ function isAnswered(v: unknown): boolean {
 // Ces types de question sautent automatiquement à l'écran suivant au clic.
 function autoAdvances(type: Question["type"]): boolean {
   return type === "single_choice" || type === "boolean" || type === "scale";
+}
+
+// ── Questionnaire adaptatif ──────────────────────────────────────────────────
+// Une question porteuse d'un `show_if` ne s'affiche que si la réponse à sa
+// question « déclencheur » (référencée par son `code`) satisfait la condition.
+//   { code:"affective_status", in:["couple"] } → visible si la réponse ∈ liste
+//   { code:"prior_support",     eq:true }       → visible si la réponse === valeur
+// La réponse peut être un scalaire (choix unique / oui-non) ou un tableau
+// (choix multiple) : dans ce dernier cas on teste l'intersection.
+function conditionMet(cond: QuestionCondition, answer: unknown): boolean {
+  if (cond.eq !== undefined) {
+    if (Array.isArray(answer)) return answer.includes(cond.eq);
+    return answer === cond.eq;
+  }
+  if (Array.isArray(cond.in)) {
+    if (Array.isArray(answer)) return answer.some((a) => cond.in!.includes(a));
+    return cond.in.includes(answer);
+  }
+  return true; // condition mal formée → on n'empêche pas l'affichage
+}
+
+// Une question est visible si elle n'a pas de condition, si son déclencheur est
+// absent du parcours (autre profil → on ne masque pas par erreur), ou si la
+// condition est satisfaite par la réponse en cours.
+function isVisible(q: Question, answers: Record<string, unknown>, codeToId: Map<string, string>): boolean {
+  const cond = q.show_if;
+  if (!cond) return true;
+  const controllerId = codeToId.get(cond.code);
+  if (!controllerId) return true;
+  return conditionMet(cond, answers[controllerId]);
 }
 
 // SSR-safe : useLayoutEffect côté client, useEffect au rendu serveur (évite le warning).
@@ -115,18 +149,33 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
     );
   }, [questions, audience, topicId]);
 
+  // Table code → id (déclencheurs présents dans le parcours), pour évaluer les show_if.
+  const codeToId = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const q of availQuestions) if (q.code) m.set(q.code, q.id);
+    return m;
+  }, [availQuestions]);
+
+  // Questionnaire adaptatif : on retire les questions dont la condition n'est pas
+  // satisfaite (ex. « depuis combien de temps en couple ? » masquée si célibataire).
+  const visibleQuestions = useMemo(
+    () => availQuestions.filter((q) => isVisible(q, answers, codeToId)),
+    [availQuestions, answers, codeToId],
+  );
+
   const service = availServices.find((s) => s.id === serviceId) ?? null;
 
   // ---- Liste dynamique des écrans ----
   const screens = useMemo<Screen[]>(() => {
-    // Ordre : profil → motif → questionnaire → accompagnement → coordonnées → créneau.
+    // Ordre : prénom+nom → profil → motif → questionnaire → accompagnement → coordonnées → créneau.
+    // On commence par l'identité pour tutoyer la personne par son prénom ensuite.
     // Le choix de l'accompagnement (formule + prix) vient APRÈS le questionnaire.
-    const arr: Screen[] = [{ k: "profile" }];
+    const arr: Screen[] = [{ k: "identity" }, { k: "profile" }];
     if (availTopics.length > 0) arr.push({ k: "topic" });
-    for (const q of availQuestions) arr.push({ k: "question", q });
+    for (const q of visibleQuestions) arr.push({ k: "question", q });
     arr.push({ k: "service" }, { k: "contact" }, { k: "slot" });
     return arr;
-  }, [availTopics.length, availQuestions]);
+  }, [availTopics.length, visibleQuestions]);
 
   const safeIndex = Math.min(index, screens.length - 1);
   const screen = screens[safeIndex];
@@ -134,6 +183,8 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   // Libellé du groupe courant (pour l'indicateur d'étape)
   const groupLabel = useMemo(() => {
     switch (screen.k) {
+      case "identity":
+        return pick(locale, "Faisons connaissance", "Let's meet");
       case "profile":
         return t.tunnel.stepProfile;
       case "service":
@@ -154,14 +205,30 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   const stepTotal = screens.length;
 
   // Petite phrase d'encouragement — esprit « jeu / parcours ».
+  // Dès que le prénom est connu, le guide s'adresse à la personne par son prénom.
   const encouragement = useMemo(() => {
-    if (screen.k === "slot") return pick(locale, "Dernière étape : choisis ton moment.", "Last step: choose your moment.");
-    if (screen.k === "contact") return pick(locale, "On y est presque, juste tes coordonnées.", "Almost there, just your details.");
-    if (safeIndex === 0) return pick(locale, "C'est parti, on avance ensemble, à ton rythme.", "Here we go, we move forward together, at your pace.");
+    const fn = client.first_name.trim();
+    if (screen.k === "identity")
+      return pick(locale, "Avant tout, dis-moi ton prénom : j'aime savoir à qui je parle.", "First, tell me your name: I like to know who I'm talking to.");
+    if (screen.k === "slot")
+      return fn
+        ? pick(locale, `Dernière étape ${fn} : choisis ton moment.`, `Last step ${fn}: choose your moment.`)
+        : pick(locale, "Dernière étape : choisis ton moment.", "Last step: choose your moment.");
+    if (screen.k === "contact")
+      return fn
+        ? pick(locale, `On y est presque ${fn}, juste tes coordonnées.`, `Almost there ${fn}, just your details.`)
+        : pick(locale, "On y est presque, juste tes coordonnées.", "Almost there, just your details.");
+    if (screen.k === "profile")
+      return fn
+        ? pick(locale, `Enchanté ${fn}, on avance ensemble, à ton rythme.`, `Nice to meet you ${fn}, we move forward together, at your pace.`)
+        : pick(locale, "C'est parti, on avance ensemble, à ton rythme.", "Here we go, we move forward together, at your pace.");
     const ratio = stepNum / stepTotal;
-    if (ratio < 0.5) return pick(locale, "Tu avances bien, continue.", "You're doing great, keep going.");
+    if (ratio < 0.5)
+      return fn
+        ? pick(locale, `Tu avances bien ${fn}, continue.`, `You're doing great ${fn}, keep going.`)
+        : pick(locale, "Tu avances bien, continue.", "You're doing great, keep going.");
     return pick(locale, "Plus que quelques pas.", "Just a few more steps.");
-  }, [screen, safeIndex, stepNum, stepTotal, locale]);
+  }, [screen, stepNum, stepTotal, locale, client.first_name]);
 
   // ---- Navigation ----
   function goForward() {
@@ -184,6 +251,15 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   function continueQuestion(q: Question) {
     if (q.required && !isAnswered(answers[q.id])) {
       setError(pick(locale, "Merci de répondre à cette question.", "Please answer this question."));
+      return;
+    }
+    goForward();
+  }
+
+  // Étape 1 : prénom + nom (indispensables pour tutoyer la personne ensuite).
+  function identityContinue() {
+    if (!client.first_name.trim() || !client.last_name.trim()) {
+      setError(pick(locale, "Ton prénom et ton nom, pour commencer.", "Your first and last name, to begin."));
       return;
     }
     goForward();
@@ -246,7 +322,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
           phone: client.phone.trim() || undefined,
           note: client.note.trim() || undefined,
         },
-        answers: availQuestions.map((q) => ({
+        answers: visibleQuestions.map((q) => ({
           question_id: q.id,
           label: pick(locale, q.label, q.label_en),
           value: answers[q.id] ?? null,
@@ -323,10 +399,11 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   }, [started, flying]);
 
   const guideName = siteConfig.practitionerName.split(" ")[0];
-  // Nom du prospect affiché sous le duo d'avatars : son prénom dès qu'il est saisi,
-  // sinon un « toi » (ou « vous deux » pour un couple) le temps qu'on le connaisse.
+  // Nom du prospect affiché sous le duo d'avatars : son prénom dès qu'il est saisi
+  // (collecté en première étape), sinon un « toi » (ou « vous deux » pour un couple).
+  const firstName = client.first_name.trim();
   const companion =
-    client.first_name.trim() ||
+    firstName ||
     (audience === "couple" ? pick(locale, "vous deux", "you two") : pick(locale, "toi", "you"));
   const guideRole = audience
     ? pick(locale, "Vous avancez ensemble", "Moving forward together")
@@ -376,6 +453,45 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
       </div>
 
       <div key={safeIndex} className="animate-fade-up">
+        {/* ── IDENTITÉ (prénom + nom, en premier) ── */}
+        {screen.k === "identity" ? (
+          <section>
+            <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">
+              {pick(locale, "Faisons connaissance", "Let's get to know each other")}
+            </h2>
+            <p className="mb-6 text-sm text-muted-foreground">
+              {pick(
+                locale,
+                "Comment t'appelles-tu ? Je pourrai ainsi t'accompagner par ton prénom tout au long du parcours.",
+                "What's your name? That way I can guide you by your first name throughout.",
+              )}
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <TextInput
+                label={t.tunnel.firstName}
+                value={client.first_name}
+                onChange={(v) => setClient({ ...client, first_name: v })}
+                onEnter={identityContinue}
+                autoFocus
+                required
+              />
+              <TextInput
+                label={t.tunnel.lastName}
+                value={client.last_name}
+                onChange={(v) => setClient({ ...client, last_name: v })}
+                onEnter={identityContinue}
+                required
+              />
+            </div>
+            {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
+            <div className="mt-8 flex items-center justify-end">
+              <button type="button" onClick={identityContinue} className={primaryBtn}>
+                {t.common.next} <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </section>
+        ) : null}
+
         {/* ── PROFIL ── */}
         {screen.k === "profile" ? (
           <section>
@@ -526,15 +642,15 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
         {/* ── COORDONNÉES ── */}
         {screen.k === "contact" ? (
           <section>
-            <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">{t.tunnel.yourInfo}</h2>
+            <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">
+              {client.first_name.trim()
+                ? pick(locale, `Merci ${client.first_name.trim()}, comment te joindre ?`, `Thanks ${client.first_name.trim()}, how can I reach you?`)
+                : t.tunnel.yourInfo}
+            </h2>
             <p className="mb-6 text-sm text-muted-foreground">
               {pick(locale, "Ces informations restent strictement confidentielles.", "This information stays strictly confidential.")}
             </p>
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <TextInput label={t.tunnel.firstName} value={client.first_name} onChange={(v) => setClient({ ...client, first_name: v })} required />
-                <TextInput label={t.tunnel.lastName} value={client.last_name} onChange={(v) => setClient({ ...client, last_name: v })} required />
-              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <TextInput label={t.common.email} type="email" value={client.email} onChange={(v) => setClient({ ...client, email: v })} required />
                 <TextInput label={t.tunnel.phone} value={client.phone} onChange={(v) => setClient({ ...client, phone: v })} />
@@ -734,14 +850,18 @@ function TextInput({
   label,
   value,
   onChange,
+  onEnter,
   type = "text",
   required = false,
+  autoFocus = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  onEnter?: () => void;
   type?: string;
   required?: boolean;
+  autoFocus?: boolean;
 }) {
   return (
     <div>
@@ -749,7 +869,14 @@ function TextInput({
         {label}
         {required ? " *" : ""}
       </label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={inputCls} />
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onEnter ? (e) => { if (e.key === "Enter") { e.preventDefault(); onEnter(); } } : undefined}
+        autoFocus={autoFocus}
+        className={inputCls}
+      />
     </div>
   );
 }
