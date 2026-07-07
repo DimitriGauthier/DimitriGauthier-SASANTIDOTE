@@ -98,10 +98,19 @@ serve(async (req) => {
           end: { dateTime: end.toISOString(), timeZone: tz },
           attendees: [{ email: booking.client_email, displayName: `${booking.client_first_name} ${booking.client_last_name}` }],
           reminders: { useDefault: true },
+          conferenceData: {
+            createRequest: {
+              requestId: booking.token,
+              conferenceSolutionKey: { type: "hangoutsMeet" },
+            },
+          },
         });
         googleEventId = ev.id ?? null;
         googleLink = ev.htmlLink ?? null;
-        await admin.from("bookings").update({ google_event_id: googleEventId, google_event_link: googleLink }).eq("id", booking.id);
+        const meetLink = ev.hangoutLink ??
+          ev.conferenceData?.entryPoints?.find((p: { entryPointType?: string; uri?: string }) => p.entryPointType === "video")?.uri ??
+          null;
+        await admin.from("bookings").update({ google_event_id: googleEventId, google_event_link: googleLink, google_meet_link: meetLink }).eq("id", booking.id);
       }
     } catch (e) {
       console.error("maj Google échouée:", e);

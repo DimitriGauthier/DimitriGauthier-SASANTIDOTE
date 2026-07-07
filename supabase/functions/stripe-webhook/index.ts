@@ -47,8 +47,10 @@ serve(async (req) => {
       if (booking.status === "scheduled") return new Response("ok (déjà planifié)", { status: 200 }); // idempotent
 
       // Événement Google Calendar (le client est invité => Google envoie l'.ics)
+      // Séance en visioconférence : on demande un lien Google Meet (conferenceData).
       let googleEventId: string | null = null;
       let googleLink: string | null = null;
+      let meetLink: string | null = null;
       try {
         const { data: service } = await admin.from("services").select("title, location_type").eq("id", booking.service_id).single();
         const { token, calendarId } = await getAccessToken(admin);
@@ -59,9 +61,18 @@ serve(async (req) => {
           end: { dateTime: booking.slot_end, timeZone: booking.timezone ?? "Indian/Reunion" },
           attendees: [{ email: booking.client_email, displayName: `${booking.client_first_name} ${booking.client_last_name}` }],
           reminders: { useDefault: true },
+          conferenceData: {
+            createRequest: {
+              requestId: booking.token, // idempotent : un seul Meet par réservation
+              conferenceSolutionKey: { type: "hangoutsMeet" },
+            },
+          },
         });
         googleEventId = ev.id ?? null;
         googleLink = ev.htmlLink ?? null;
+        meetLink = ev.hangoutLink ??
+          ev.conferenceData?.entryPoints?.find((p: { entryPointType?: string; uri?: string }) => p.entryPointType === "video")?.uri ??
+          null;
       } catch (e) {
         console.error("createEvent échoué:", e); // le RDV reste valide même si Google échoue
       }
@@ -71,6 +82,7 @@ serve(async (req) => {
         hold_expires_at: null,
         google_event_id: googleEventId,
         google_event_link: googleLink,
+        google_meet_link: meetLink,
       }).eq("id", bookingId);
 
       const lang = (booking.locale === "en" ? "en" : "fr") as Lang;
@@ -80,7 +92,7 @@ serve(async (req) => {
       const manageUrl = `${SITE}/${lang}/rdv/${booking.token}`;
 
       // Email de confirmation au client (dans sa langue) — avec bouton « Gérer mon rendez-vous »
-      const conf = bookingConfirmation(lang, { firstName: booking.client_first_name, when: fmtReunion(booking.slot_start, lang), practitioner, manageUrl });
+      const conf = bookingConfirmation(lang, { firstName: booking.client_first_name, when: fmtReunion(booking.slot_start, lang), practitioner, manageUrl, meetUrl: meetLink ?? undefined });
       await sendEmail(admin, {
         to: booking.client_email,
         subject: conf.subject,
@@ -103,6 +115,7 @@ serve(async (req) => {
           when: fmtReunion(booking.slot_start, "fr"),
           amount: montant,
           lang,
+          meetUrl: meetLink ?? undefined,
         });
         await sendEmail(admin, {
           to: settings.email,

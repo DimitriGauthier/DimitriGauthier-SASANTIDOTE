@@ -49,9 +49,11 @@ export async function freeBusy(token: string, calendarId: string, timeMin: strin
 }
 
 // Crée un événement (le client est invité => Google lui envoie l'invitation .ics).
+// conferenceDataVersion=1 : si `ev` contient un `conferenceData.createRequest`,
+// Google génère un lien Google Meet et le renvoie dans `hangoutLink`.
 export async function createEvent(token: string, calendarId: string, ev: Record<string, unknown>) {
   const res = await fetch(
-    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events?sendUpdates=all`,
+    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events?sendUpdates=all&conferenceDataVersion=1`,
     {
       method: "POST",
       headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
@@ -63,9 +65,10 @@ export async function createEvent(token: string, calendarId: string, ev: Record<
 }
 
 // Met à jour un événement existant (PATCH). Google renvoie une invitation .ics mise à jour au client.
+// conferenceDataVersion=1 : préserve le lien Google Meet existant lors d'un report.
 export async function updateEvent(token: string, calendarId: string, eventId: string, patch: Record<string, unknown>) {
   const res = await fetch(
-    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all`,
+    `${CAL_BASE}/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}?sendUpdates=all&conferenceDataVersion=1`,
     {
       method: "PATCH",
       headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },

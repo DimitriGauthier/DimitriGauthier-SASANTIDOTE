@@ -158,6 +158,7 @@ export interface Booking {
   currency: string;
   token: string;
   google_event_link: string | null;
+  google_meet_link: string | null;
   created_at: string;
 }
 

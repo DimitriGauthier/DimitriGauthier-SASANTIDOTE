@@ -18,6 +18,7 @@ type BookingRow = {
   price_cents: number;
   currency: string;
   google_event_link: string | null;
+  google_meet_link: string | null;
   services: { title: string } | null;
 };
 
@@ -41,7 +42,7 @@ export default async function AdminBookingsPage({
   const { data } = await sb
     .from("bookings")
     .select(
-      "id, status, slot_start, client_first_name, client_last_name, client_email, client_phone, audience, price_cents, currency, google_event_link, services(title)",
+      "id, status, slot_start, client_first_name, client_last_name, client_email, client_phone, audience, price_cents, currency, google_event_link, google_meet_link, services(title)",
     )
     .order("slot_start", { ascending: false })
     .limit(200);
@@ -76,6 +77,11 @@ export default async function AdminBookingsPage({
                       {b.google_event_link ? (
                         <a href={b.google_event_link} target="_blank" rel="noopener noreferrer" className="mt-1 block text-xs text-primary underline">
                           {pick(l, "Événement agenda", "Calendar event")}
+                        </a>
+                      ) : null}
+                      {b.google_meet_link ? (
+                        <a href={b.google_meet_link} target="_blank" rel="noopener noreferrer" className="mt-1 block text-xs text-primary underline">
+                          {pick(l, "Rejoindre la visio", "Join video call")}
                         </a>
                       ) : null}
                     </td>

@@ -134,7 +134,7 @@ function para(html: string): string {
 // ── Confirmation de RDV (client) ──
 export function bookingConfirmation(
   lang: Lang,
-  p: { firstName: string; when: string; practitioner: string; manageUrl?: string },
+  p: { firstName: string; when: string; practitioner: string; manageUrl?: string; meetUrl?: string },
 ): { subject: string; html: string } {
   const en = lang === "en";
   const heading = en ? `It's confirmed, ${esc(p.firstName)}` : `C'est confirmé, ${esc(p.firstName)}`;
@@ -144,7 +144,15 @@ export function bookingConfirmation(
       : "Votre rendez-vous est réservé et votre paiement bien reçu. Voici les détails :"),
     highlight(`<p style="margin:0;font-family:${SANS};font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:${C.gold};">${en ? "Your appointment" : "Votre rendez-vous"}</p>
       <p style="margin:6px 0 0;font-family:${SERIF};font-size:18px;color:${C.ink};">${esc(p.when)}</p>
-      <p style="margin:4px 0 0;font-family:${SANS};font-size:12px;color:${C.muted};">${en ? "Réunion time" : "heure de La Réunion"}</p>`),
+      <p style="margin:4px 0 0;font-family:${SANS};font-size:12px;color:${C.muted};">${en ? "Réunion time" : "heure de La Réunion"}</p>${p.meetUrl ? `
+      <p style="margin:12px 0 0;font-family:${SANS};font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:${C.gold};">${en ? "Video session" : "Séance en visio"}</p>
+      <p style="margin:6px 0 0;font-family:${SANS};font-size:14px;"><a href="${p.meetUrl}" target="_blank" style="color:${C.primary};text-decoration:none;font-weight:600;">${esc(p.meetUrl)}</a></p>` : ""}`),
+    p.meetUrl
+      ? emailButton(en ? "Join by video" : "Rejoindre en visio", p.meetUrl) +
+        para(`<span style="font-size:13px;color:${C.muted};">${en
+          ? "This same link will let you join at your appointment time."
+          : "Ce même lien vous permettra de rejoindre le jour du rendez-vous."}</span>`)
+      : "",
     para(en
       ? "A calendar invitation is on its way — accept it to receive an automatic reminder."
       : "Une invitation agenda vous parvient — acceptez-la pour recevoir un rappel automatique."),
@@ -326,7 +334,7 @@ export function practitionerNewProspect(p: {
 // ── Notification à Dimitri : NOUVEAU RDV PAYÉ (webhook Stripe). Toujours en FR. ──
 export function practitionerNewBooking(p: {
   firstName: string; lastName: string; email: string; phone: string | null;
-  audience: string; when: string; amount: string; lang: Lang;
+  audience: string; when: string; amount: string; lang: Lang; meetUrl?: string;
 }): { subject: string; html: string } {
   const recap = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     ${detailRow("Rendez-vous", `${esc(p.when)} (heure de La Réunion)`)}
@@ -335,6 +343,7 @@ export function practitionerNewBooking(p: {
     ${detailRow("Email", esc(p.email))}
     ${detailRow("Téléphone", esc(p.phone ?? "—"))}
     ${detailRow("Profil / langue", `${esc(p.audience)} · ${p.lang.toUpperCase()}`)}
+    ${p.meetUrl ? detailRow("Lien visio", `<a href="${p.meetUrl}" target="_blank" style="color:${C.primary};text-decoration:none;">${esc(p.meetUrl)}</a>`) : ""}
   </table>`;
   const body = [
     para("Un rendez-vous vient d'être <strong>payé et confirmé</strong>. L'événement a été ajouté à votre agenda."),
