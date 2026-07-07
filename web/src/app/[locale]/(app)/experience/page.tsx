@@ -1,6 +1,7 @@
 // Expérience INTIMY — application plein écran (sous-domaine intimy.), sans menu.
 // Charge les données d'admission côté serveur puis monte le tunnel guidé par Dimitri.
 import type { Metadata } from "next";
+import Image from "next/image";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { getIntakeData } from "@/lib/data";
 import { EmptyState } from "@/components/ui";
@@ -35,10 +36,18 @@ export default async function ExperiencePage({
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-8 text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">
+        <p className="text-[0.7rem] font-medium uppercase tracking-[0.24em] text-primary">
           {pick(l, "L'expérience", "The experience")}
         </p>
-        <h1 className="mt-2 font-serif text-3xl font-medium leading-tight text-foreground sm:text-4xl">
+        <Image
+          src="/img/intimy.png"
+          alt="INTIMY"
+          width={1200}
+          height={500}
+          priority
+          className="mx-auto mt-2 h-14 w-auto drop-shadow-[0_10px_22px_hsl(var(--primary)/0.18)] sm:h-16"
+        />
+        <h1 className="mt-3 font-serif text-2xl font-medium leading-tight text-foreground sm:text-3xl">
           {pick(l, "On avance ensemble, à ton rythme", "We move forward together, at your pace")}
         </h1>
       </div>

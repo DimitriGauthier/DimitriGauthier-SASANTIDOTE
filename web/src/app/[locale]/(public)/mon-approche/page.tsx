@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, IconCard, CTASection } from "@/components/ui";
+import { Prose } from "@/components/ui";
+import { PageHero, SplitSection, FeatureGrid, QuoteBlock, CTABanner, SectionHeading, Pill } from "@/components/sections";
 import { Brain, Waves, Heart } from "lucide-react";
 
 export async function generateMetadata({
@@ -35,18 +36,48 @@ export default async function ApproachPage({
 
   return (
     <article>
-      <PageTitle
+      <PageHero
+        tone="warm"
         eyebrow={pick(l, "Ma méthode", "My method")}
-        sub={pick(l, "Une approche globale : tête, corps et cœur", "A holistic approach: mind, body and heart")}
-      >
-        {pick(l, "Mon approche", "My approach")}
-      </PageTitle>
+        title={
+          l === "fr" ? (
+            <>
+              Une approche <em className="text-gradient not-italic">globale</em> : tête, corps &amp; cœur
+            </>
+          ) : (
+            <>
+              A <em className="text-gradient not-italic">holistic</em> approach: mind, body &amp; heart
+            </>
+          )
+        }
+        sub={pick(
+          l,
+          "Trois outils qui ne s'empilent pas mais se répondent, pour te réaligner en profondeur.",
+          "Three tools that don't stack but answer one another, to realign you deeply.",
+        )}
+        badges={
+          <>
+            <Pill icon={<Brain className="h-4 w-4" />}>{pick(l, "La tête", "The mind")}</Pill>
+            <Pill icon={<Waves className="h-4 w-4" />}>{pick(l, "Le corps", "The body")}</Pill>
+            <Pill icon={<Heart className="h-4 w-4" />}>{pick(l, "Le cœur", "The heart")}</Pill>
+          </>
+        }
+      />
 
       {html ? (
-        <Prose html={html} />
+        <section className="full-bleed py-20 sm:py-24">
+          <div className="mx-auto max-w-3xl px-4">
+            <Prose html={html} />
+          </div>
+        </section>
       ) : (
         <>
-          <Section>
+          <SplitSection
+            image="/img/detail.jpg"
+            imageAlt=""
+            eyebrow={pick(l, "Le point de départ", "The starting point")}
+            title={pick(l, "S'accomplir, c'est un tout", "Flourishing is a whole")}
+          >
             <p>
               {pick(
                 l,
@@ -61,32 +92,60 @@ export default async function ApproachPage({
                 "That's why I combine three tools. Not to stack them, but to create a real synergy and help you realign.",
               )}
             </p>
-          </Section>
+          </SplitSection>
 
-          <Section title={pick(l, "Trois outils, une synergie", "Three tools, one synergy")}>
-            <div className="mb-5 grid gap-5 sm:grid-cols-3">
-              <IconCard icon={<Brain className="h-5 w-5" />} title={pick(l, "La tête", "The mind")}>
+          <FeatureGrid
+            tone="soft"
+            heading={
+              <SectionHeading
+                eyebrow={pick(l, "Trois clés", "Three keys")}
+                title={pick(l, "Trois outils, une synergie", "Three tools, one synergy")}
+              >
                 {pick(
+                  l,
+                  "Chacun agit sur une dimension. Ensemble, ils remettent toute ta vie en mouvement.",
+                  "Each works on one dimension. Together, they set your whole life back in motion.",
+                )}
+              </SectionHeading>
+            }
+            items={[
+              {
+                icon: <Brain className="h-6 w-6" />,
+                title: pick(l, "La tête", "The mind"),
+                body: pick(
                   l,
                   "La sexothérapie pour comprendre, mettre des mots et déposer ce qui pèse.",
                   "Sex therapy to understand, put words to things and set down what weighs on you.",
-                )}
-              </IconCard>
-              <IconCard icon={<Waves className="h-5 w-5" />} title={pick(l, "Le corps", "The body")}>
-                {pick(
+                ),
+              },
+              {
+                icon: <Waves className="h-6 w-6" />,
+                title: pick(l, "Le corps", "The body"),
+                body: pick(
                   l,
                   "La TRAME® pour libérer les tensions et remettre l'énergie en mouvement.",
                   "TRAME® to release tension and set the energy back in motion.",
-                )}
-              </IconCard>
-              <IconCard icon={<Heart className="h-5 w-5" />} title={pick(l, "Le cœur", "The heart")}>
-                {pick(
+                ),
+              },
+              {
+                icon: <Heart className="h-6 w-6" />,
+                title: pick(l, "Le cœur", "The heart"),
+                body: pick(
                   l,
                   "La numérologie pour éclairer ton chemin et ce qui te ressemble vraiment.",
                   "Numerology to light up your path and what truly resembles you.",
-                )}
-              </IconCard>
-            </div>
+                ),
+              },
+            ]}
+          />
+
+          <SplitSection
+            reverse
+            image="/img/cabinet-3.jpg"
+            imageAlt=""
+            eyebrow={pick(l, "Le principe", "The principle")}
+            title={pick(l, "Aligner pour avancer", "Align to move forward")}
+          >
             <p>
               {pick(
                 l,
@@ -94,21 +153,26 @@ export default async function ApproachPage({
                 "The principle: aligning these three dimensions so your life becomes truer, smoother, more you.",
               )}
             </p>
-          </Section>
-
-          <Section title={pick(l, "Ce que je ne suis pas", "What I am not")}>
             <p>
               {pick(
                 l,
-                "Je ne fais pas de miracles. Je ne te promets pas une solution magique. Je t'accompagne, avec honnêteté et bienveillance. Le vrai thérapeute, c'est toi : je marche à tes côtés pour que tu trouves ton propre chemin.",
-                "I don't perform miracles. I won't promise you a magic fix. I support you, honestly and with care. The real therapist is you: I walk beside you so you find your own path.",
+                "On ne suit pas un protocole figé : on choisit, à chaque étape, l'outil le plus juste pour ce que tu traverses.",
+                "We don't follow a fixed protocol: at each step, we choose the tool that best fits what you're going through.",
               )}
             </p>
-          </Section>
+          </SplitSection>
+
+          <QuoteBlock tone="warm" cite="Dimitri Gauthier">
+            {pick(
+              l,
+              "Je ne fais pas de miracles et je ne te promets pas de solution magique. Le vrai thérapeute, c'est toi : je marche à tes côtés pour que tu trouves ton propre chemin.",
+              "I don't perform miracles and I won't promise you a magic fix. The real therapist is you: I walk beside you so you find your own path.",
+            )}
+          </QuoteBlock>
         </>
       )}
 
-      <CTASection
+      <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Prêt·e à te réaligner ?", "Ready to realign?")}
         sub={pick(l, "Réserve une première séance et avançons ensemble, à ton rythme.", "Book a first session and let's move forward together, at your own pace.")}

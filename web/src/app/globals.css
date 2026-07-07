@@ -96,6 +96,7 @@
   --animate-fade-in: fade-in 0.7s ease-out both;
   --animate-fade-up: fade-up 0.7s ease-out both;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-float-soft: float-soft 5.5s ease-in-out infinite;
   --animate-blob: blob 18s ease-in-out infinite;
   --animate-gradient-shift: gradient-shift 8s ease infinite;
   --animate-pulse-glow: pulse-glow 2.6s ease-in-out infinite;
@@ -247,6 +248,10 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-14px); }
 }
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
 @keyframes blob {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(30px, -40px) scale(1.1); }
@@ -324,7 +329,7 @@ html {
     transition: none !important;
   }
   .text-gradient, .hover-lift, .blob, .experience-btn,
-  .animate-pulse-glow, .animate-pop, .animate-float, .animate-blob {
+  .animate-pulse-glow, .animate-pop, .animate-float, .animate-float-soft, .animate-blob {
     animation: none !important;
   }
 }

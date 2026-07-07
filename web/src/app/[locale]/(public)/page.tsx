@@ -17,7 +17,6 @@ import { getServices, getPublishedReviews } from "@/lib/data";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { CTAButton } from "@/components/ui";
 import Reveal from "@/components/Reveal";
-import ExperienceCTA from "@/components/ExperienceCTA";
 import DimitriGuide from "@/components/DimitriGuide";
 
 // Motif « cœurs » en filigrane pour le fond du hero (posé à très faible opacité).
@@ -617,13 +616,6 @@ export default async function HomePage({
         ]}
       />
 
-      {/* ── Invitation flottante ──────────────────────────── */}
-      <ExperienceCTA
-        href={experienceHref(l)}
-        label={pick(l, "Tente l'expérience", "Try the experience")}
-        hint={pick(l, "Ton parcours guidé t'attend", "Your guided journey awaits")}
-        closeLabel={pick(l, "Fermer", "Close")}
-      />
     </div>
   );
 }

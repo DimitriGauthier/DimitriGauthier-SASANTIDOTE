@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, CTASection } from "@/components/ui";
-import { Check } from "lucide-react";
+import { Prose } from "@/components/ui";
+import { PageHero, SplitSection, FeatureGrid, QuoteBlock, CTABanner, SectionHeading, Pill } from "@/components/sections";
+import { Compass, Calendar, Fingerprint, Sparkles, Hash } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -35,18 +36,37 @@ export default async function NumerologyPage({
 
   return (
     <article>
-      <PageTitle
+      <PageHero
         eyebrow={pick(l, "Symboles & sens", "Symbols & meaning")}
-        sub={pick(l, "Un éclairage sur ton chemin de vie", "Insight into your life path")}
-      >
-        {pick(l, "Numérologie & sexualité", "Numerology & sexuality")}
-      </PageTitle>
+        title={pick(l, "Numérologie & sexualité", "Numerology & sexuality")}
+        sub={pick(
+          l,
+          "Un langage de symboles pour éclairer ton chemin de vie, tes cycles et ta manière d'aimer.",
+          "A language of symbols to light up your life path, your cycles and your way of loving.",
+        )}
+        badges={
+          <>
+            <Pill icon={<Hash className="h-4 w-4" />}>{pick(l, "Chemin de vie", "Life path")}</Pill>
+            <Pill icon={<Calendar className="h-4 w-4" />}>{pick(l, "Cycles", "Cycles")}</Pill>
+            <Pill icon={<Compass className="h-4 w-4" />}>{pick(l, "Éclairage, pas prédiction", "Insight, not prediction")}</Pill>
+          </>
+        }
+      />
 
       {html ? (
-        <Prose html={html} />
+        <section className="full-bleed py-20 sm:py-24">
+          <div className="mx-auto max-w-3xl px-4">
+            <Prose html={html} />
+          </div>
+        </section>
       ) : (
         <>
-          <Section>
+          <SplitSection
+            image="/img/cabinet-2.jpg"
+            imageAlt=""
+            eyebrow={pick(l, "En quoi ça consiste", "What it is")}
+            title={pick(l, "Un langage de symboles", "A language of symbols")}
+          >
             <p>
               {pick(
                 l,
@@ -57,33 +77,53 @@ export default async function NumerologyPage({
             <p>
               {pick(
                 l,
-                "Sur le plan intime, cet éclairage aide à comprendre ta manière d'aimer, de désirer, de te lier. Il ne remplace pas le travail thérapeutique : il l'accompagne, en donnant du sens à ce que tu traverses.",
-                "On an intimate level, this insight helps you understand how you love, desire and connect. It doesn't replace therapeutic work: it supports it, giving meaning to what you're going through.",
+                "Sur le plan intime, cet éclairage aide à comprendre ta manière d'aimer, de désirer, de te lier.",
+                "On an intimate level, this insight helps you understand how you love, desire and connect.",
               )}
             </p>
-          </Section>
+          </SplitSection>
 
-          <Section title={pick(l, "Ce que la numérologie apporte", "What numerology brings")}>
-            <ul className="space-y-3">
-              {[
-                pick(l, "Mieux comprendre tes cycles et tes moments-clés", "Better understanding your cycles and key moments"),
-                pick(l, "Repérer ce qui te ressemble vraiment", "Spotting what truly resembles you"),
-                pick(l, "Donner du sens à tes blocages et à tes élans", "Giving meaning to your blocks and drives"),
-                pick(l, "Poser des choix plus alignés, dans ta vie et ton couple", "Making more aligned choices, in your life and your relationship"),
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
-                    <Check className="h-3 w-3" />
-                  </span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </Section>
+          <FeatureGrid
+            cols={4}
+            tone="soft"
+            heading={
+              <SectionHeading eyebrow={pick(l, "Ce que ça t'apporte", "What it brings you")} title={pick(l, "Ce que la numérologie apporte", "What numerology brings")} />
+            }
+            items={[
+              {
+                icon: <Calendar className="h-6 w-6" />,
+                title: pick(l, "Tes cycles", "Your cycles"),
+                body: pick(l, "Mieux comprendre tes cycles et tes moments-clés.", "Better understanding your cycles and key moments."),
+              },
+              {
+                icon: <Fingerprint className="h-6 w-6" />,
+                title: pick(l, "Ce qui te ressemble", "What resembles you"),
+                body: pick(l, "Repérer ce qui te ressemble vraiment.", "Spotting what truly resembles you."),
+              },
+              {
+                icon: <Sparkles className="h-6 w-6" />,
+                title: pick(l, "Du sens", "Meaning"),
+                body: pick(l, "Donner du sens à tes blocages et à tes élans.", "Giving meaning to your blocks and drives."),
+              },
+              {
+                icon: <Compass className="h-6 w-6" />,
+                title: pick(l, "Des choix alignés", "Aligned choices"),
+                body: pick(l, "Poser des choix plus alignés, dans ta vie et ton couple.", "Making more aligned choices, in your life and your relationship."),
+              },
+            ]}
+          />
+
+          <QuoteBlock tone="warm">
+            {pick(
+              l,
+              "La numérologie ne remplace pas le travail thérapeutique : elle l'accompagne, en donnant du sens à ce que tu traverses.",
+              "Numerology doesn't replace therapeutic work: it supports it, giving meaning to what you're going through.",
+            )}
+          </QuoteBlock>
         </>
       )}
 
-      <CTASection
+      <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Envie d'y voir plus clair ?", "Want to see more clearly?")}
         sub={pick(l, "Réserve une séance et donnons du sens à ton chemin.", "Book a session and let's give meaning to your path.")}

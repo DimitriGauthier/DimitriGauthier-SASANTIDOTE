@@ -1,10 +1,11 @@
-// À propos — parcours de Dimitri. Contenu éditable via content_pages (slug "a-propos"), sinon fallback statique.
+// À propos — parcours de Dimitri. Contenu éditable via content_pages (slug "a-propos"), sinon fallback riche.
 import type { Metadata } from "next";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
-import { PageTitle, Section, Prose, CTASection } from "@/components/ui";
-import { Check } from "lucide-react";
+import { Prose } from "@/components/ui";
+import { PageHero, SplitSection, Timeline, FeatureGrid, QuoteBlock, CTABanner, SectionHeading, Pill } from "@/components/sections";
+import { Award, Sparkles, Compass, Dumbbell, MapPin, Video } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -35,18 +36,39 @@ export default async function AboutPage({
 
   return (
     <article>
-      <PageTitle
+      <PageHero
         eyebrow={pick(l, "Qui je suis", "Who I am")}
-        sub={pick(l, "Sexothérapeute · La Réunion & métropole", "Sex therapist · Réunion Island & mainland France")}
-      >
-        {pick(l, "À propos", "About")}
-      </PageTitle>
+        title={pick(l, "À propos", "About")}
+        sub={pick(
+          l,
+          "Sexothérapeute à La Réunion et en visio partout dans le monde. Depuis près de vingt ans, mon métier est d'accompagner.",
+          "Sex therapist on Réunion Island and online worldwide. For nearly twenty years, my work has been to support people.",
+        )}
+        image="/img/coach.jpg"
+        imageAlt="Dimitri Gauthier"
+        badges={
+          <>
+            <Pill icon={<MapPin className="h-4 w-4" />}>{pick(l, "La Réunion", "Réunion Island")}</Pill>
+            <Pill icon={<Video className="h-4 w-4" />}>{pick(l, "Consultations en visio", "Online sessions")}</Pill>
+            <Pill icon={<Award className="h-4 w-4" />}>{pick(l, "Certifié depuis 2006", "Certified since 2006")}</Pill>
+          </>
+        }
+      />
 
       {html ? (
-        <Prose html={html} />
+        <section className="full-bleed py-20 sm:py-24">
+          <div className="mx-auto max-w-3xl px-4">
+            <Prose html={html} />
+          </div>
+        </section>
       ) : (
         <>
-          <Section>
+          <SplitSection
+            image="/img/detail.jpg"
+            imageAlt=""
+            eyebrow={pick(l, "Mon histoire", "My story")}
+            title={pick(l, "Un fil rouge : accompagner", "One common thread: to support")}
+          >
             <p>
               {pick(
                 l,
@@ -61,39 +83,78 @@ export default async function AboutPage({
                 "Today I support men, women and couples with their sexuality and intimacy. But I don't stop there: when someone struggles sexually, the cause is often elsewhere, in their emotional life, their work, their relationship with themselves.",
               )}
             </p>
-          </Section>
+          </SplitSection>
 
-          <Section title={pick(l, "Mon parcours & mes certifications", "My background & certifications")}>
-            <ul className="space-y-3">
-              {[
-                pick(l, "Certification de sexothérapeute", "Sex therapy certification"),
-                pick(l, "Praticien certifié La TRAME®", "Certified TRAME® practitioner"),
-                pick(l, "Numérologue certifié", "Certified numerologist"),
-                pick(l, "Brevet d'État de coach sportif", "State diploma in sports coaching"),
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
-                    <Check className="h-3 w-3" />
-                  </span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </Section>
+          <Timeline
+            tone="soft"
+            heading={
+              <SectionHeading eyebrow={pick(l, "Parcours", "Journey")} title={pick(l, "Un chemin, pas à pas", "A path, step by step")} />
+            }
+            items={[
+              {
+                marker: pick(l, "Depuis 2006", "Since 2006"),
+                title: pick(l, "Les métiers de l'accompagnement", "The support professions"),
+                body: pick(
+                  l,
+                  "Le début d'une vocation : être présent aux côtés des personnes pour les aider à cheminer.",
+                  "The start of a calling: being present beside people to help them move forward.",
+                ),
+              },
+              {
+                marker: pick(l, "Formations & certifications", "Training & certifications"),
+                title: pick(l, "Sexothérapie, TRAME® & numérologie", "Sex therapy, TRAME® & numerology"),
+                body: pick(
+                  l,
+                  "Trois approches complémentaires, réunies pour relier la tête, le corps et le cœur.",
+                  "Three complementary approaches, brought together to connect mind, body and heart.",
+                ),
+              },
+              {
+                marker: pick(l, "Aujourd'hui", "Today"),
+                title: pick(l, "Accompagnant en intime", "Companion in intimacy"),
+                body: pick(
+                  l,
+                  "J'accompagne hommes, femmes et couples, en cabinet à La Réunion comme en visio partout dans le monde.",
+                  "I support men, women and couples, in person on Réunion Island and online worldwide.",
+                ),
+              },
+            ]}
+          />
 
-          <Section title={pick(l, "Ma vision", "My vision")}>
-            <blockquote className="border-l-2 border-primary/40 pl-5 font-serif text-xl italic leading-relaxed text-foreground">
-              {pick(
-                l,
-                "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi. L'objectif ? T'aider à t'accomplir pleinement, dans ta vie comme dans ton intimité.",
-                "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you. The goal? Helping you fully flourish, in your life as in your intimacy.",
-              )}
-            </blockquote>
-          </Section>
+          <FeatureGrid
+            cols={4}
+            tone="plain"
+            heading={
+              <SectionHeading
+                eyebrow={pick(l, "Certifications", "Certifications")}
+                title={pick(l, "Mes formations", "My qualifications")}
+              >
+                {pick(
+                  l,
+                  "Un socle solide, au service d'un accompagnement honnête et sur mesure.",
+                  "A solid foundation, in service of honest, tailored support.",
+                )}
+              </SectionHeading>
+            }
+            items={[
+              { icon: <Award className="h-6 w-6" />, title: pick(l, "Sexothérapie", "Sex therapy"), body: pick(l, "Certifié par la Secret Therapy Academy.", "Certified by the Secret Therapy Academy.") },
+              { icon: <Sparkles className="h-6 w-6" />, title: "La TRAME®", body: pick(l, "Praticien certifié, formé en 2020.", "Certified practitioner, trained in 2020.") },
+              { icon: <Compass className="h-6 w-6" />, title: pick(l, "Numérologie", "Numerology"), body: pick(l, "Numérologue certifié.", "Certified numerologist.") },
+              { icon: <Dumbbell className="h-6 w-6" />, title: pick(l, "Coaching", "Coaching"), body: pick(l, "Brevet d'État d'éducateur sportif (2003).", "State diploma in sports education (2003).") },
+            ]}
+          />
+
+          <QuoteBlock tone="warm" cite="Dimitri Gauthier">
+            {pick(
+              l,
+              "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi.",
+              "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you.",
+            )}
+          </QuoteBlock>
         </>
       )}
 
-      <CTASection
+      <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Faisons connaissance", "Let's get to know each other")}
         sub={pick(l, "Réserve une première séance, en toute confidentialité.", "Book a first session, in full confidentiality.")}
