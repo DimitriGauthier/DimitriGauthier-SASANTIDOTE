@@ -82,12 +82,16 @@ export default function SiteHeader({
   const solid = scrolled || open;
 
   return (
-    <header className="sticky top-0 z-50">
+    // Header « flottant » hors flux : il ne réserve aucune hauteur, si bien que le
+    // fond des héros (dégradé + cœurs) remonte jusqu'en haut sans bande crème.
+    // pointer-events-none sur l'entête + auto sur la pilule : on ne bloque pas les clics
+    // sur le héros situé dessous, seule la pilule capte la souris.
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
       <div className="mx-auto max-w-6xl px-3 pt-3 sm:px-4 sm:pt-4">
         {/* Barre « pilule » flottante aux bords arrondis : verre dépoli, teinte chaude
             et léger relief. Le fond s'intensifie au défilement. */}
         <div
-          className={`relative flex items-center justify-between gap-2 rounded-full border py-2 pl-4 pr-2 backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ${
+          className={`pointer-events-auto relative flex items-center justify-between gap-2 rounded-full border py-2 pl-4 pr-2 backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ${
             solid
               ? "border-border/50 bg-card/85 shadow-[0_18px_50px_-20px_hsl(var(--deep)/0.34)] ring-1 ring-white/45"
               : "border-border/35 bg-card/55 shadow-[0_12px_40px_-22px_hsl(var(--deep)/0.26)] ring-1 ring-white/25"
@@ -198,7 +202,7 @@ export default function SiteHeader({
       {/* Menu mobile — panneau arrondi flottant sous la pilule, organisé par blocs */}
       {open && (
         <div className="mx-auto max-w-6xl px-3 sm:px-4 lg:hidden">
-          <div className="mt-2 overflow-hidden rounded-3xl border border-border/50 bg-card/90 shadow-[0_22px_54px_-22px_hsl(var(--deep)/0.34)] backdrop-blur-xl backdrop-saturate-150">
+          <div className="pointer-events-auto mt-2 overflow-hidden rounded-3xl border border-border/50 bg-card/90 shadow-[0_22px_54px_-22px_hsl(var(--deep)/0.34)] backdrop-blur-xl backdrop-saturate-150">
             <nav className="flex flex-col gap-1 p-3">
               {NAV.map((entry) =>
                 entry.type === "link" ? (

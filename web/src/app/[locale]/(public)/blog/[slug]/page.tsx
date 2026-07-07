@@ -37,7 +37,7 @@ export default async function ArticlePage({
   const body = pick(l, article.body_html, article.body_html_en);
 
   return (
-    <article className="mx-auto max-w-3xl">
+    <article className="mx-auto max-w-3xl pt-6 sm:pt-8">
       <Link href={href(l, "blog")} className="story-link text-sm text-muted-foreground hover:text-primary">
         ← {pick(l, "Tous les articles", "All articles")}
       </Link>
