@@ -56,7 +56,7 @@ const NAV: Entry[] = [
 ];
 
 const linkClass =
-  "text-[0.95rem] font-medium text-foreground/75 transition-colors hover:text-primary";
+  "font-serif text-[0.98rem] font-medium text-foreground/75 transition-colors hover:text-primary";
 
 export default function SiteHeader({
   locale,
@@ -159,7 +159,7 @@ export default function SiteHeader({
                               <Icon className="h-5 w-5" />
                             </span>
                             <span className="min-w-0">
-                              <span className="block text-[0.92rem] font-medium text-foreground transition-colors group-hover/item:text-primary">
+                              <span className="block font-serif text-[0.98rem] font-medium text-foreground transition-colors group-hover/item:text-primary">
                                 {t.nav[it.key]}
                               </span>
                               <span className="block text-xs text-muted-foreground">
@@ -210,7 +210,7 @@ export default function SiteHeader({
                     key={entry.slug}
                     href={href(locale, entry.slug)}
                     onClick={() => setOpen(false)}
-                    className="rounded-2xl px-3 py-2.5 text-base font-medium text-foreground/80 transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="rounded-2xl px-3 py-2.5 font-serif text-base font-medium text-foreground/80 transition-colors hover:bg-primary/10 hover:text-primary"
                   >
                     {t.nav[entry.key]}
                   </Link>
@@ -232,7 +232,7 @@ export default function SiteHeader({
                             <Icon className="h-5 w-5" />
                           </span>
                           <span className="min-w-0">
-                            <span className="block text-base font-medium text-foreground/85 group-hover/item:text-primary">
+                            <span className="block font-serif text-base font-medium text-foreground/85 group-hover/item:text-primary">
                               {t.nav[it.key]}
                             </span>
                             <span className="block text-xs text-muted-foreground">
