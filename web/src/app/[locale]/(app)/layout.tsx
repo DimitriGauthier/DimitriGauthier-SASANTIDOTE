@@ -43,8 +43,10 @@ export default async function AppLayout({
       </header>
 
       {/* Contenu */}
-      <main className="relative z-10 flex flex-1 items-start justify-center px-4 py-8 sm:py-12">
-        <div className="w-full">{children}</div>
+      <main className="relative z-10 flex flex-1 items-start justify-center px-4 pb-8 pt-4 sm:py-12">
+        {/* min-w-0 + max-w-full : le contenu ne peut jamais dépasser la largeur de
+            l'écran (garde-fou anti-débordement horizontal du questionnaire sur mobile). */}
+        <div className="w-full min-w-0 max-w-full">{children}</div>
       </main>
 
       {/* Réassurance */}

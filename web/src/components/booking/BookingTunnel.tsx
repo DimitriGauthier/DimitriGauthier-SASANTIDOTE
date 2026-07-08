@@ -427,16 +427,19 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
         <DimitriAvatar size={100} />
       </div>
     ) : null}
-    <div className="mx-auto max-w-4xl lg:grid lg:grid-cols-[240px_1fr] lg:gap-12">
+    <div className="mx-auto min-w-0 max-w-4xl lg:grid lg:grid-cols-[240px_1fr] lg:gap-12">
       {/* Guide « Dimitri » — colonne de gauche (desktop) */}
       <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="sidebar" audience={audience} companion={companion} hideAvatar={flying} />
 
-      <div>
+      {/* min-w-0 : empêche cette colonne de forcer une largeur supérieure au viewport
+          (bug de débordement horizontal sur mobile — flex/grid child min-width auto). */}
+      <div className="min-w-0">
       {/* Guide compact (mobile) */}
       <DimitriGuide message={encouragement} name={guideName} role={guideRole} variant="bar" audience={audience} companion={companion} hideAvatar={flying} />
 
-      {/* Progression — barre dégradée + encouragement (esprit « parcours ») */}
-      <div className="mb-8">
+      {/* Progression — barre dégradée. L'encouragement n'est PAS répété ici :
+          il est déjà porté par la bulle de Dimitri (guide) juste au-dessus. */}
+      <div className="mb-6">
         <div className="mb-2 flex items-center justify-between text-xs">
           <span className="font-medium uppercase tracking-[0.2em] text-primary">{groupLabel}</span>
           <span className="text-muted-foreground">
@@ -449,7 +452,6 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">{encouragement}</p>
       </div>
 
       <div key={safeIndex} className="animate-fade-up">
@@ -501,7 +503,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             <p className="mb-6 text-sm text-muted-foreground">
               {pick(locale, "Aucune bonne ou mauvaise réponse, choisis ce qui te ressemble.", "No right or wrong answer, pick what feels like you.")}
             </p>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {AUDIENCES.map((a) => {
                 const Avatar = AUDIENCE_AVATAR[a];
                 const active = audience === a;
@@ -517,18 +519,18 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
                         setAnswers({});
                       })
                     }
-                    className={`group flex flex-col items-center gap-3 rounded-2xl border-2 px-4 py-6 text-center transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${
+                    className={`group flex flex-col items-center gap-2 rounded-2xl border-2 px-2 py-4 text-center transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] sm:gap-3 sm:px-4 sm:py-6 ${
                       active
                         ? "animate-pop border-primary bg-secondary/50 shadow-soft"
                         : "border-border bg-card hover:border-primary/40 hover:bg-secondary/30 hover:shadow-card"
                     }`}
                   >
                     <Avatar
-                      size={92}
+                      size={84}
                       active={active}
-                      className={`transition-transform duration-300 ${active ? "animate-float" : "group-hover:scale-105"}`}
+                      className={`h-16 w-16 transition-transform duration-300 sm:h-[84px] sm:w-[84px] ${active ? "animate-float" : "group-hover:scale-105"}`}
                     />
-                    <span className="font-serif text-lg text-foreground">
+                    <span className="font-serif text-sm text-foreground sm:text-lg">
                       {a === "homme" ? t.tunnel.profileMan : a === "femme" ? t.tunnel.profileWoman : t.tunnel.profileCouple}
                     </span>
                   </button>
@@ -801,7 +803,7 @@ function IntroScreen({
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-8 text-center shadow-soft sm:p-12">
+      <div className="relative overflow-hidden rounded-3xl border border-border/60 bg-card p-6 text-center shadow-soft sm:p-12">
         <div aria-hidden className="blob pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-primary/40" />
         <div className="relative">
           {/* Span mesurable (ref) : point de départ du vol de Dimitri vers le guide. */}
@@ -822,19 +824,19 @@ function IntroScreen({
             )}
           </p>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="mt-7 grid grid-cols-3 gap-2 sm:mt-8 sm:gap-4">
             {points.map(({ Icon, title, text }) => (
-              <div key={title} className="rounded-2xl border border-border/60 bg-background/60 p-4 text-center">
-                <span className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary">
-                  <Icon className="h-5 w-5" />
+              <div key={title} className="rounded-2xl border border-border/60 bg-background/60 p-3 text-center sm:p-4">
+                <span className="mx-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-secondary text-primary sm:h-10 sm:w-10">
+                  <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </span>
-                <p className="mt-2 text-sm font-medium text-foreground">{title}</p>
-                <p className="mt-1 text-xs leading-snug text-muted-foreground">{text}</p>
+                <p className="mt-1.5 text-xs font-medium leading-snug text-foreground sm:mt-2 sm:text-sm">{title}</p>
+                <p className="mt-1 hidden text-xs leading-snug text-muted-foreground sm:block">{text}</p>
               </div>
             ))}
           </div>
 
-          <button type="button" onClick={onStart} className={`${primaryBtn} mt-9 justify-center`}>
+          <button type="button" onClick={onStart} className={`${primaryBtn} mt-7 justify-center sm:mt-9`}>
             {pick(locale, "Commencer", "Start")} <ArrowRight className="h-4 w-4" />
           </button>
           <p className="mt-3 text-xs text-muted-foreground">
@@ -907,21 +909,21 @@ function QuestionScreen({
   const auto = autoAdvances(q.type);
 
   const chip = (active: boolean) =>
-    `rounded-2xl border-2 px-5 py-3.5 text-left text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] ${
+    `rounded-2xl border-2 px-4 py-3 text-left text-sm transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] sm:px-5 sm:py-3.5 ${
       active ? "animate-pop border-primary bg-secondary/50 text-foreground shadow-soft" : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-secondary/30 hover:shadow-card"
     }`;
 
   return (
     <section>
-      <h2 className="mb-1.5 font-serif text-2xl font-medium leading-snug text-foreground sm:text-3xl">
+      <h2 className="mb-1.5 font-serif text-xl font-medium leading-snug text-foreground sm:text-3xl">
         {label}
         {q.required ? <span className="text-primary"> *</span> : null}
       </h2>
-      {help ? <p className="mb-6 text-sm text-muted-foreground">{help}</p> : <div className="mb-6" />}
+      {help ? <p className="mb-5 text-sm text-muted-foreground sm:mb-6">{help}</p> : <div className="mb-5 sm:mb-6" />}
 
       {/* Choix unique */}
       {q.type === "single_choice" ? (
-        <div className="grid gap-3">
+        <div className="grid gap-2.5 sm:gap-3">
           {opts.map((o) => {
             const active = value === o.value;
             return (
@@ -936,7 +938,7 @@ function QuestionScreen({
 
       {/* Oui / Non */}
       {q.type === "boolean" ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
           {[
             { v: true, label: pick(locale, "Oui", "Yes") },
             { v: false, label: pick(locale, "Non", "No") },
@@ -974,7 +976,7 @@ function QuestionScreen({
 
       {/* Choix multiple */}
       {q.type === "multi_choice" ? (
-        <div className="grid gap-3">
+        <div className="grid gap-2.5 sm:gap-3">
           {opts.map((o) => {
             const arr = Array.isArray(value) ? (value as string[]) : [];
             const on = arr.includes(o.value);
@@ -1010,7 +1012,7 @@ function QuestionScreen({
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
-      <div className="mt-8 flex items-center justify-between">
+      <div className="mt-6 flex items-center justify-between sm:mt-8">
         <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
           <ArrowLeft className="h-4 w-4" /> {t.common.back}
         </button>

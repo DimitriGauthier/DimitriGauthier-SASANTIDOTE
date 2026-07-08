@@ -56,23 +56,37 @@ export default function DimitriGuide({
   const duoName = paired && companion ? `${name} & ${companion}` : name;
 
   if (variant === "bar") {
+    // Mobile : on empile le guide pour que les DEUX avatars et les DEUX prénoms
+    // soient bien lisibles (centrés, en toutes lettres), puis la bulle pleine largeur.
     return (
-      <div className="mb-6 flex items-center gap-3 lg:hidden">
-        <div className="relative flex shrink-0 items-end">
-          <span data-dimitri-target className="inline-flex" style={targetStyle}>
-            <DimitriAvatar size={48} className="animate-float" />
-          </span>
+      <div className="mb-5 lg:hidden">
+        <div className="flex flex-col items-center text-center">
           {ProspectAvatar ? (
-            <>
+            <div className="relative flex items-end justify-center">
+              <span data-dimitri-target className="inline-flex" style={targetStyle}>
+                <DimitriAvatar size={60} className="animate-float" />
+              </span>
               <div className="-ml-3">
-                <ProspectAvatar size={38} active className="animate-float" />
+                <ProspectAvatar size={50} active className="animate-float" />
               </div>
-              <LinkHeart className="absolute left-1/2 top-0 h-5 w-5 -translate-x-1/2" />
-            </>
-          ) : null}
+              <LinkHeart className="absolute left-1/2 top-1 h-6 w-6 -translate-x-1/2" />
+            </div>
+          ) : (
+            <span data-dimitri-target className="inline-flex" style={targetStyle}>
+              <DimitriAvatar size={64} className="animate-float" />
+            </span>
+          )}
+          <p className="mt-1.5 font-serif text-[15px] font-medium leading-tight text-foreground [overflow-wrap:anywhere]">
+            {duoName}
+          </p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-primary">{role}</p>
         </div>
-        <div className="relative flex-1 rounded-2xl rounded-tl-sm border border-border/60 bg-card px-4 py-2.5 shadow-card">
-          <p key={message} className="animate-fade-up text-sm leading-snug text-foreground">
+        <div className="relative mt-3 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-card">
+          <span
+            aria-hidden
+            className="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-border/60 bg-card"
+          />
+          <p key={message} className="animate-fade-up relative text-[0.95rem] leading-snug text-foreground [overflow-wrap:anywhere]">
             {message}
           </p>
         </div>
