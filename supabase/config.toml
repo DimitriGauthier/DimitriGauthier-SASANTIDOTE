@@ -21,3 +21,15 @@ verify_jwt = false
 # Action réservée à l'admin connecté : on exige un JWT + on revérifie is_admin() dans le code.
 [functions.complete-booking]
 verify_jwt = true
+
+# Notification de contact : appelée côté serveur (route Next) ; le contenu est relu en base.
+[functions.contact-notify]
+verify_jwt = false
+
+# Connexion Google Agenda (OAuth) : ouvertes par le navigateur / le callback Google → pas de JWT.
+# Sécurité assurée dans le code : state signé (CSRF) + allowlist du compte au callback.
+[functions.google-oauth-start]
+verify_jwt = false
+
+[functions.google-oauth-callback]
+verify_jwt = false

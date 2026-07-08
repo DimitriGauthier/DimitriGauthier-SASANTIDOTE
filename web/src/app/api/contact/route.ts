@@ -2,6 +2,27 @@
 // Défensif : si Supabase n'est pas câblé, on renvoie 202 (accepté) pour ne pas casser l'UX de dev.
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { env, functionsBase } from "@/lib/env";
+
+// Notifie Dimitri du nouveau message (edge function Resend). Non bloquant :
+// une panne d'email ne doit jamais casser l'envoi du formulaire côté visiteur.
+async function notifyPractitioner(contactId: string) {
+  const base = functionsBase();
+  if (!base) return;
+  try {
+    await fetch(`${base}/contact-notify`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        apikey: env.supabaseAnonKey,
+        authorization: `Bearer ${env.serviceRoleKey || env.supabaseAnonKey}`,
+      },
+      body: JSON.stringify({ contact_id: contactId }),
+    });
+  } catch {
+    // silencieux : le message est déjà enregistré et visible dans l'espace admin.
+  }
+}
 
 export async function POST(req: Request) {
   let body: Record<string, unknown>;
@@ -33,12 +54,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, persisted: false }, { status: 202 });
   }
 
-  const { error } = await sb
+  const { data: inserted, error } = await sb
     .from("contact_messages")
-    .insert({ name, email, phone, subject, message });
+    .insert({ name, email, phone, subject, message })
+    .select("id")
+    .single();
 
-  if (error) {
+  if (error || !inserted) {
     return NextResponse.json({ error: "db_error" }, { status: 500 });
   }
+
+  // Email d'information à Dimitri (attendu mais tolérant aux pannes).
+  await notifyPractitioner(inserted.id as string);
+
   return NextResponse.json({ ok: true, persisted: true }, { status: 201 });
 }

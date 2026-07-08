@@ -331,6 +331,35 @@ export function practitionerNewProspect(p: {
   };
 }
 
+// ── Notification à Dimitri : NOUVEAU MESSAGE via le formulaire de contact. FR. ──
+export function contactMessage(p: {
+  name: string; email: string; phone: string | null; subject: string | null; message: string;
+}): { subject: string; html: string } {
+  const recap = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+    ${detailRow("De", esc(p.name))}
+    ${detailRow("Email", `<a href="mailto:${esc(p.email)}" style="color:${C.primary};text-decoration:none;">${esc(p.email)}</a>`)}
+    ${detailRow("Téléphone", esc(p.phone ?? "—"))}
+    ${p.subject ? detailRow("Sujet", esc(p.subject)) : ""}
+  </table>`;
+  const body = [
+    para("Un nouveau message vient d'être envoyé depuis le formulaire de contact du site."),
+    highlight(recap),
+    `<p style="margin:20px 0 8px;font-family:${SERIF};font-size:15px;color:${C.primary};">Message</p>`,
+    `<div style="font-family:${SANS};font-size:14px;line-height:1.65;color:${C.ink};white-space:pre-wrap;">${esc(p.message)}</div>`,
+    emailButton(`Répondre à ${p.name}`, `mailto:${p.email}`),
+  ].join("");
+  return {
+    subject: `Nouveau message — ${p.name}`,
+    html: emailLayout({
+      lang: "fr",
+      preheader: `${p.name}${p.subject ? ` · ${p.subject}` : ""}`,
+      heading: "Nouveau message de contact",
+      bodyHtml: body,
+      signature: "Notification automatique",
+    }),
+  };
+}
+
 // ── Notification à Dimitri : NOUVEAU RDV PAYÉ (webhook Stripe). Toujours en FR. ──
 export function practitionerNewBooking(p: {
   firstName: string; lastName: string; email: string; phone: string | null;
