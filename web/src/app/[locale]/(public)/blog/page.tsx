@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { isLocale, type Locale, pick } from "@/lib/i18n";
-import { href } from "@/lib/site";
+import { href, experienceHref } from "@/lib/site";
 import { getPublishedArticles } from "@/lib/data";
 import { formatDayLabel } from "@/lib/format";
 import { EmptyState } from "@/components/ui";
@@ -48,6 +48,17 @@ export default async function BlogPage({
           "Articles to understand, step back and move forward: sexuality, couples, TRAME® and numerology.",
         )}
       />
+
+      {/* CTA obligatoire : redirige vers l'expérience INTIMY (sous-domaine dédié). */}
+      <div className="mx-auto max-w-6xl px-4">
+        <a
+          href={experienceHref(l)}
+          className="experience-btn group mx-auto mt-10 flex w-full max-w-md items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white shadow-soft transition-transform duration-300 hover:-translate-y-0.5"
+        >
+          {pick(l, "Tente l'expérience", "Try the experience")}
+          <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </a>
+      </div>
 
       <section className="full-bleed py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4">
