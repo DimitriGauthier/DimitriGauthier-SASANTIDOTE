@@ -161,7 +161,13 @@ export default function SiteSplash({
       /* stockage indisponible : on joue quand même une fois */
     }
     document.body.style.overflow = "hidden";
-    timer.current = window.setTimeout(() => setShow(false), TOTAL_MS);
+    timer.current = window.setTimeout(() => {
+      // Fin d'animation : le composant rend `null` sans se démonter, donc le
+      // cleanup ne s'exécute pas. On rétablit le scroll ici, sinon `<body>`
+      // reste bloqué en overflow:hidden pour tout le reste de la session.
+      document.body.style.overflow = "";
+      setShow(false);
+    }, TOTAL_MS);
     return () => {
       if (timer.current) window.clearTimeout(timer.current);
       document.body.style.overflow = "";
