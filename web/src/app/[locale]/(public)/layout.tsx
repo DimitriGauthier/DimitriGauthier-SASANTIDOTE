@@ -32,7 +32,7 @@ export default async function PublicLayout({
       <SiteHeader locale={l} settings={settings} />
       <main className="mx-auto max-w-6xl px-4 py-16">{children}</main>
       <SiteFooter locale={l} settings={settings} />
-      <WhatsAppButton settings={settings} />
+      <WhatsAppButton settings={settings} locale={l} />
       <ExperienceCTA
         href={experienceHref(l)}
         label={pick(l, "Tente l'expérience", "Try the experience")}

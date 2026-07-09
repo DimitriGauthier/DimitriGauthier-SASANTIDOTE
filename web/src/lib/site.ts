@@ -10,6 +10,11 @@ export const siteConfig = {
   },
   phone: "+262 692 52 72 86",
   whatsappDigits: "262692527286", // pour wa.me (sans + ni espaces)
+  // Message pré-rempli à l'ouverture de WhatsApp (localisé).
+  whatsappMessage: {
+    fr: "Bonjour Dimitri, j'ai découvert votre site et j'aimerais quelques informations sur vos accompagnements. Merci !",
+    en: "Hello Dimitri, I came across your website and I'd like some information about your sessions. Thank you!",
+  },
   email: "dimitrigauthier974@gmail.com",
   instagram: "https://instagram.com/dimitrigauthier",
   // Positionnement : accompagnement en visio partout dans le monde (FR/EN), cabinet à La Réunion.
@@ -35,8 +40,9 @@ export const siteConfig = {
   },
 } as const;
 
-export function whatsappUrl(digits: string = siteConfig.whatsappDigits): string {
-  return `https://wa.me/${digits}`;
+export function whatsappUrl(digits: string = siteConfig.whatsappDigits, message?: string): string {
+  const base = `https://wa.me/${digits}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 
 // Navigation principale : slug de route + clé de libellé (cf. i18n getDict().nav)
