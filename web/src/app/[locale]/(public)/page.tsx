@@ -68,8 +68,8 @@ export default async function HomePage({
       title: "La TRAME®",
       body: pick(
         l,
-        "Un travail énergétique qui libère les tensions du corps et remet en mouvement ce qui était figé.",
-        "Energy work that releases the body's tensions and sets in motion what had become stuck.",
+        "Une technique vibratoire qui libère les tensions du corps et remet en mouvement ce qui était figé.",
+        "A vibratory technique that releases the body's tensions and sets in motion what had become stuck.",
       ),
     },
     {
@@ -104,8 +104,8 @@ export default async function HomePage({
       title: pick(l, "Couple", "Couples"),
       body: pick(
         l,
-        "Communication, désir, complicité. Retrouver ensemble un équilibre qui vous ressemble.",
-        "Communication, desire, closeness. Finding together a balance that suits you.",
+        "Un souci relationnel, un manque de communication, un désir en décalage. On avance ensemble vers un équilibre qui vous ressemble.",
+        "A relational strain, a lack of communication, mismatched desire. We move together toward a balance that suits you.",
       ),
     },
   ];
@@ -151,8 +151,8 @@ export default async function HomePage({
             <p className="animate-fade-up mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground md:mx-0">
               {pick(
                 l,
-                "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à retrouver un équilibre entre la tête, le corps et le cœur.",
-                "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and finding balance again between mind, body and heart.",
+                "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à réaligner la tête, le corps et le cœur.",
+                "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and realigning mind, body and heart.",
               )}
             </p>
             <div className="animate-fade-up mt-10 flex flex-col items-center gap-4 md:items-start">
@@ -278,7 +278,21 @@ export default async function HomePage({
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">
               {pick(l, "Ma vision de la sexothérapie", "My view of sex therapy")}
             </p>
-            <p className="mt-6 font-serif text-2xl leading-relaxed text-foreground sm:text-3xl">
+            <p className="mt-6 font-serif text-2xl italic leading-relaxed text-foreground sm:text-3xl">
+              {pick(
+                l,
+                "« Attendre ou espérer, c'est désirer ce qui ne dépend pas de nous. Vouloir, c'est désirer ce qui dépend de nous. »",
+                "“To wait or to hope is to desire what does not depend on us. To will is to desire what depends on us.”",
+              )}
+            </p>
+            <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-muted-foreground">
+              {pick(
+                l,
+                "Tout commence par là : vouloir. Quand une personne le veut vraiment, elle se donne tous les moyens. Mon rôle n'est pas de vouloir à ta place, mais de créer les conditions pour que tu avances.",
+                "It all starts there: to will. When a person truly wants it, they give themselves every means. My role isn't to want in your place, but to create the conditions for you to move forward.",
+              )}
+            </p>
+            <p className="mt-8 font-serif text-2xl leading-relaxed text-foreground sm:text-3xl">
               {pick(
                 l,
                 "Selon moi, « accompagnant en intime », la sexothérapie ne se limite en rien à la performance sexuelle.",
@@ -288,8 +302,8 @@ export default async function HomePage({
             <p className="mx-auto mt-5 max-w-2xl leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Je considère la sexualité comme une dimension globale de l'identité, du bien-être et des relations humaines, dans un cadre éthique, confidentiel et sans jugement.",
-                "I see sexuality as a global dimension of identity, well-being and human relationships, within an ethical, confidential and non-judgmental framework.",
+                "Je considère la sexualité comme une dimension globale de l'identité, du bien-être et des relations humaines, dans un cadre éthique, confidentiel et sans jugement. Bien souvent, un blocage sexuel n'est pas la cause : c'est la conséquence de quelque chose de plus profond.",
+                "I see sexuality as a global dimension of identity, well-being and human relationships, within an ethical, confidential and non-judgmental framework. Very often, a sexual block isn't the cause: it's the consequence of something deeper.",
               )}
             </p>
           </Reveal>

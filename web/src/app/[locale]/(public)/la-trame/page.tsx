@@ -5,7 +5,7 @@ import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
 import { Prose } from "@/components/ui";
 import { PageHero, SplitSection, FeatureGrid, Steps, CTABanner, SectionHeading, Pill } from "@/components/sections";
-import { Waves, Wind, Unlock, Feather, HandHeart, Sparkles, Compass, Sprout, Award } from "lucide-react";
+import { Waves, Wind, Unlock, Feather, HandHeart, Sparkles, Compass, Sprout, Award, Clock, ShieldAlert } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -15,11 +15,11 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "La TRAME® · travail énergétique", "The TRAME® · energy work"),
+    title: pick(l, "La TRAME® · technique vibratoire", "The TRAME® · vibratory technique"),
     description: pick(
       l,
-      "La TRAME® : un travail énergétique doux qui libère les tensions du corps et remet en mouvement ce qui était figé.",
-      "The TRAME®: gentle energy work that releases the body's tensions and sets in motion what had become stuck.",
+      "La TRAME® : une technique vibratoire douce qui libère les tensions du corps et remet en mouvement ce qui était figé.",
+      "The TRAME®: a gentle vibratory technique that releases the body's tensions and sets in motion what had become stuck.",
     ),
   };
 }
@@ -38,18 +38,19 @@ export default async function TramePage({
     <article>
       <PageHero
         tone="warm"
-        eyebrow={pick(l, "Travail énergétique", "Energy work")}
+        eyebrow={pick(l, "Technique vibratoire", "Vibratory technique")}
         title={pick(l, "La TRAME®", "The TRAME®")}
         sub={pick(
           l,
-          "Libérer le corps, remettre l'énergie en mouvement. Un soin doux et non intrusif, en complément de la parole.",
-          "Freeing the body, setting energy back in motion. Gentle, non-intrusive care, alongside talking.",
+          "Se reconnecter à soi, en douceur. Une technique vibratoire, douce et non intrusive, en complément de la parole.",
+          "Reconnecting with yourself, gently. A soft, non-intrusive vibratory technique, alongside talking.",
         )}
         badges={
           <>
             <Pill icon={<Feather className="h-4 w-4" />}>{pick(l, "Doux", "Gentle")}</Pill>
             <Pill icon={<HandHeart className="h-4 w-4" />}>{pick(l, "Non intrusif", "Non-intrusive")}</Pill>
-            <Pill icon={<Waves className="h-4 w-4" />}>{pick(l, "Énergétique", "Energy-based")}</Pill>
+            <Pill icon={<Waves className="h-4 w-4" />}>{pick(l, "Vibratoire", "Vibratory")}</Pill>
+            <Pill icon={<Clock className="h-4 w-4" />}>{pick(l, "≈ 45 min", "≈ 45 min")}</Pill>
             <Pill icon={<Award className="h-4 w-4" />}>{pick(l, "Praticien certifié 2020", "Certified practitioner 2020")}</Pill>
           </>
         }
@@ -67,20 +68,27 @@ export default async function TramePage({
             image="/img/cabinet-5.jpg"
             imageAlt=""
             eyebrow={pick(l, "En quoi ça consiste", "What it is")}
-            title={pick(l, "Un soin énergétique", "An energy treatment")}
+            title={pick(l, "Une technique vibratoire", "A vibratory technique")}
           >
             <p>
               {pick(
                 l,
-                "La TRAME® est un soin énergétique. Par des gestes précis le long de la colonne, elle relance la circulation de l'énergie vitale et aide le corps à relâcher les tensions qu'il retient, parfois depuis longtemps.",
-                "The TRAME® is an energy treatment. Through precise gestures along the spine, it revives the flow of vital energy and helps the body release the tensions it holds, sometimes for a long time.",
+                "La TRAME® est une technique vibratoire. Par des gestes précis le long de la colonne, elle agit sur les tensions que le corps retient, parfois depuis longtemps, et remet le mouvement là où quelque chose s'était figé.",
+                "The TRAME® is a vibratory technique. Through precise gestures along the spine, it works on the tensions the body holds, sometimes for a very long time, and sets movement back where something had become stuck.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "Beaucoup de blocages intimes s'ancrent dans le corps. Travailler cette dimension, en complément de la parole, permet souvent de débloquer ce qui résistait.",
-                "Many intimate blocks are anchored in the body. Working on this dimension, alongside talking, often unlocks what had been resisting.",
+                "Le principe est simple : tu restes habillé·e, allongé·e. Rien d'intrusif, jamais.",
+                "The principle is simple: you stay dressed, lying down. Nothing intrusive, ever.",
+              )}
+            </p>
+            <p>
+              {pick(
+                l,
+                "Beaucoup de blocages intimes s'ancrent dans le corps. Travailler cette dimension, en complément de la parole, permet souvent de débloquer ce qui résistait. La TRAME® s'adresse à toute personne en quête d'équilibre et de rééquilibrage.",
+                "Many intimate blocks are anchored in the body. Working on this dimension, alongside talking, often unlocks what had been resisting. The TRAME® is for anyone seeking balance and rebalancing.",
               )}
             </p>
             <p className="flex items-start gap-2.5 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3 text-sm text-foreground/80">
@@ -88,8 +96,18 @@ export default async function TramePage({
               <span>
                 {pick(
                   l,
-                  "Je suis praticien certifié La TRAME®, formé en 2020. Un cadre sérieux, pour un soin qui reste toujours doux et respectueux.",
-                  "I'm a certified TRAME® practitioner, trained in 2020. A serious framework, for care that always stays gentle and respectful.",
+                  "Je suis praticien certifié La TRAME®, formé en 2020. Un cadre sérieux, pour une séance qui reste toujours douce et respectueuse.",
+                  "I'm a certified TRAME® practitioner, trained in 2020. A serious framework, for a session that always stays gentle and respectful.",
+                )}
+              </span>
+            </p>
+            <p className="flex items-start gap-2.5 rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-foreground/80">
+              <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+              <span>
+                {pick(
+                  l,
+                  "Un préalable indispensable : avant toute séance, on remplit ensemble un court questionnaire médical. La TRAME® est contre-indiquée dans certains cas, notamment en cas de pacemaker, de stent ou de certains antécédents. Dans ces situations, on ne la pratique pas : ta sécurité passe avant tout.",
+                  "A necessary first step: before any session, we fill out a short medical questionnaire together. The TRAME® is contraindicated in certain cases, notably with a pacemaker, a stent or some medical histories. In those situations, we don't perform it: your safety comes first.",
                 )}
               </span>
             </p>
@@ -98,7 +116,7 @@ export default async function TramePage({
           <FeatureGrid
             tone="soft"
             heading={
-              <SectionHeading eyebrow={pick(l, "Les effets ressentis", "The felt effects")} title={pick(l, "Ce que la TRAME® apporte", "What the TRAME® brings")}>
+              <SectionHeading eyebrow={pick(l, "Les bienfaits", "The benefits")} title={pick(l, "Les bienfaits couramment observés", "Commonly observed benefits")}>
                 {pick(
                   l,
                   "Chaque personne vit sa séance à sa façon. Voici ce que beaucoup ressentent, séance après séance.",
@@ -139,8 +157,8 @@ export default async function TramePage({
                 title: pick(l, "La capacité de choisir", "The power to choose"),
                 body: pick(
                   l,
-                  "Retrouver sa liberté de décider, avancer sans se sentir bloqué.",
-                  "Reclaiming your freedom to decide, moving forward without feeling stuck.",
+                  "Renouer avec sa liberté de décider, avancer sans se sentir bloqué.",
+                  "Reconnecting with your freedom to decide, moving forward without feeling stuck.",
                 ),
               },
               {
@@ -148,8 +166,8 @@ export default async function TramePage({
                 title: pick(l, "De nouveaux potentiels", "New potential"),
                 body: pick(
                   l,
-                  "Une énergie qui se remet en mouvement, et des possibles qui s'ouvrent.",
-                  "Energy that starts moving again, and possibilities that open up.",
+                  "Un élan qui se remet en mouvement, et des possibles qui s'ouvrent.",
+                  "A momentum that starts moving again, and possibilities that open up.",
                 ),
               },
               {
@@ -175,8 +193,8 @@ export default async function TramePage({
                 body: pick(l, "On échange pour comprendre ce que tu traverses.", "We talk to understand what you're going through."),
               },
               {
-                title: pick(l, "Le soin énergétique", "The energy treatment"),
-                body: pick(l, "Le soin, doux et non intrusif, le long de la colonne.", "The gentle, non-intrusive treatment along the spine."),
+                title: pick(l, "La séance vibratoire", "The vibratory session"),
+                body: pick(l, "La séance, douce et non intrusive : habillé·e, allongé·e, le long de la colonne.", "The gentle, non-intrusive session: dressed, lying down, along the spine."),
               },
               {
                 title: pick(l, "Ressentir & intégrer", "Feel & integrate"),
@@ -190,7 +208,7 @@ export default async function TramePage({
       <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Envie de relâcher ce qui pèse ?", "Ready to release what weighs on you?")}
-        sub={pick(l, "Réserve une séance de TRAME® et remets ton énergie en mouvement.", "Book a TRAME® session and set your energy back in motion.")}
+        sub={pick(l, "Réserve une séance de TRAME® et remets le mouvement en toi, en douceur.", "Book a TRAME® session and set movement back in you, gently.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

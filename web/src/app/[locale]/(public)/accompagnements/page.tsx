@@ -142,8 +142,8 @@ export default async function ServicesPage({
               title: pick(l, "Séance de couple", "Couple session"),
               body: pick(
                 l,
-                "Communication, désir, complicité : retrouver ensemble un équilibre qui vous ressemble.",
-                "Communication, desire, closeness: finding together a balance that suits you.",
+                "Pour les couples qui traversent un souci relationnel ou un manque de communication : remettre du lien et comprendre ce qui se joue vraiment.",
+                "For couples going through a relational strain or a lack of communication: rebuilding connection and understanding what's really at play.",
               ),
             },
             {
@@ -151,8 +151,8 @@ export default async function ServicesPage({
               title: pick(l, "Séance TRAME® / numérologie", "TRAME® / numerology session"),
               body: pick(
                 l,
-                "Un travail énergétique ou un éclairage numérologique, en complément du suivi.",
-                "Energy work or a numerology reading, alongside the follow-up.",
+                "Une technique vibratoire ou un éclairage numérologique, en complément du suivi.",
+                "A vibratory technique or a numerology reading, alongside the follow-up.",
               ),
             },
           ]}

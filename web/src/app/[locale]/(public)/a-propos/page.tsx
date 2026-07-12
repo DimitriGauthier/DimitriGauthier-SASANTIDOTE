@@ -72,8 +72,8 @@ export default async function AboutPage({
             <p>
               {pick(
                 l,
-                "Je m'appelle Dimitri Gauthier. Depuis 2006, j'exerce des métiers d'accompagnement, c'est le fil rouge de ma vie. J'ai toujours aimé être aux côtés des gens pour les aider à avancer.",
-                "My name is Dimitri Gauthier. Since 2006 I've worked in support professions, and it's the common thread of my life. I've always loved being alongside people to help them move forward.",
+                "Je m'appelle Dimitri Gauthier. Depuis 2006, j'exerce des métiers d'accompagnement, c'est le fil rouge de ma vie. J'ai toujours aimé être aux côtés des gens et cheminer avec eux. Ce qui me porte, ce n'est pas une méthode toute faite : c'est l'expérience, le vécu, les années passées à écouter.",
+                "My name is Dimitri Gauthier. Since 2006 I've worked in support professions, and it's the common thread of my life. I've always loved being beside people and walking with them. What carries me isn't a ready-made method: it's experience, real life, the years spent listening.",
               )}
             </p>
             <p>
@@ -96,8 +96,8 @@ export default async function AboutPage({
                 title: pick(l, "Les métiers de l'accompagnement", "The support professions"),
                 body: pick(
                   l,
-                  "Le début d'une vocation : être présent aux côtés des personnes pour les aider à cheminer.",
-                  "The start of a calling: being present beside people to help them move forward.",
+                  "Le début d'une vocation : être présent aux côtés des personnes et les accompagner sur leur chemin.",
+                  "The start of a calling: being present beside people and supporting them on their path.",
                 ),
               },
               {

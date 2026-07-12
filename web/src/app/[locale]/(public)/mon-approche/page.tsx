@@ -81,15 +81,15 @@ export default async function ApproachPage({
             <p>
               {pick(
                 l,
-                "S'accomplir pleinement, ce n'est pas régler un seul problème isolé. C'est un ensemble : le sentimental, le professionnel, le sexuel. Quelqu'un qui va mal dans sa sexualité porte souvent une difficulté qui vient d'ailleurs.",
-                "Fully flourishing isn't about fixing one isolated problem. It's a whole: emotional life, work, sexuality. Someone struggling with their sexuality often carries a difficulty that comes from elsewhere.",
+                "S'accomplir pleinement, ce n'est pas régler un seul problème isolé. C'est un ensemble : le sentimental, le professionnel, le sexuel. Très souvent, ce qui se joue dans la sexualité n'est pas la cause mais la conséquence. La vraie racine est ailleurs.",
+                "Fully flourishing isn't about fixing one isolated problem. It's a whole: emotional life, work, sexuality. Very often, what plays out in sexuality isn't the cause but the consequence. The real root lies elsewhere.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "C'est pour ça que je combine trois outils. Non pas pour les empiler, mais pour créer une réelle synergie et t'aider à te réaligner.",
-                "That's why I combine three tools. Not to stack them, but to create a real synergy and help you realign.",
+                "C'est pour ça que je combine trois outils. Non pas pour les empiler, mais pour créer une réelle synergie et te permettre de te réaligner toi-même.",
+                "That's why I combine three tools. Not to stack them, but to create a real synergy so you can realign yourself.",
               )}
             </p>
           </SplitSection>
@@ -123,8 +123,8 @@ export default async function ApproachPage({
                 title: pick(l, "Le corps", "The body"),
                 body: pick(
                   l,
-                  "La TRAME® pour libérer les tensions et remettre l'énergie en mouvement.",
-                  "TRAME® to release tension and set the energy back in motion.",
+                  "La TRAME®, technique vibratoire, pour libérer les tensions du corps et remettre le mouvement.",
+                  "TRAME®, a vibratory technique, to release the body's tensions and set movement back in motion.",
                 ),
               },
               {
