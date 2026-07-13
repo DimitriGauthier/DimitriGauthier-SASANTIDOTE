@@ -4,7 +4,7 @@ import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
 import { Prose } from "@/components/ui";
-import { PageHero, SplitSection, FeatureGrid, Steps, CTABanner, SectionHeading, Pill } from "@/components/sections";
+import { PageHero, SplitSection, FeatureGrid, Steps, CTABanner, SectionHeading, Pill, QuoteBlock } from "@/components/sections";
 import { Waves, Wind, Unlock, Feather, HandHeart, Sparkles, Compass, Sprout, Award, Clock, ShieldAlert } from "lucide-react";
 
 export async function generateMetadata({
@@ -18,8 +18,8 @@ export async function generateMetadata({
     title: pick(l, "La TRAME® · technique vibratoire", "The TRAME® · vibratory technique"),
     description: pick(
       l,
-      "La TRAME® : une technique vibratoire douce qui libère les tensions du corps et remet en mouvement ce qui était figé.",
-      "The TRAME®: a gentle vibratory technique that releases the body's tensions and sets in motion what had become stuck.",
+      "La TRAME® : une technique vibratoire douce qui rétablit la circulation de l'information dans le corps et remet en mouvement ce qui était figé.",
+      "The TRAME®: a gentle vibratory technique that restores the circulation of information in the body and sets moving again what had become stuck.",
     ),
   };
 }
@@ -50,7 +50,7 @@ export default async function TramePage({
             <Pill icon={<Feather className="h-4 w-4" />}>{pick(l, "Doux", "Gentle")}</Pill>
             <Pill icon={<HandHeart className="h-4 w-4" />}>{pick(l, "Non intrusif", "Non-intrusive")}</Pill>
             <Pill icon={<Waves className="h-4 w-4" />}>{pick(l, "Vibratoire", "Vibratory")}</Pill>
-            <Pill icon={<Clock className="h-4 w-4" />}>{pick(l, "≈ 45 min", "≈ 45 min")}</Pill>
+            <Pill icon={<Clock className="h-4 w-4" />}>{pick(l, "30 à 45 min", "30 to 45 min")}</Pill>
             <Pill icon={<Award className="h-4 w-4" />}>{pick(l, "Praticien certifié 2020", "Certified practitioner 2020")}</Pill>
           </>
         }
@@ -73,8 +73,15 @@ export default async function TramePage({
             <p>
               {pick(
                 l,
-                "La TRAME® est une technique vibratoire. Par des gestes précis le long de la colonne, elle agit sur les tensions que le corps retient, parfois depuis longtemps, et remet le mouvement là où quelque chose s'était figé.",
-                "The TRAME® is a vibratory technique. Through precise gestures along the spine, it works on the tensions the body holds, sometimes for a very long time, and sets movement back where something had become stuck.",
+                "La TRAME® est une technique vibratoire, composée de seize mouvements précis, le long de la colonne. Son but : rétablir la circulation de l'information dans le corps, quand elle est perturbée par des obstacles que l'on se crée, souvent liés à des émotions, conscientes ou non.",
+                "The TRAME® is a vibratory technique, made of sixteen precise movements along the spine. Its purpose: to restore the circulation of information in the body when it's disrupted by the obstacles we create for ourselves, often tied to emotions, whether we're aware of them or not.",
+              )}
+            </p>
+            <p>
+              {pick(
+                l,
+                "Elle permet de faire, ou de refaire, circuler cette information de façon harmonieuse.",
+                "It lets this information flow, or flow again, in a harmonious way.",
               )}
             </p>
             <p>
@@ -139,8 +146,8 @@ export default async function TramePage({
                 title: pick(l, "La libération des émotions", "Emotional release"),
                 body: pick(
                   l,
-                  "Ce qui était retenu peut enfin se dénouer et circuler à nouveau.",
-                  "What was held back can finally loosen and flow again.",
+                  "Les émotions qui étaient figées se décristallisent, se dénouent et circulent à nouveau.",
+                  "Emotions that had frozen decrystallize, loosen and flow again.",
                 ),
               },
               {
@@ -148,8 +155,8 @@ export default async function TramePage({
                 title: pick(l, "Une clarté nouvelle", "New clarity"),
                 body: pick(
                   l,
-                  "Les idées s'éclaircissent, on voit plus juste ce qui compte vraiment.",
-                  "Thoughts clear up, you see more truly what really matters.",
+                  "Une clarification qui se fait, sur le plan émotionnel comme physique.",
+                  "A clarification that settles in, on both the emotional and the physical level.",
                 ),
               },
               {
@@ -157,8 +164,8 @@ export default async function TramePage({
                 title: pick(l, "La capacité de choisir", "The power to choose"),
                 body: pick(
                   l,
-                  "Renouer avec sa liberté de décider, avancer sans se sentir bloqué.",
-                  "Reconnecting with your freedom to decide, moving forward without feeling stuck.",
+                  "Retrouver la capacité de faire des choix et de prendre des décisions, plus simplement.",
+                  "Regaining the capacity to make choices and decisions, more simply.",
                 ),
               },
               {
@@ -194,7 +201,7 @@ export default async function TramePage({
               },
               {
                 title: pick(l, "La séance vibratoire", "The vibratory session"),
-                body: pick(l, "La séance, douce et non intrusive : habillé·e, allongé·e, le long de la colonne.", "The gentle, non-intrusive session: dressed, lying down, along the spine."),
+                body: pick(l, "La séance, douce et non intrusive : habillé·e, allongé·e, seize mouvements le long de la colonne.", "The gentle, non-intrusive session: dressed, lying down, sixteen movements along the spine."),
               },
               {
                 title: pick(l, "Ressentir & intégrer", "Feel & integrate"),
@@ -202,6 +209,14 @@ export default async function TramePage({
               },
             ]}
           />
+
+          <QuoteBlock tone="warm" cite="Dimitri Gauthier">
+            {pick(
+              l,
+              "Mon rôle, c'est de t'accueillir, de t'écouter, d'observer et d'éclairer ton chemin. Le reste, c'est le mouvement de guérison qui vient de l'intérieur de toi-même.",
+              "My role is to welcome you, to listen, to observe and to shed light on your path. The rest is the healing movement that comes from within you.",
+            )}
+          </QuoteBlock>
         </>
       )}
 
