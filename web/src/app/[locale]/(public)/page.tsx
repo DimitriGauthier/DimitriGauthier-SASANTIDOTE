@@ -33,12 +33,12 @@ export async function generateMetadata({
   return {
     title: pick(
       l,
-      "Dimitri Gauthier · Sexothérapie, TRAME® & numérologie",
+      "Dimitri Gauthier · Sexothérapie, la TRAME® & numérologie",
       "Dimitri Gauthier · Sex therapy, TRAME® & numerology",
     ),
     description: pick(
       l,
-      "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur : sexothérapie, TRAME® et numérologie. Consultations en visio.",
+      "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur : sexothérapie, la TRAME® et numérologie. Consultations en visio.",
       "Sex therapist for men, women and couples. An approach connecting mind, body and heart: sex therapy, TRAME® and numerology. Online sessions.",
     ),
   };

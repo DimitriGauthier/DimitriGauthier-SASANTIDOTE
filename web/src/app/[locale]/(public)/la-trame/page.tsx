@@ -223,7 +223,7 @@ export default async function TramePage({
       <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Envie de relâcher ce qui pèse ?", "Ready to release what weighs on you?")}
-        sub={pick(l, "Réserve une séance de TRAME® et remets le mouvement en toi, en douceur.", "Book a TRAME® session and set movement back in you, gently.")}
+        sub={pick(l, "Réserve une séance de La TRAME® et remets le mouvement en toi, en douceur.", "Book a TRAME® session and set movement back in you, gently.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

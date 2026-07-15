@@ -44,7 +44,7 @@ export default async function BlogPage({
         title={pick(l, "Réflexions & ressources", "Reflections & resources")}
         sub={pick(
           l,
-          "Des articles pour comprendre, prendre du recul et avancer : sexualité, couple, TRAME® et numérologie.",
+          "Des articles pour comprendre, prendre du recul et avancer : sexualité, couple, la TRAME® et numérologie.",
           "Articles to understand, step back and move forward: sexuality, couples, TRAME® and numerology.",
         )}
       />

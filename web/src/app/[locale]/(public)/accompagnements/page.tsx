@@ -148,7 +148,7 @@ export default async function ServicesPage({
             },
             {
               icon: <Sparkles className="h-6 w-6" />,
-              title: pick(l, "Séance TRAME® / numérologie", "TRAME® / numerology session"),
+              title: pick(l, "Séance de La TRAME® ou numérologie", "TRAME® / numerology session"),
               body: pick(
                 l,
                 "Une technique vibratoire ou un éclairage numérologique, en complément du suivi.",
@@ -191,7 +191,7 @@ export default async function ServicesPage({
             title: pick(l, "On avance ensemble", "We move forward together"),
             body: pick(
               l,
-              "On choisit les outils les plus justes : sexothérapie, TRAME® ou numérologie, selon ton besoin.",
+              "On choisit les outils les plus justes : sexothérapie, la TRAME® ou numérologie, selon ton besoin.",
               "We choose the most fitting tools: sex therapy, TRAME® or numerology, depending on your need.",
             ),
           },

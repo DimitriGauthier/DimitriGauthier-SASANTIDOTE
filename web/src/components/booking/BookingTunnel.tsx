@@ -18,7 +18,7 @@ import type { Locale } from "@/lib/i18n";
 import { pick, getDict } from "@/lib/i18n";
 import { siteConfig } from "@/lib/site";
 import type { Audience, Service, Topic, Question, QuestionCondition, Slot } from "@/lib/types";
-import { getSlots, createHold } from "@/lib/edge";
+import { getSlots, createHold, EdgeTimeoutError } from "@/lib/edge";
 import { formatPrice, formatDuration, formatDayLabel, formatTime, reunionDayKey } from "@/lib/format";
 import DimitriGuide from "@/components/booking/DimitriGuide";
 import { HommeAvatar, FemmeAvatar, CoupleAvatar } from "@/components/booking/ProfileAvatars";
@@ -330,9 +330,17 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
         consent_rgpd: consent,
         locale,
       });
+      if (!res.checkout_url) {
+        throw new Error(pick(locale, "Le paiement n'a pas pu démarrer.", "Payment could not start."));
+      }
       window.location.href = res.checkout_url;
     } catch (e) {
-      setError(e instanceof Error ? e.message : pick(locale, "Le paiement n'a pas pu démarrer.", "Payment could not start."));
+      const msg = e instanceof EdgeTimeoutError
+        ? pick(locale, "Le paiement met trop de temps à démarrer. Vérifie ta connexion et réessaie dans un instant.", "Payment is taking too long to start. Check your connection and try again in a moment.")
+        : e instanceof Error
+          ? e.message
+          : pick(locale, "Le paiement n'a pas pu démarrer.", "Payment could not start.");
+      setError(msg);
       setSubmitting(false);
     }
   }

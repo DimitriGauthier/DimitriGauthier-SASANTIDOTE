@@ -8,6 +8,13 @@ import type {
 } from "@/lib/types";
 
 class EdgeError extends Error {}
+/** Levée quand l'Edge Function ne répond pas dans le délai imparti (ex: cold start Stripe). */
+export class EdgeTimeoutError extends EdgeError {}
+
+// Délai max avant d'abandonner un appel Edge. Un cold start (import Stripe) peut prendre
+// plusieurs secondes ; au-delà on préfère rendre la main à l'utilisateur avec un message clair
+// plutôt que de le laisser bloqué indéfiniment sur « loading ».
+const CALL_TIMEOUT_MS = 25_000;
 
 async function callFunction<T>(
   name: string,
@@ -16,15 +23,28 @@ async function callFunction<T>(
 ): Promise<T> {
   const base = functionsBase();
   if (!base) throw new EdgeError("Backend non configuré (NEXT_PUBLIC_SUPABASE_URL manquant).");
-  const res = await fetch(`${base}/${name}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: env.supabaseAnonKey,
-      Authorization: `Bearer ${accessToken ?? env.supabaseAnonKey}`,
-    },
-    body: JSON.stringify(body ?? {}),
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), CALL_TIMEOUT_MS);
+  let res: Response;
+  try {
+    res = await fetch(`${base}/${name}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: env.supabaseAnonKey,
+        Authorization: `Bearer ${accessToken ?? env.supabaseAnonKey}`,
+      },
+      body: JSON.stringify(body ?? {}),
+      signal: controller.signal,
+    });
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new EdgeTimeoutError("La requête a expiré.");
+    }
+    throw new EdgeError((e as Error)?.message ?? "Réseau indisponible.");
+  } finally {
+    clearTimeout(timer);
+  }
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new EdgeError((data as { error?: string })?.error ?? `Erreur ${res.status}`);
   return data as T;

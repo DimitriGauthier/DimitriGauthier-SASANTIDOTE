@@ -18,7 +18,7 @@ export async function generateMetadata({
     title: pick(l, "Mon approche · tête, corps & cœur", "My approach · mind, body & heart"),
     description: pick(
       l,
-      "Une synergie unique entre sexothérapie, TRAME® et numérologie pour aligner la tête, le corps et le cœur.",
+      "Une synergie unique entre sexothérapie, la TRAME® et numérologie pour aligner la tête, le corps et le cœur.",
       "A unique synergy between sex therapy, TRAME® and numerology to align mind, body and heart.",
     ),
   };
