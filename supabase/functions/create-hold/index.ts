@@ -4,7 +4,7 @@
 // Public (verify_jwt=false). Écrit via service-role.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14?target=deno";
+import Stripe from "npm:stripe@14";
 import { cors, json } from "../_shared/cors.ts";
 import { adminClient } from "../_shared/supabase.ts";
 import { sendEmail } from "../_shared/resend.ts";

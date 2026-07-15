@@ -5,7 +5,7 @@
 // Public (verify_jwt=false) — la sécurité vient de la signature Stripe.
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14?target=deno";
+import Stripe from "npm:stripe@14";
 import { adminClient } from "../_shared/supabase.ts";
 import { getAccessToken, createEvent } from "../_shared/google.ts";
 import { sendEmail } from "../_shared/resend.ts";

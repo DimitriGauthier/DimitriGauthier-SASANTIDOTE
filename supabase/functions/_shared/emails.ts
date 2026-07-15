@@ -100,10 +100,10 @@ export function emailLayout(p: {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${C.bg};padding:32px 12px;">
     <tr><td align="center">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:${C.card};border:1px solid ${C.border};border-radius:16px;overflow:hidden;">
-        <!-- En-tête / wordmark -->
-        <tr><td style="padding:30px 40px 22px;text-align:center;border-bottom:1px solid ${C.border};">
-          <div style="font-family:${SERIF};font-size:23px;letter-spacing:.5px;color:${C.primary};font-weight:600;">Dimitri Gauthier</div>
-          <div style="font-family:${SANS};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:${C.gold};margin-top:7px;">${tagline}</div>
+        <!-- En-tête / logo -->
+        <tr><td style="padding:28px 40px 22px;text-align:center;border-bottom:1px solid ${C.border};">
+          <img src="https://dimitrigauthier.com/img/logo.png" width="210" height="74" alt="Dimitri Gauthier" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:210px;max-width:62%;height:auto;">
+          <div style="font-family:${SANS};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:${C.gold};margin-top:12px;">${tagline}</div>
         </td></tr>
         <!-- Corps -->
         <tr><td style="padding:34px 40px 8px;">
