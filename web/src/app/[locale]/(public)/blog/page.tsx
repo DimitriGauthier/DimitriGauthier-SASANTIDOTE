@@ -23,7 +23,7 @@ export async function generateMetadata({
     description: pick(
       l,
       "Articles et réflexions sur la sexualité, le couple, la TRAME® et la numérologie.",
-      "Articles and reflections on sexuality, couples, TRAME® and numerology.",
+      "Articles and reflections on sexuality, couples, the TRAME® and numerology.",
     ),
   };
 }
@@ -45,7 +45,7 @@ export default async function BlogPage({
         sub={pick(
           l,
           "Des articles pour comprendre, prendre du recul et avancer : sexualité, couple, la TRAME® et numérologie.",
-          "Articles to understand, step back and move forward: sexuality, couples, TRAME® and numerology.",
+          "Articles to understand, step back and move forward: sexuality, couples, the TRAME® and numerology.",
         )}
       />
 

@@ -5,8 +5,9 @@ import { href } from "@/lib/site";
 import { getServices } from "@/lib/data";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { PageHero, FeatureGrid, Steps, CTABanner, SectionHeading, Pill } from "@/components/sections";
-import { Heart, Users, Sparkles, ArrowRight, Video, Clock, ShieldCheck } from "lucide-react";
+import { Heart, Users, Sparkles, ArrowRight, Video, Clock, ShieldCheck, Mars, Venus, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import AnimatedCard from "@/components/AnimatedCard";
 import Link from "next/link";
 
 export async function generateMetadata({
@@ -63,6 +64,74 @@ export default async function ServicesPage({
         cta={{ href: href(l, "reservation"), label: pick(l, "Réserver une séance", "Book a session") }}
       />
 
+      {/* Ce que l'accompagnement peut apporter — hommes / femmes */}
+      <section className="full-bleed py-20 sm:py-24">
+        <div className="mx-auto max-w-5xl px-4">
+          <SectionHeading
+            eyebrow={pick(l, "Pour toi", "For you")}
+            title={pick(l, "Ce que l'accompagnement peut t'apporter", "What the sessions can bring you")}
+          >
+            {pick(
+              l,
+              "Chaque histoire est différente. Que tu sois un homme ou une femme, voici les situations sur lesquelles on peut avancer ensemble, en toute confidentialité.",
+              "Every story is different. Whether you're a man or a woman, here are the situations we can work through together, in full confidentiality.",
+            )}
+          </SectionHeading>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            <Reveal>
+              <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Mars className="h-5 w-5" />
+                  </span>
+                  <h3 className="font-serif text-2xl font-medium text-foreground">{pick(l, "Pour les hommes", "For men")}</h3>
+                </div>
+                <ul className="mt-6 space-y-3">
+                  {[
+                    pick(l, "Les pannes d'érection et la peur de « ne pas y arriver »", "Erection difficulties and the fear of “not performing”"),
+                    pick(l, "L'éjaculation trop rapide, ou au contraire trop retenue", "Ejaculating too quickly, or on the contrary too held back"),
+                    pick(l, "Une baisse de désir ou de libido", "A drop in desire or libido"),
+                    pick(l, "La confiance en soi et la pression de la performance", "Self-confidence and performance pressure"),
+                    pick(l, "Le rapport au corps et à l'image de soi", "The relationship to the body and self-image"),
+                    pick(l, "Retrouver du plaisir et de la complicité dans le couple", "Rediscovering pleasure and closeness in the relationship"),
+                  ].map((t, i) => (
+                    <li key={i} className="flex gap-3 leading-relaxed text-muted-foreground">
+                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </AnimatedCard>
+            </Reveal>
+            <Reveal delay={100}>
+              <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Venus className="h-5 w-5" />
+                  </span>
+                  <h3 className="font-serif text-2xl font-medium text-foreground">{pick(l, "Pour les femmes", "For women")}</h3>
+                </div>
+                <ul className="mt-6 space-y-3">
+                  {[
+                    pick(l, "Une baisse ou une absence de désir", "A drop in or absence of desire"),
+                    pick(l, "Les douleurs pendant les rapports (sécheresse, vaginisme)", "Pain during intercourse (dryness, vaginismus)"),
+                    pick(l, "La difficulté à ressentir du plaisir ou à atteindre l'orgasme", "Difficulty feeling pleasure or reaching orgasm"),
+                    pick(l, "Le rapport au corps, à l'image de soi et à la charge mentale", "The relationship to the body, self-image and mental load"),
+                    pick(l, "Se reconnecter à ses envies et à sa sensualité", "Reconnecting with your desires and sensuality"),
+                    pick(l, "Retrouver du plaisir et de la complicité dans le couple", "Rediscovering pleasure and closeness in the relationship"),
+                  ].map((t, i) => (
+                    <li key={i} className="flex gap-3 leading-relaxed text-muted-foreground">
+                      <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </AnimatedCard>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {services.length > 0 ? (
         <section className="full-bleed py-20 sm:py-24">
           <div className="mx-auto max-w-6xl px-4">
@@ -76,7 +145,7 @@ export default async function ServicesPage({
             <div className="mt-12 grid gap-6 md:grid-cols-2">
               {services.map((s, i) => (
                 <Reveal key={s.id} delay={(i % 2) * 100}>
-                  <div className="hover-lift flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 shadow-card">
+                  <AnimatedCard className="flex h-full flex-col rounded-3xl border border-border/60 bg-card p-8 shadow-card">
                     <div className="flex items-start justify-between gap-4">
                       <h2 className="font-serif text-2xl font-medium text-foreground">{pick(l, s.title, s.title_en)}</h2>
                       <span className="shrink-0 rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
@@ -109,7 +178,7 @@ export default async function ServicesPage({
                     >
                       {pick(l, "Réserver cet accompagnement", "Book this session")} <ArrowRight className="h-4 w-4" />
                     </Link>
-                  </div>
+                  </AnimatedCard>
                 </Reveal>
               ))}
             </div>
@@ -148,7 +217,7 @@ export default async function ServicesPage({
             },
             {
               icon: <Sparkles className="h-6 w-6" />,
-              title: pick(l, "Séance de La TRAME® ou numérologie", "TRAME® / numerology session"),
+              title: pick(l, "Séance de La TRAME® ou numérologie", "The TRAME® or numerology session"),
               body: pick(
                 l,
                 "Une technique vibratoire ou un éclairage numérologique, en complément du suivi.",
@@ -192,7 +261,7 @@ export default async function ServicesPage({
             body: pick(
               l,
               "On choisit les outils les plus justes : sexothérapie, la TRAME® ou numérologie, selon ton besoin.",
-              "We choose the most fitting tools: sex therapy, TRAME® or numerology, depending on your need.",
+              "We choose the most fitting tools: sex therapy, the TRAME® or numerology, depending on your need.",
             ),
           },
         ]}

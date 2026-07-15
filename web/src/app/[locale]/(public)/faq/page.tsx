@@ -31,7 +31,7 @@ const FAQ: QA[] = [
     q: { fr: "Comment se déroule une séance ?", en: "How does a session work?" },
     a: {
       fr: "Chaque séance a lieu en visio. On commence par un temps d'écoute, puis on avance avec les outils les plus adaptés à ta situation : sexothérapie, la TRAME® ou numérologie.",
-      en: "Each session is online. We start with a time of listening, then move forward with the tools best suited to your situation: sex therapy, TRAME® or numerology.",
+      en: "Each session is online. We start with a time of listening, then move forward with the tools best suited to your situation: sex therapy, the TRAME® or numerology.",
     },
   },
   {

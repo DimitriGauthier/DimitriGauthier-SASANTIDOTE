@@ -19,7 +19,7 @@ export async function generateMetadata({
     description: pick(
       l,
       "Une synergie unique entre sexothérapie, la TRAME® et numérologie pour aligner la tête, le corps et le cœur.",
-      "A unique synergy between sex therapy, TRAME® and numerology to align mind, body and heart.",
+      "A unique synergy between sex therapy, the TRAME® and numerology to align mind, body and heart.",
     ),
   };
 }
@@ -124,7 +124,7 @@ export default async function ApproachPage({
                 body: pick(
                   l,
                   "La TRAME®, technique vibratoire, pour libérer les tensions du corps et remettre le mouvement.",
-                  "TRAME®, a vibratory technique, to release the body's tensions and set movement back in motion.",
+                  "The TRAME®, a vibratory technique, to release the body's tensions and set movement back in motion.",
                 ),
               },
               {

@@ -188,6 +188,90 @@
   box-shadow: var(--shadow-soft);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   Cartes animées : tilt 3D suivant le curseur, halo lumineux
+   (spotlight) qui suit la souris, liseré dégradé animé au survol.
+   Piloté par AnimatedCard (variables --mx/--my/--rx/--ry).
+   ───────────────────────────────────────────────────────────── */
+@property --card-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.card-3d {
+  --mx: 50%;
+  --my: 50%;
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  isolation: isolate;
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.45s ease, border-color 0.45s ease;
+  will-change: transform;
+}
+.card-3d:hover {
+  transform: perspective(1000px) translateY(-8px) rotateX(var(--rx)) rotateY(var(--ry));
+  box-shadow: var(--shadow-soft);
+  border-color: hsl(var(--primary) / 0.4);
+}
+/* Le contenu reste au-dessus du halo et du liseré, sans wrapper
+   (préserve les mises en page flex des cartes). */
+.card-3d > :not(.card-3d__glow) {
+  position: relative;
+  z-index: 1;
+}
+/* Halo lumineux qui suit le curseur */
+.card-3d__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    240px circle at var(--mx) var(--my),
+    hsl(var(--primary) / 0.13),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.card-3d:hover .card-3d__glow {
+  opacity: 1;
+}
+/* Liseré dégradé animé (terracotta → or), révélé au survol */
+.card-3d::before {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--card-angle),
+    transparent 0deg,
+    hsl(var(--gold) / 0.7) 90deg,
+    hsl(var(--primary) / 0.75) 180deg,
+    transparent 300deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: card-border-spin 4s linear infinite;
+  pointer-events: none;
+}
+.card-3d:hover::before {
+  opacity: 1;
+}
+@keyframes card-border-spin {
+  to {
+    --card-angle: 360deg;
+  }
+}
+
 /* Lien avec soulignement animé */
 .story-link {
   position: relative;
@@ -330,6 +414,12 @@ html {
   }
   .text-gradient, .hover-lift, .blob, .experience-btn,
   .animate-pulse-glow, .animate-pop, .animate-float, .animate-float-soft, .animate-blob {
+    animation: none !important;
+  }
+  .card-3d {
+    transform: none !important;
+  }
+  .card-3d::before {
     animation: none !important;
   }
 }

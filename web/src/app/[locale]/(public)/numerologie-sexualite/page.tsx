@@ -83,6 +83,29 @@ export default async function NumerologyPage({
             </p>
           </SplitSection>
 
+          <SplitSection
+            reverse
+            image="/img/cabinet-3.jpg"
+            imageAlt=""
+            eyebrow={pick(l, "La méthode que j'utilise", "The method I use")}
+            title={pick(l, "La numérologie salomique", "Salomic numerology")}
+          >
+            <p>
+              {pick(
+                l,
+                "C'est la méthode que j'utilise. Une approche complète pour comprendre ta personnalité, tes motivations et les complexités de tes réactions, comme celles de ton environnement.",
+                "This is the method I use. A complete approach to understanding your personality, your motivations and the complexities of your reactions, as well as those of your environment.",
+              )}
+            </p>
+            <p>
+              {pick(
+                l,
+                "Elle éclaire aussi les cycles qui s'ouvrent devant toi et t'aide à anticiper tes actions, pour avancer avec plus de clarté et de sérénité.",
+                "It also sheds light on the cycles opening ahead of you and helps you anticipate your actions, so you can move forward with more clarity and calm.",
+              )}
+            </p>
+          </SplitSection>
+
           <FeatureGrid
             cols={4}
             tone="soft"

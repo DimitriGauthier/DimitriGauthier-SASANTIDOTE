@@ -8,6 +8,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import AnimatedCard from "@/components/AnimatedCard";
 import { Eyebrow } from "@/components/ui";
 
 // Motif « cœurs » en filigrane (repris du hero de la home).
@@ -195,15 +196,15 @@ export function FeatureGrid({
         <div className={`grid gap-6 ${grid}`}>
           {items.map((it, i) => (
             <Reveal key={i} delay={(i % 3) * 100}>
-              <div className="hover-lift group h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
+              <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
                 {it.icon ? (
-                  <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                     {it.icon}
                   </div>
                 ) : null}
                 <h3 className="font-serif text-2xl font-medium text-foreground">{it.title}</h3>
                 {it.body ? <div className="mt-3 leading-relaxed text-muted-foreground">{it.body}</div> : null}
-              </div>
+              </AnimatedCard>
             </Reveal>
           ))}
         </div>
@@ -231,13 +232,13 @@ export function Steps({
         <div className={`grid gap-6 ${cols}`}>
           {items.map((it, i) => (
             <Reveal key={i} delay={i * 100}>
-              <div className="hover-lift h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
-                <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary font-serif text-lg font-medium text-primary-foreground shadow-soft">
+              <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
+                <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary font-serif text-lg font-medium text-primary-foreground shadow-soft transition-transform duration-500 group-hover:scale-110">
                   {i + 1}
                 </span>
                 <h3 className="font-serif text-xl font-medium text-foreground">{it.title}</h3>
                 {it.body ? <p className="mt-2 leading-relaxed text-muted-foreground">{it.body}</p> : null}
-              </div>
+              </AnimatedCard>
             </Reveal>
           ))}
         </div>

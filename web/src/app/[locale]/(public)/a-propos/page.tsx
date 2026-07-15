@@ -19,7 +19,7 @@ export async function generateMetadata({
     description: pick(
       l,
       "Sexothérapeute depuis 2006, certifié La TRAME® et en numérologie. Un métier d'accompagnement, une vocation.",
-      "Sex therapist since 2006, certified in TRAME® and numerology. A profession of support, a calling.",
+      "Sex therapist since 2006, certified in the TRAME® and numerology. A profession of support, a calling.",
     ),
   };
 }
@@ -102,7 +102,7 @@ export default async function AboutPage({
               },
               {
                 marker: pick(l, "Formations & certifications", "Training & certifications"),
-                title: pick(l, "Sexothérapie, la TRAME® & numérologie", "Sex therapy, TRAME® & numerology"),
+                title: pick(l, "Sexothérapie, la TRAME® & numérologie", "Sex therapy, the TRAME® & numerology"),
                 body: pick(
                   l,
                   "Trois approches complémentaires, réunies pour relier la tête, le corps et le cœur.",

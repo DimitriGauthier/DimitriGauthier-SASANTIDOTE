@@ -17,6 +17,7 @@ import { getServices, getPublishedReviews } from "@/lib/data";
 import { formatPrice, formatDuration } from "@/lib/format";
 import { CTAButton } from "@/components/ui";
 import Reveal from "@/components/Reveal";
+import AnimatedCard from "@/components/AnimatedCard";
 import DimitriGuide from "@/components/DimitriGuide";
 
 // Motif « cœurs » en filigrane pour le fond du hero (posé à très faible opacité).
@@ -34,12 +35,12 @@ export async function generateMetadata({
     title: pick(
       l,
       "Dimitri Gauthier · Sexothérapie, la TRAME® & numérologie",
-      "Dimitri Gauthier · Sex therapy, TRAME® & numerology",
+      "Dimitri Gauthier · Sex therapy, the TRAME® & numerology",
     ),
     description: pick(
       l,
       "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur : sexothérapie, la TRAME® et numérologie. Consultations en visio.",
-      "Sex therapist for men, women and couples. An approach connecting mind, body and heart: sex therapy, TRAME® and numerology. Online sessions.",
+      "Sex therapist for men, women and couples. An approach connecting mind, body and heart: sex therapy, the TRAME® and numerology. Online sessions.",
     ),
   };
 }
@@ -369,13 +370,13 @@ export default async function HomePage({
               const Icon = p.icon;
               return (
                 <Reveal key={p.title} delay={i * 120}>
-                  <div className="hover-lift h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
-                    <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
+                    <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                       <Icon size={26} />
                     </div>
                     <h3 className="font-serif text-2xl font-medium text-foreground">{p.title}</h3>
                     <p className="mt-3 leading-relaxed text-muted-foreground">{p.body}</p>
-                  </div>
+                  </AnimatedCard>
                 </Reveal>
               );
             })}
@@ -430,10 +431,10 @@ export default async function HomePage({
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {profiles.map((p, i) => (
               <Reveal key={p.title} delay={i * 120}>
-                <div className="glass hover-lift h-full rounded-3xl p-8">
+                <AnimatedCard className="glass h-full rounded-3xl p-8">
                   <h3 className="font-serif text-2xl font-medium text-foreground">{p.title}</h3>
                   <p className="mt-3 leading-relaxed text-muted-foreground">{p.body}</p>
-                </div>
+                </AnimatedCard>
               </Reveal>
             ))}
           </div>
@@ -455,7 +456,7 @@ export default async function HomePage({
             <div className="grid gap-6 md:grid-cols-2">
               {services.map((s, i) => (
                 <Reveal key={s.id} delay={(i % 2) * 100}>
-                  <div className="hover-lift h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
+                  <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
                     <div className="flex items-baseline justify-between gap-3">
                       <h3 className="font-serif text-2xl font-medium text-foreground">
                         {pick(l, s.title, s.title_en)}
@@ -469,7 +470,7 @@ export default async function HomePage({
                         {pick(l, s.subtitle, s.subtitle_en)}
                       </p>
                     ) : null}
-                  </div>
+                  </AnimatedCard>
                 </Reveal>
               ))}
             </div>
@@ -497,7 +498,7 @@ export default async function HomePage({
             <div className="grid gap-6 md:grid-cols-3">
               {reviews.map((r, i) => (
                 <Reveal key={r.id} delay={i * 120}>
-                  <div className="hover-lift h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
+                  <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-7 shadow-card">
                     {r.rating ? (
                       <div className="mb-3 text-gold" aria-label={`${r.rating}/5`}>
                         {"★".repeat(r.rating)}
@@ -514,7 +515,7 @@ export default async function HomePage({
                         — {r.client_display_name}
                       </p>
                     ) : null}
-                  </div>
+                  </AnimatedCard>
                 </Reveal>
               ))}
             </div>
