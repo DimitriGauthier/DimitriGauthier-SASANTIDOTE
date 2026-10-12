@@ -67,11 +67,11 @@ export default async function PrivacyPage({
             </p>
           </Section>
 
-          <Section title={pick(l, "Tes droits", "Your rights")}>
+          <Section title={pick(l, "Vos droits", "Your rights")}>
             <p className="text-sm text-muted-foreground">
               {pick(
                 l,
-                "Tu disposes d'un droit d'accès, de rectification, d'effacement et d'opposition sur tes données. Pour l'exercer, écris à ",
+                "Vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition sur vos données. Pour l'exercer, écrivez à ",
                 "You have the right to access, rectify, erase and object to your data. To exercise it, write to ",
               )}
               <a href={`mailto:${siteConfig.email}`} className="story-link text-primary">

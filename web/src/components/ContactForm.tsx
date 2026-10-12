@@ -29,17 +29,17 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         key: "name",
         type: "text",
         required: true,
-        title: pick(locale, "Comment t'appelles-tu ?", "What's your name?"),
-        help: pick(locale, "Ton prénom suffit si tu préfères.", "Your first name is enough if you prefer."),
-        placeholder: pick(locale, "Ton nom", "Your name"),
+        title: pick(locale, "Comment vous appelez-vous ?", "What's your name?"),
+        help: pick(locale, "Votre prénom suffit si vous préférez.", "Your first name is enough if you prefer."),
+        placeholder: pick(locale, "Votre nom", "Your name"),
         autoComplete: "name",
       },
       {
         key: "email",
         type: "email",
         required: true,
-        title: pick(locale, "Ton adresse e-mail ?", "Your email address?"),
-        help: pick(locale, "C'est là que je te répondrai.", "That's where I'll reply to you."),
+        title: pick(locale, "Votre adresse e-mail ?", "Your email address?"),
+        help: pick(locale, "C'est là que je vous répondrai.", "That's where I'll reply to you."),
         placeholder: "email@exemple.com",
         autoComplete: "email",
       },
@@ -47,8 +47,8 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         key: "phone",
         type: "tel",
         required: false,
-        title: pick(locale, "Un numéro où te joindre ?", "A number to reach you?"),
-        help: pick(locale, "Facultatif, seulement si tu préfères qu'on t'appelle.", "Optional, only if you'd rather be called."),
+        title: pick(locale, "Un numéro où vous joindre ?", "A number to reach you?"),
+        help: pick(locale, "Facultatif, seulement si vous préférez qu'on vous appelle.", "Optional, only if you'd rather be called."),
         placeholder: pick(locale, "Téléphone (facultatif)", "Phone (optional)"),
         autoComplete: "tel",
       },
@@ -56,7 +56,7 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         key: "subject",
         type: "text",
         required: false,
-        title: pick(locale, "Le sujet de ton message ?", "What's it about?"),
+        title: pick(locale, "Le sujet de votre message ?", "What's it about?"),
         help: pick(locale, "En quelques mots (facultatif).", "In a few words (optional)."),
         placeholder: pick(locale, "Sujet (facultatif)", "Subject (optional)"),
         autoComplete: "off",
@@ -65,9 +65,9 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         key: "message",
         type: "textarea",
         required: true,
-        title: pick(locale, "Ton message", "Your message"),
-        help: pick(locale, "Écris-moi ce que tu veux partager. Tout reste confidentiel.", "Write whatever you'd like to share. Everything stays confidential."),
-        placeholder: pick(locale, "Ton message…", "Your message…"),
+        title: pick(locale, "Votre message", "Your message"),
+        help: pick(locale, "Écrivez-moi ce que vous voulez partager. Tout reste confidentiel.", "Write whatever you'd like to share. Everything stays confidential."),
+        placeholder: pick(locale, "Votre message…", "Your message…"),
         autoComplete: "off",
       },
     ],
@@ -170,7 +170,7 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         <p className="mt-2 text-sm text-muted-foreground">
           {pick(
             locale,
-            "Merci, ton message a bien été envoyé. Je te réponds au plus vite.",
+            "Merci, votre message a bien été envoyé. Je vous réponds au plus vite.",
             "Thank you, your message has been sent. I'll get back to you as soon as possible.",
           )}
         </p>
@@ -183,7 +183,7 @@ export default function ContactForm({ locale }: { locale: Locale }) {
       {/* Progression */}
       <div className="mb-8">
         <div className="mb-2 flex items-center justify-between text-xs">
-          <span className="font-medium uppercase tracking-[0.2em] text-primary">{pick(locale, "Écris-moi", "Write to me")}</span>
+          <span className="font-medium uppercase tracking-[0.2em] text-primary">{pick(locale, "Écrivez-moi", "Write to me")}</span>
           <span className="text-muted-foreground">
             {pick(locale, "Étape", "Step")} {index + 1} / {steps.length}
           </span>
@@ -290,7 +290,7 @@ export default function ContactForm({ locale }: { locale: Locale }) {
         <p className="mt-4 text-xs text-muted-foreground">
           {step.type === "textarea"
             ? pick(locale, "Astuce : Ctrl + Entrée pour envoyer.", "Tip: Ctrl + Enter to send.")
-            : pick(locale, "Astuce : appuie sur Entrée pour continuer.", "Tip: press Enter to continue.")}
+            : pick(locale, "Astuce : appuyez sur Entrée pour continuer.", "Tip: press Enter to continue.")}
         </p>
       </div>
     </div>

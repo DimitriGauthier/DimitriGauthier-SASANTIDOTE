@@ -36,7 +36,7 @@ const NAV: Entry[] = [
     labelEn: "Approach",
     items: [
       { key: "approach", slug: "mon-approche", icon: Brain, descFr: "Tête, corps & cœur", descEn: "Mind, body & heart" },
-      { key: "numerology", slug: "numerologie-sexualite", icon: Compass, descFr: "Ton chemin en chiffres", descEn: "Your path in numbers" },
+      { key: "numerology", slug: "numerologie-sexualite", icon: Compass, descFr: "Votre chemin en chiffres", descEn: "Your path in numbers" },
       { key: "trame", slug: "la-trame", icon: Sparkles, descFr: "Libérer les tensions", descEn: "Release tension" },
     ],
   },
@@ -120,7 +120,7 @@ export default function SiteHeader({
               width={1000}
               height={350}
               priority
-              className="h-9 w-auto drop-shadow-[0_8px_18px_hsl(var(--primary)/0.22)] transition-transform duration-500 group-hover:scale-[1.04] sm:h-10 lg:h-12"
+              className="h-12 w-auto drop-shadow-[0_8px_18px_hsl(var(--primary)/0.22)] transition-transform duration-500 group-hover:scale-[1.04] sm:h-14 lg:h-16"
             />
           </Link>
 

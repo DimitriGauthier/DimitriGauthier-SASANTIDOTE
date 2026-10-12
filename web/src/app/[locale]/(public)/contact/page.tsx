@@ -29,7 +29,7 @@ export async function generateMetadata({
     title: pick(l, "Contact", "Contact"),
     description: pick(
       l,
-      "Une question ? Écris-moi. Je te réponds au plus vite.",
+      "Une question ? Écrivez-moi. Je vous réponds au plus vite.",
       "A question? Write to me. I'll get back to you as soon as possible.",
     ),
   };
@@ -57,7 +57,7 @@ export default async function ContactPage({
         title={pick(l, "Écrivons-nous", "Let's talk")}
         sub={pick(
           l,
-          "Une question, un doute, une envie d'en savoir plus ? Écris-moi, je te réponds avec plaisir et en toute confidentialité.",
+          "Une question, un doute, une envie d'en savoir plus ? Écrivez-moi, je vous réponds avec plaisir et en toute confidentialité.",
           "A question, a doubt, a wish to know more? Write to me, I'll be glad to answer, in full confidentiality.",
         )}
         badges={
@@ -74,7 +74,7 @@ export default async function ContactPage({
             <div className="rounded-3xl border border-border/60 bg-card p-7 shadow-card sm:p-9">
               <h2 className="font-serif text-2xl font-medium text-foreground">{pick(l, "M'envoyer un message", "Send me a message")}</h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                {pick(l, "Je te réponds au plus vite, en français ou en anglais.", "I'll get back to you as soon as possible, in French or English.")}
+                {pick(l, "Je vous réponds au plus vite, en français ou en anglais.", "I'll get back to you as soon as possible, in French or English.")}
               </p>
               <div className="mt-6">
                 <ContactForm locale={l} />
@@ -116,26 +116,26 @@ export default async function ContactPage({
 
       <FeatureGrid
         tone="soft"
-        heading={<SectionHeading eyebrow={pick(l, "En toute confiance", "In full confidence")} title={pick(l, "Ce que tu peux attendre", "What you can expect")} />}
+        heading={<SectionHeading eyebrow={pick(l, "En toute confiance", "In full confidence")} title={pick(l, "Ce que vous pouvez attendre", "What you can expect")} />}
         items={[
           {
             icon: <Clock className="h-6 w-6" />,
             title: pick(l, "Une réponse rapide", "A quick reply"),
-            body: pick(l, "Je lis tous les messages et je te réponds au plus vite.", "I read every message and get back to you as soon as possible."),
+            body: pick(l, "Je lis tous les messages et je vous réponds au plus vite.", "I read every message and get back to you as soon as possible."),
           },
           {
             icon: <ShieldCheck className="h-6 w-6" />,
             title: pick(l, "Confidentialité", "Confidentiality"),
             body: pick(
               l,
-              "Tes informations sont traitées de manière confidentielle et ne servent qu'à te répondre.",
+              "Vos informations sont traitées de manière confidentielle et ne servent qu'à vous répondre.",
               "Your information is handled confidentially and used only to respond to you.",
             ),
           },
           {
             icon: <Languages className="h-6 w-6" />,
             title: pick(l, "Français ou anglais", "French or English"),
-            body: pick(l, "On échange dans la langue avec laquelle tu es le plus à l'aise.", "We talk in the language you're most comfortable with."),
+            body: pick(l, "On échange dans la langue avec laquelle vous êtes le plus à l'aise.", "We talk in the language you're most comfortable with."),
           },
         ]}
       />

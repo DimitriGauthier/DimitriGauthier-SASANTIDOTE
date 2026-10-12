@@ -4,7 +4,7 @@ import { isLocale, type Locale, pick, getDict } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getServices } from "@/lib/data";
 import { formatPrice, formatDuration } from "@/lib/format";
-import { PageHero, FeatureGrid, Steps, CTABanner, SectionHeading, Pill } from "@/components/sections";
+import { PageHero, FeatureGrid, CTABanner, SectionHeading, Pill } from "@/components/sections";
 import { Heart, Users, Sparkles, ArrowRight, Video, Clock, ShieldCheck, Mars, Venus, Check } from "lucide-react";
 import Reveal from "@/components/Reveal";
 import AnimatedCard from "@/components/AnimatedCard";
@@ -21,8 +21,8 @@ export async function generateMetadata({
     title: pick(l, "Accompagnements", "Sessions"),
     description: pick(
       l,
-      "Consultations individuelles et de couple, en visio. Homme, femme, couple : un accompagnement adapté à ta situation.",
-      "Individual and couple sessions, online. Man, woman, couple: support tailored to your situation.",
+      "Consultations individuelles et de couple, en visio. Homme, femme, couple et adolescent : un accompagnement adapté à votre situation.",
+      "Individual and couple sessions, online. Man, woman, couple and teenager: support tailored to your situation.",
     ),
   };
 }
@@ -31,6 +31,7 @@ const AUDIENCE_LABEL: Record<string, { fr: string; en: string }> = {
   homme: { fr: "Homme", en: "Man" },
   femme: { fr: "Femme", en: "Woman" },
   couple: { fr: "Couple", en: "Couple" },
+  adolescent: { fr: "Adolescent", en: "Teenager" },
   tous: { fr: "Tous", en: "Everyone" },
 };
 
@@ -51,13 +52,13 @@ export default async function ServicesPage({
         title={pick(l, "Les accompagnements", "The sessions")}
         sub={pick(
           l,
-          "Des séances en visioconférence, à ton rythme, où que tu sois. On choisit ensemble les outils les plus justes pour ce que tu traverses.",
-          "Online video sessions, at your pace, wherever you are. Together we choose the tools that best fit what you're going through.",
+          "Des séances en visioconférence, à votre rythme, où que vous soyez.",
+          "Online video sessions, at your pace, wherever you are.",
         )}
         badges={
           <>
             <Pill icon={<Video className="h-4 w-4" />}>{pick(l, "En visio", "Online")}</Pill>
-            <Pill icon={<Clock className="h-4 w-4" />}>{pick(l, "À ton rythme", "At your pace")}</Pill>
+            <Pill icon={<Clock className="h-4 w-4" />}>{pick(l, "À votre rythme", "At your pace")}</Pill>
             <Pill icon={<ShieldCheck className="h-4 w-4" />}>{pick(l, "Confidentiel", "Confidential")}</Pill>
           </>
         }
@@ -68,15 +69,8 @@ export default async function ServicesPage({
       <section className="full-bleed py-20 sm:py-24">
         <div className="mx-auto max-w-5xl px-4">
           <SectionHeading
-            eyebrow={pick(l, "Pour toi", "For you")}
-            title={pick(l, "Ce que l'accompagnement peut t'apporter", "What the sessions can bring you")}
-          >
-            {pick(
-              l,
-              "Chaque histoire est différente. Que tu sois un homme ou une femme, voici les situations sur lesquelles on peut avancer ensemble, en toute confidentialité.",
-              "Every story is different. Whether you're a man or a woman, here are the situations we can work through together, in full confidentiality.",
-            )}
-          </SectionHeading>
+            title={pick(l, "Exemple de problématique rencontrée :", "Examples of situations I work with:")}
+          />
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             <Reveal>
               <AnimatedCard className="h-full rounded-3xl border border-border/60 bg-card p-8 shadow-card">
@@ -135,13 +129,7 @@ export default async function ServicesPage({
       {services.length > 0 ? (
         <section className="full-bleed py-20 sm:py-24">
           <div className="mx-auto max-w-6xl px-4">
-            <SectionHeading eyebrow={pick(l, "Consultations", "Consultations")} title={pick(l, "Choisis ton accompagnement", "Choose your session")}>
-              {pick(
-                l,
-                "Chaque accompagnement démarre par un temps d'écoute pour comprendre ta situation.",
-                "Every session starts with a time of listening to understand your situation.",
-              )}
-            </SectionHeading>
+            <SectionHeading eyebrow={pick(l, "Consultations", "Consultations")} title={pick(l, "Choisissez la formule qui vous convient", "Choose the option that suits you")} />
             <div className="mt-12 grid gap-6 md:grid-cols-2">
               {services.map((s, i) => (
                 <Reveal key={s.id} delay={(i % 2) * 100}>
@@ -188,7 +176,7 @@ export default async function ServicesPage({
         <FeatureGrid
           tone="plain"
           heading={
-            <SectionHeading eyebrow={pick(l, "Consultations", "Consultations")} title={pick(l, "Des séances adaptées à toi", "Sessions tailored to you")}>
+            <SectionHeading eyebrow={pick(l, "Consultations", "Consultations")} title={pick(l, "Des séances adaptées à vous", "Sessions tailored to you")}>
               {pick(
                 l,
                 "Le détail des séances et les tarifs s'affichent au moment de la réservation.",
@@ -199,11 +187,11 @@ export default async function ServicesPage({
           items={[
             {
               icon: <Heart className="h-6 w-6" />,
-              title: pick(l, "Séance individuelle", "Individual session"),
+              title: pick(l, "Séance complète", "Full session"),
               body: pick(
                 l,
-                "Pour les hommes et les femmes : panne, désir, plaisir, confiance, rapport au corps.",
-                "For men and women: performance, desire, pleasure, confidence, relationship to the body.",
+                "Pour les hommes, les femmes et les adolescents : panne, désir, plaisir, confiance, rapport au corps.",
+                "For men, women and teenagers: performance, desire, pleasure, confidence, relationship to the body.",
               ),
             },
             {
@@ -217,60 +205,20 @@ export default async function ServicesPage({
             },
             {
               icon: <Sparkles className="h-6 w-6" />,
-              title: pick(l, "Séance de La TRAME® ou numérologie", "The TRAME® or numerology session"),
+              title: pick(l, "Séance de La TRAME® ou numérologie salomique", "The TRAME® or salomic numerology session"),
               body: pick(
                 l,
-                "Une technique vibratoire ou un éclairage numérologique, en complément du suivi.",
-                "A vibratory technique or a numerology reading, alongside the follow-up.",
+                "Une technique vibratoire ou un éclairage de numérologie salomique, en complément du suivi.",
+                "A vibratory technique or a salomic numerology reading, alongside the follow-up.",
               ),
             },
           ]}
         />
       )}
 
-      <Steps
-        tone="soft"
-        heading={
-          <SectionHeading eyebrow={pick(l, "Le déroulé", "How it works")} title={pick(l, "Comment ça se passe", "What to expect")}>
-            {pick(
-              l,
-              "Un cadre simple et rassurant, de la réservation à la séance.",
-              "A simple, reassuring path, from booking to session.",
-            )}
-          </SectionHeading>
-        }
-        items={[
-          {
-            title: pick(l, "Tu réserves en ligne", "You book online"),
-            body: pick(
-              l,
-              "Tu choisis ton créneau en quelques minutes. Le tarif s'affiche clairement avant de confirmer.",
-              "You pick your slot in a few minutes. The price is shown clearly before you confirm.",
-            ),
-          },
-          {
-            title: pick(l, "On fait connaissance", "We get acquainted"),
-            body: pick(
-              l,
-              "La séance démarre par un temps d'écoute pour comprendre ta situation, sans jugement.",
-              "The session starts with a time of listening to understand your situation, without judgment.",
-            ),
-          },
-          {
-            title: pick(l, "On avance ensemble", "We move forward together"),
-            body: pick(
-              l,
-              "On choisit les outils les plus justes : sexothérapie, la TRAME® ou numérologie, selon ton besoin.",
-              "We choose the most fitting tools: sex therapy, the TRAME® or numerology, depending on your need.",
-            ),
-          },
-        ]}
-      />
-
       <CTABanner
         href={href(l, "reservation")}
-        title={pick(l, "Prêt·e à avancer ?", "Ready to move forward?")}
-        sub={pick(l, "Réserve ta séance en quelques minutes, en toute confidentialité.", "Book your session in a few minutes, in full confidentiality.")}
+        title={pick(l, "Réserver une séance", "Book a session")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </div>

@@ -209,24 +209,24 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   const encouragement = useMemo(() => {
     const fn = client.first_name.trim();
     if (screen.k === "identity")
-      return pick(locale, "Avant tout, dis-moi ton prénom : j'aime savoir à qui je parle.", "First, tell me your name: I like to know who I'm talking to.");
+      return pick(locale, "Avant tout, dites-moi votre prénom : j'aime savoir à qui je parle.", "First, tell me your name: I like to know who I'm talking to.");
     if (screen.k === "slot")
       return fn
-        ? pick(locale, `Dernière étape ${fn} : choisis ton moment.`, `Last step ${fn}: choose your moment.`)
-        : pick(locale, "Dernière étape : choisis ton moment.", "Last step: choose your moment.");
+        ? pick(locale, `Dernière étape ${fn} : choisissez votre moment.`, `Last step ${fn}: choose your moment.`)
+        : pick(locale, "Dernière étape : choisissez votre moment.", "Last step: choose your moment.");
     if (screen.k === "contact")
       return fn
-        ? pick(locale, `On y est presque ${fn}, juste tes coordonnées.`, `Almost there ${fn}, just your details.`)
-        : pick(locale, "On y est presque, juste tes coordonnées.", "Almost there, just your details.");
+        ? pick(locale, `On y est presque ${fn}, juste vos coordonnées.`, `Almost there ${fn}, just your details.`)
+        : pick(locale, "On y est presque, juste vos coordonnées.", "Almost there, just your details.");
     if (screen.k === "profile")
       return fn
-        ? pick(locale, `Enchanté ${fn}, on avance ensemble, à ton rythme.`, `Nice to meet you ${fn}, we move forward together, at your pace.`)
-        : pick(locale, "C'est parti, on avance ensemble, à ton rythme.", "Here we go, we move forward together, at your pace.");
+        ? pick(locale, `Enchanté ${fn}, on avance ensemble, à votre rythme.`, `Nice to meet you ${fn}, we move forward together, at your pace.`)
+        : pick(locale, "C'est parti, on avance ensemble, à votre rythme.", "Here we go, we move forward together, at your pace.");
     const ratio = stepNum / stepTotal;
     if (ratio < 0.5)
       return fn
-        ? pick(locale, `Tu avances bien ${fn}, continue.`, `You're doing great ${fn}, keep going.`)
-        : pick(locale, "Tu avances bien, continue.", "You're doing great, keep going.");
+        ? pick(locale, `Vous avancez bien ${fn}, continuez.`, `You're doing great ${fn}, keep going.`)
+        : pick(locale, "Vous avancez bien, continuez.", "You're doing great, keep going.");
     return pick(locale, "Plus que quelques pas.", "Just a few more steps.");
   }, [screen, stepNum, stepTotal, locale, client.first_name]);
 
@@ -259,7 +259,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   // Étape 1 : prénom + nom (indispensables pour tutoyer la personne ensuite).
   function identityContinue() {
     if (!client.first_name.trim() || !client.last_name.trim()) {
-      setError(pick(locale, "Ton prénom et ton nom, pour commencer.", "Your first and last name, to begin."));
+      setError(pick(locale, "Votre prénom et votre nom, pour commencer.", "Your first and last name, to begin."));
       return;
     }
     goForward();
@@ -272,6 +272,10 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client.email)) {
       setError(pick(locale, "Adresse e-mail invalide.", "Invalid email address."));
+      return false;
+    }
+    if (!client.phone.trim()) {
+      setError(pick(locale, "Un numéro de téléphone est requis.", "A phone number is required."));
       return false;
     }
     if (!consent) {
@@ -304,7 +308,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
 
   async function pay() {
     if (!serviceId || !selectedSlot) {
-      setError(pick(locale, "Choisis un créneau.", "Choose a slot."));
+      setError(pick(locale, "Choisissez un créneau.", "Choose a slot."));
       return;
     }
     setSubmitting(true);
@@ -336,7 +340,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
       window.location.href = res.checkout_url;
     } catch (e) {
       const msg = e instanceof EdgeTimeoutError
-        ? pick(locale, "Le paiement met trop de temps à démarrer. Vérifie ta connexion et réessaie dans un instant.", "Payment is taking too long to start. Check your connection and try again in a moment.")
+        ? pick(locale, "Le paiement met trop de temps à démarrer. Vérifiez votre connexion et réessayez dans un instant.", "Payment is taking too long to start. Check your connection and try again in a moment.")
         : e instanceof Error
           ? e.message
           : pick(locale, "Le paiement n'a pas pu démarrer.", "Payment could not start.");
@@ -412,10 +416,10 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   const firstName = client.first_name.trim();
   const companion =
     firstName ||
-    (audience === "couple" ? pick(locale, "vous deux", "you two") : pick(locale, "toi", "you"));
+    (audience === "couple" ? pick(locale, "vous deux", "you two") : pick(locale, "vous", "you"));
   const guideRole = audience
     ? pick(locale, "Vous avancez ensemble", "Moving forward together")
-    : pick(locale, "Ton accompagnant", "Your companion");
+    : pick(locale, "Votre accompagnant", "Your companion");
 
   // Écran d'accueil : on explique l'expérience avant de lancer le formulaire.
   if (!started) {
@@ -472,7 +476,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             <p className="mb-6 text-sm text-muted-foreground">
               {pick(
                 locale,
-                "Comment t'appelles-tu ? Je pourrai ainsi t'accompagner par ton prénom tout au long du parcours.",
+                "Comment vous appelez-vous ? Je pourrai ainsi vous accompagner par votre prénom tout au long du parcours.",
                 "What's your name? That way I can guide you by your first name throughout.",
               )}
             </p>
@@ -509,7 +513,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
               {pick(locale, "Pour qui est cet accompagnement ?", "Who is this session for?")}
             </h2>
             <p className="mb-6 text-sm text-muted-foreground">
-              {pick(locale, "Aucune bonne ou mauvaise réponse, choisis ce qui te ressemble.", "No right or wrong answer, pick what feels like you.")}
+              {pick(locale, "Aucune bonne ou mauvaise réponse, choisissez ce qui vous ressemble.", "No right or wrong answer, pick what feels like you.")}
             </p>
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {AUDIENCES.map((a) => {
@@ -553,7 +557,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
         {screen.k === "service" ? (
           <section>
             <h2 className="mb-6 font-serif text-2xl font-medium text-foreground sm:text-3xl">
-              {pick(locale, "Choisis ton accompagnement", "Choose your session")}
+              {pick(locale, "Choisissez votre accompagnement", "Choose your session")}
             </h2>
             {availServices.length > 0 ? (
               <div className="space-y-3">
@@ -654,7 +658,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
           <section>
             <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">
               {client.first_name.trim()
-                ? pick(locale, `Merci ${client.first_name.trim()}, comment te joindre ?`, `Thanks ${client.first_name.trim()}, how can I reach you?`)
+                ? pick(locale, `Merci ${client.first_name.trim()}, comment vous joindre ?`, `Thanks ${client.first_name.trim()}, how can I reach you?`)
                 : t.tunnel.yourInfo}
             </h2>
             <p className="mb-6 text-sm text-muted-foreground">
@@ -663,7 +667,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             <div className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <TextInput label={t.common.email} type="email" value={client.email} onChange={(v) => setClient({ ...client, email: v })} required />
-                <TextInput label={t.tunnel.phone} value={client.phone} onChange={(v) => setClient({ ...client, phone: v })} />
+                <TextInput label={t.tunnel.phone} type="tel" value={client.phone} onChange={(v) => setClient({ ...client, phone: v })} required />
               </div>
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">{t.tunnel.note}</label>
@@ -795,17 +799,17 @@ function IntroScreen({
     {
       Icon: ShieldCheck,
       title: pick(locale, "100 % confidentiel", "100% confidential"),
-      text: pick(locale, "Tes réponses restent entre toi et Dimitri.", "Your answers stay between you and Dimitri."),
+      text: pick(locale, "Vos réponses restent entre vous et Dimitri.", "Your answers stay between you and Dimitri."),
     },
     {
       Icon: Heart,
-      title: pick(locale, "À ton rythme", "At your pace"),
-      text: pick(locale, "Pas de bonne ou mauvaise réponse, tu peux revenir en arrière.", "No right or wrong answer, you can go back anytime."),
+      title: pick(locale, "À votre rythme", "At your pace"),
+      text: pick(locale, "Pas de bonne ou mauvaise réponse, vous pouvez revenir en arrière.", "No right or wrong answer, you can go back anytime."),
     },
     {
       Icon: Clock,
       title: pick(locale, "3 à 5 minutes", "3 to 5 minutes"),
-      text: pick(locale, "Quelques questions simples, puis le choix de ton créneau.", "A few simple questions, then pick your slot."),
+      text: pick(locale, "Quelques questions simples, puis le choix de votre créneau.", "A few simple questions, then pick your slot."),
     },
   ];
 
@@ -827,7 +831,7 @@ function IntroScreen({
           <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
             {pick(
               locale,
-              "Ce parcours confidentiel me permet de mieux te connaître avant notre séance. Je te pose quelques questions simples, en toute intimité. Rien n'est envoyé tant que tu n'as pas terminé.",
+              "Ce parcours confidentiel me permet de mieux vous connaître avant notre séance. Je vous pose quelques questions simples, en toute intimité. Rien n'est envoyé tant que vous n'avez pas terminé.",
               "This confidential journey helps me get to know you before our session. I'll ask a few simple questions, in full privacy. Nothing is sent until you're done.",
             )}
           </p>
@@ -848,7 +852,7 @@ function IntroScreen({
             {pick(locale, "Commencer", "Start")} <ArrowRight className="h-4 w-4" />
           </button>
           <p className="mt-3 text-xs text-muted-foreground">
-            {pick(locale, "Tu pourras t'arrêter et reprendre quand tu veux.", "You can pause and resume whenever you like.")}
+            {pick(locale, "Vous pourrez vous arrêter et reprendre quand vous voulez.", "You can pause and resume whenever you like.")}
           </p>
         </div>
       </div>
@@ -1030,7 +1034,7 @@ function QuestionScreen({
             {t.common.next} <ArrowRight className="h-4 w-4" />
           </button>
         ) : (
-          <span className="text-xs text-muted-foreground">{pick(locale, "Sélectionne une réponse", "Pick an answer")}</span>
+          <span className="text-xs text-muted-foreground">{pick(locale, "Sélectionnez une réponse", "Pick an answer")}</span>
         )}
       </div>
     </section>

@@ -5,7 +5,7 @@ import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
 import { Prose } from "@/components/ui";
 import { PageHero, SplitSection, Timeline, FeatureGrid, QuoteBlock, CTABanner, SectionHeading, Pill } from "@/components/sections";
-import { Award, Sparkles, Compass, Dumbbell, MapPin, Video } from "lucide-react";
+import { Award, Sparkles, Compass, Dumbbell, Video } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -18,8 +18,8 @@ export async function generateMetadata({
     title: pick(l, "À propos · Dimitri Gauthier", "About · Dimitri Gauthier"),
     description: pick(
       l,
-      "Sexothérapeute depuis 2006, certifié La TRAME® et en numérologie. Un métier d'accompagnement, une vocation.",
-      "Sex therapist since 2006, certified in the TRAME® and numerology. A profession of support, a calling.",
+      "Sexothérapeute depuis 2006, certifié La TRAME® et en numérologie salomique. Un métier d'accompagnement, une vocation.",
+      "Sex therapist since 2006, certified in the TRAME® and salomic numerology. A profession of support, a calling.",
     ),
   };
 }
@@ -41,14 +41,13 @@ export default async function AboutPage({
         title={pick(l, "À propos", "About")}
         sub={pick(
           l,
-          "Sexothérapeute à La Réunion et en visio partout dans le monde. Depuis près de vingt ans, mon métier est d'accompagner.",
-          "Sex therapist on Réunion Island and online worldwide. For nearly twenty years, my work has been to support people.",
+          "Je suis Dimitri Gauthier. Depuis plus de 20 ans, j'accompagne mes clients à se sentir mieux dans leur corps, mieux dans leur tête et à écouter leur cœur.",
+          "I am Dimitri Gauthier. For over 20 years, I have helped my clients feel better in their body, better in their mind and listen to their heart.",
         )}
         image="/img/coach.jpg"
         imageAlt="Dimitri Gauthier"
         badges={
           <>
-            <Pill icon={<MapPin className="h-4 w-4" />}>{pick(l, "La Réunion", "Réunion Island")}</Pill>
             <Pill icon={<Video className="h-4 w-4" />}>{pick(l, "Consultations en visio", "Online sessions")}</Pill>
             <Pill icon={<Award className="h-4 w-4" />}>{pick(l, "Certifié depuis 2006", "Certified since 2006")}</Pill>
           </>
@@ -72,15 +71,15 @@ export default async function AboutPage({
             <p>
               {pick(
                 l,
-                "Je m'appelle Dimitri Gauthier. Depuis 2006, j'exerce des métiers d'accompagnement, c'est le fil rouge de ma vie. J'ai toujours aimé être aux côtés des gens et cheminer avec eux. Ce qui me porte, ce n'est pas une méthode toute faite : c'est l'expérience, le vécu, les années passées à écouter.",
-                "My name is Dimitri Gauthier. Since 2006 I've worked in support professions, and it's the common thread of my life. I've always loved being beside people and walking with them. What carries me isn't a ready-made method: it's experience, real life, the years spent listening.",
+                "Aujourd'hui, j'accompagne les hommes, les femmes, les couples et les adolescents sur leur sexualité et leur intimité.",
+                "Today I support men, women, couples and teenagers with their sexuality and intimacy.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "Aujourd'hui, j'accompagne les hommes, les femmes et les couples sur leur sexualité et leur intimité. Mais je ne m'arrête pas là : quand quelqu'un va mal sexuellement, la cause est souvent ailleurs, dans le sentimental, le professionnel, le rapport à soi.",
-                "Today I support men, women and couples with their sexuality and intimacy. But I don't stop there: when someone struggles sexually, the cause is often elsewhere, in their emotional life, their work, their relationship with themselves.",
+                "Fort de mon expérience, j'accompagne homme, femme, couple et adolescent en visio partout dans le monde.",
+                "Drawing on my experience, I support men, women, couples and teenagers by video, everywhere in the world.",
               )}
             </p>
           </SplitSection>
@@ -102,7 +101,7 @@ export default async function AboutPage({
               },
               {
                 marker: pick(l, "Formations & certifications", "Training & certifications"),
-                title: pick(l, "Sexothérapie, la TRAME® & numérologie", "Sex therapy, the TRAME® & numerology"),
+                title: pick(l, "Sexothérapie, la TRAME® & numérologie salomique", "Sex therapy, the TRAME® & salomic numerology"),
                 body: pick(
                   l,
                   "Trois approches complémentaires, réunies pour relier la tête, le corps et le cœur.",
@@ -114,8 +113,8 @@ export default async function AboutPage({
                 title: pick(l, "Accompagnant en intime", "Companion in intimacy"),
                 body: pick(
                   l,
-                  "J'accompagne hommes, femmes et couples, en cabinet à La Réunion comme en visio partout dans le monde.",
-                  "I support men, women and couples, in person on Réunion Island and online worldwide.",
+                  "J'accompagne hommes, femmes, couples et adolescents, en visio partout dans le monde.",
+                  "I support men, women, couples and teenagers, online worldwide.",
                 ),
               },
             ]}
@@ -139,7 +138,7 @@ export default async function AboutPage({
             items={[
               { icon: <Award className="h-6 w-6" />, title: pick(l, "Sexothérapie", "Sex therapy"), body: pick(l, "Certifié par la Secret Therapy Academy.", "Certified by the Secret Therapy Academy.") },
               { icon: <Sparkles className="h-6 w-6" />, title: "La TRAME®", body: pick(l, "Praticien certifié, formé en 2020.", "Certified practitioner, trained in 2020.") },
-              { icon: <Compass className="h-6 w-6" />, title: pick(l, "Numérologie", "Numerology"), body: pick(l, "Numérologue certifié.", "Certified numerologist.") },
+              { icon: <Compass className="h-6 w-6" />, title: pick(l, "Numérologie salomique", "Salomic numerology"), body: pick(l, "Lecture salomique des nombres.", "Salomic reading of numbers.") },
               { icon: <Dumbbell className="h-6 w-6" />, title: pick(l, "Coaching", "Coaching"), body: pick(l, "Brevet d'État d'éducateur sportif (2003).", "State diploma in sports education (2003).") },
             ]}
           />
@@ -147,7 +146,7 @@ export default async function AboutPage({
           <QuoteBlock tone="warm" cite="Dimitri Gauthier">
             {pick(
               l,
-              "Je ne fais pas de miracles. J'accompagne. Tu es ton propre thérapeute : mon rôle est de t'éclairer, de te donner des clés et de cheminer avec toi.",
+              "Je ne fais pas de miracles. J'accompagne. Vous êtes votre propre thérapeute : mon rôle est de vous éclairer, de vous donner des clés et de cheminer avec vous.",
               "I don't perform miracles. I support. You are your own therapist: my role is to shed light, hand you keys and walk alongside you.",
             )}
           </QuoteBlock>
@@ -157,7 +156,7 @@ export default async function AboutPage({
       <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Faisons connaissance", "Let's get to know each other")}
-        sub={pick(l, "Réserve une première séance, en toute confidentialité.", "Book a first session, in full confidentiality.")}
+        sub={pick(l, "Réservez une première séance, en toute confidentialité.", "Book a first session, in full confidentiality.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

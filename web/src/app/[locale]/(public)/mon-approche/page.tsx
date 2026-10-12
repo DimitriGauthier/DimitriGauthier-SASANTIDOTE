@@ -18,8 +18,8 @@ export async function generateMetadata({
     title: pick(l, "Mon approche · tête, corps & cœur", "My approach · mind, body & heart"),
     description: pick(
       l,
-      "Une synergie unique entre sexothérapie, la TRAME® et numérologie pour aligner la tête, le corps et le cœur.",
-      "A unique synergy between sex therapy, the TRAME® and numerology to align mind, body and heart.",
+      "Une synergie unique entre sexothérapie, la TRAME® et numérologie salomique pour aligner la tête, le corps et le cœur.",
+      "A unique synergy between sex therapy, the TRAME® and salomic numerology to align mind, body and heart.",
     ),
   };
 }
@@ -38,7 +38,6 @@ export default async function ApproachPage({
     <article>
       <PageHero
         tone="warm"
-        eyebrow={pick(l, "Ma méthode", "My method")}
         title={
           l === "fr" ? (
             <>
@@ -50,11 +49,6 @@ export default async function ApproachPage({
             </>
           )
         }
-        sub={pick(
-          l,
-          "Trois outils qui ne s'empilent pas mais se répondent, pour te réaligner en profondeur.",
-          "Three tools that don't stack but answer one another, to realign you deeply.",
-        )}
         badges={
           <>
             <Pill icon={<Brain className="h-4 w-4" />}>{pick(l, "La tête", "The mind")}</Pill>
@@ -88,7 +82,7 @@ export default async function ApproachPage({
             <p>
               {pick(
                 l,
-                "C'est pour ça que je combine trois outils. Non pas pour les empiler, mais pour créer une réelle synergie et te permettre de te réaligner toi-même.",
+                "C'est pour ça que je combine trois outils. Non pas pour les empiler, mais pour créer une réelle synergie et vous permettre de vous réaligner vous-même.",
                 "That's why I combine three tools. Not to stack them, but to create a real synergy so you can realign yourself.",
               )}
             </p>
@@ -100,13 +94,7 @@ export default async function ApproachPage({
               <SectionHeading
                 eyebrow={pick(l, "Trois clés", "Three keys")}
                 title={pick(l, "Trois outils, une synergie", "Three tools, one synergy")}
-              >
-                {pick(
-                  l,
-                  "Chacun agit sur une dimension. Ensemble, ils remettent toute ta vie en mouvement.",
-                  "Each works on one dimension. Together, they set your whole life back in motion.",
-                )}
-              </SectionHeading>
+              />
             }
             items={[
               {
@@ -114,8 +102,8 @@ export default async function ApproachPage({
                 title: pick(l, "La tête", "The mind"),
                 body: pick(
                   l,
-                  "La sexothérapie pour comprendre, mettre des mots et déposer ce qui pèse.",
-                  "Sex therapy to understand, put words to things and set down what weighs on you.",
+                  "Croyances, schéma de pensées, éducation reçue.",
+                  "Beliefs, thought patterns, upbringing.",
                 ),
               },
               {
@@ -123,8 +111,8 @@ export default async function ApproachPage({
                 title: pick(l, "Le corps", "The body"),
                 body: pick(
                   l,
-                  "La TRAME®, technique vibratoire, pour libérer les tensions du corps et remettre le mouvement.",
-                  "The TRAME®, a vibratory technique, to release the body's tensions and set movement back in motion.",
+                  "Les mémoires physiques.",
+                  "The body's memories.",
                 ),
               },
               {
@@ -132,8 +120,8 @@ export default async function ApproachPage({
                 title: pick(l, "Le cœur", "The heart"),
                 body: pick(
                   l,
-                  "La numérologie pour éclairer ton chemin et ce qui te ressemble vraiment.",
-                  "Numerology to light up your path and what truly resembles you.",
+                  "Les émotions.",
+                  "The emotions.",
                 ),
               },
             ]}
@@ -144,20 +132,13 @@ export default async function ApproachPage({
             image="/img/cabinet-3.jpg"
             imageAlt=""
             eyebrow={pick(l, "Le principe", "The principle")}
-            title={pick(l, "Aligner pour avancer", "Align to move forward")}
+            title={pick(l, "S'aligner pour avancer", "Align to move forward")}
           >
             <p>
               {pick(
                 l,
-                "Le principe : aligner ces trois dimensions pour que ta vie soit plus juste, plus fluide, plus toi.",
-                "The principle: aligning these three dimensions so your life becomes truer, smoother, more you.",
-              )}
-            </p>
-            <p>
-              {pick(
-                l,
-                "On ne suit pas un protocole figé : on choisit, à chaque étape, l'outil le plus juste pour ce que tu traverses.",
-                "We don't follow a fixed protocol: at each step, we choose the tool that best fits what you're going through.",
+                "Chaque séance est différente car je m'adapte à vos problématiques et vos besoins du moment, aucun protocole figé.",
+                "Each session is different, because I adapt to your challenges and your needs of the moment. No fixed protocol.",
               )}
             </p>
           </SplitSection>
@@ -165,8 +146,8 @@ export default async function ApproachPage({
           <QuoteBlock tone="warm" cite="Dimitri Gauthier">
             {pick(
               l,
-              "Je ne fais pas de miracles et je ne te promets pas de solution magique. Le vrai thérapeute, c'est toi : je marche à tes côtés pour que tu trouves ton propre chemin.",
-              "I don't perform miracles and I won't promise you a magic fix. The real therapist is you: I walk beside you so you find your own path.",
+              "Mon rôle en tant qu'accompagnant est de vous accueillir, vous écouter, observer et éclairer votre chemin. Libérer le mouvement de guérison qui vient de l'intérieur de vous-même.",
+              "My role as a companion is to welcome you, to listen to you, to observe and to light up your path. To free the movement of healing that comes from within you.",
             )}
           </QuoteBlock>
         </>
@@ -174,8 +155,8 @@ export default async function ApproachPage({
 
       <CTABanner
         href={href(l, "reservation")}
-        title={pick(l, "Prêt·e à te réaligner ?", "Ready to realign?")}
-        sub={pick(l, "Réserve une première séance et avançons ensemble, à ton rythme.", "Book a first session and let's move forward together, at your own pace.")}
+        title={pick(l, "Réservez une séance", "Book a session")}
+        sub={pick(l, "Réservez une première séance et avançons ensemble, à votre rythme.", "Book a first session and let's move forward together, at your own pace.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

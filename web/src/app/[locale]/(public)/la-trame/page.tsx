@@ -4,7 +4,7 @@ import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
 import { Prose } from "@/components/ui";
-import { PageHero, SplitSection, FeatureGrid, Steps, CTABanner, SectionHeading, Pill, QuoteBlock } from "@/components/sections";
+import { PageHero, SplitSection, FeatureGrid, CTABanner, SectionHeading, Pill } from "@/components/sections";
 import { Waves, Wind, Unlock, Feather, HandHeart, Sparkles, Compass, Sprout, Award, Clock, ShieldAlert } from "lucide-react";
 
 export async function generateMetadata({
@@ -40,11 +40,7 @@ export default async function TramePage({
         tone="warm"
         eyebrow={pick(l, "Technique vibratoire", "Vibratory technique")}
         title={pick(l, "La TRAME®", "The TRAME®")}
-        sub={pick(
-          l,
-          "Se reconnecter à soi, en douceur. Une technique vibratoire, douce et non intrusive, en complément de la parole.",
-          "Reconnecting with yourself, gently. A soft, non-intrusive vibratory technique, alongside talking.",
-        )}
+        sub={pick(l, "Se reconnecter à soi.", "Reconnecting with yourself.")}
         badges={
           <>
             <Pill icon={<Feather className="h-4 w-4" />}>{pick(l, "Doux", "Gentle")}</Pill>
@@ -73,48 +69,28 @@ export default async function TramePage({
             <p>
               {pick(
                 l,
-                "La TRAME® est une technique vibratoire, composée de seize mouvements précis, le long de la colonne. Son but : rétablir la circulation de l'information dans le corps, quand elle est perturbée par des obstacles que l'on se crée, souvent liés à des émotions, conscientes ou non.",
-                "The TRAME® is a vibratory technique, made of sixteen precise movements along the spine. Its purpose: to restore the circulation of information in the body when it's disrupted by the obstacles we create for ourselves, often tied to emotions, whether we're aware of them or not.",
+                "La TRAME® est une technique vibratoire qui a pour but de rétablir la circulation de l'information qui peut être perturbée par des obstacles que l'on se crée, liés aux émotions conscientisées ou non.",
+                "The TRAME® is a vibratory technique whose purpose is to restore the circulation of information that can be disrupted by obstacles we create for ourselves, tied to emotions, conscious or not.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "Elle permet de faire, ou de refaire, circuler cette information de façon harmonieuse.",
-                "It lets this information flow, or flow again, in a harmonious way.",
-              )}
-            </p>
-            <p>
-              {pick(
-                l,
-                "Le principe est simple : tu restes habillé·e, allongé·e. Rien d'intrusif, jamais.",
-                "The principle is simple: you stay dressed, lying down. Nothing intrusive, ever.",
-              )}
-            </p>
-            <p>
-              {pick(
-                l,
-                "Beaucoup de blocages intimes s'ancrent dans le corps. Travailler cette dimension, en complément de la parole, permet souvent de débloquer ce qui résistait. La TRAME® s'adresse à toute personne en quête d'équilibre et de rééquilibrage.",
-                "Many intimate blocks are anchored in the body. Working on this dimension, alongside talking, often unlocks what had been resisting. The TRAME® is for anyone seeking balance and rebalancing.",
+                "La TRAME® permet de faire ou de refaire circuler l'information de manière harmonieuse.",
+                "The TRAME® lets this information flow, or flow again, in a harmonious way.",
               )}
             </p>
             <p className="flex items-start gap-2.5 rounded-2xl border border-primary/15 bg-primary/5 px-4 py-3 text-sm text-foreground/80">
               <Award className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>
-                {pick(
-                  l,
-                  "Je suis praticien certifié La TRAME®, formé en 2020. Un cadre sérieux, pour une séance qui reste toujours douce et respectueuse.",
-                  "I'm a certified TRAME® practitioner, trained in 2020. A serious framework, for a session that always stays gentle and respectful.",
-                )}
-              </span>
+              <span>{pick(l, "Certifié depuis 2020.", "Certified since 2020.")}</span>
             </p>
             <p className="flex items-start gap-2.5 rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-foreground/80">
               <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
               <span>
                 {pick(
                   l,
-                  "Un préalable indispensable : avant toute séance, on remplit ensemble un court questionnaire médical. La TRAME® est contre-indiquée dans certains cas, notamment en cas de pacemaker, de stent ou de certains antécédents. Dans ces situations, on ne la pratique pas : ta sécurité passe avant tout.",
-                  "A necessary first step: before any session, we fill out a short medical questionnaire together. The TRAME® is contraindicated in certain cases, notably with a pacemaker, a stent or some medical histories. In those situations, we don't perform it: your safety comes first.",
+                  "Un préalable indispensable : nous discutons avant toute séance afin de faire connaissance et de nous assurer d'aucune contre-indication.",
+                  "A necessary first step: we talk before any session to get to know each other and make sure there is no contraindication.",
                 )}
               </span>
             </p>
@@ -123,23 +99,13 @@ export default async function TramePage({
           <FeatureGrid
             tone="soft"
             heading={
-              <SectionHeading eyebrow={pick(l, "Les bienfaits", "The benefits")} title={pick(l, "Les bienfaits couramment observés", "Commonly observed benefits")}>
-                {pick(
-                  l,
-                  "Chaque personne vit sa séance à sa façon. Voici ce que beaucoup ressentent, séance après séance.",
-                  "Everyone experiences their session in their own way. Here's what many feel, session after session.",
-                )}
-              </SectionHeading>
+              <SectionHeading eyebrow={pick(l, "Les bienfaits", "The benefits")} title={pick(l, "Les bienfaits couramment observés", "Commonly observed benefits")} />
             }
             items={[
               {
                 icon: <Feather className="h-6 w-6" />,
-                title: pick(l, "Un apaisement profond", "Deep calm"),
-                body: pick(
-                  l,
-                  "Le mental se pose, le corps se détend. Un calme qui revient de l'intérieur.",
-                  "The mind settles, the body relaxes. A calm that returns from within.",
-                ),
+                title: pick(l, "Apaisement", "Calm"),
+                body: pick(l, "Moins d'agitation mentale.", "Less mental agitation."),
               },
               {
                 icon: <Unlock className="h-6 w-6" />,
@@ -189,41 +155,12 @@ export default async function TramePage({
             ]}
           />
 
-          <Steps
-            tone="plain"
-            heading={
-              <SectionHeading eyebrow={pick(l, "Le déroulé", "How it unfolds")} title={pick(l, "Comment se déroule une séance", "How a session unfolds")} />
-            }
-            items={[
-              {
-                title: pick(l, "Un temps d'échange", "A time to talk"),
-                body: pick(l, "On échange pour comprendre ce que tu traverses.", "We talk to understand what you're going through."),
-              },
-              {
-                title: pick(l, "La séance vibratoire", "The vibratory session"),
-                body: pick(l, "La séance, douce et non intrusive : habillé·e, allongé·e, seize mouvements le long de la colonne.", "The gentle, non-intrusive session: dressed, lying down, sixteen movements along the spine."),
-              },
-              {
-                title: pick(l, "Ressentir & intégrer", "Feel & integrate"),
-                body: pick(l, "Un temps pour ressentir et laisser le mouvement s'installer.", "A time to feel and let the movement settle in."),
-              },
-            ]}
-          />
-
-          <QuoteBlock tone="warm" cite="Dimitri Gauthier">
-            {pick(
-              l,
-              "Mon rôle, c'est de t'accueillir, de t'écouter, d'observer et d'éclairer ton chemin. Le reste, c'est le mouvement de guérison qui vient de l'intérieur de toi-même.",
-              "My role is to welcome you, to listen, to observe and to shed light on your path. The rest is the healing movement that comes from within you.",
-            )}
-          </QuoteBlock>
         </>
       )}
 
       <CTABanner
         href={href(l, "reservation")}
-        title={pick(l, "Envie de relâcher ce qui pèse ?", "Ready to release what weighs on you?")}
-        sub={pick(l, "Réserve une séance de La TRAME® et remets le mouvement en toi, en douceur.", "Book a TRAME® session and set movement back in you, gently.")}
+        title={pick(l, "Envie de réserver une séance de TRAME ?", "Want to book a TRAME® session?")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

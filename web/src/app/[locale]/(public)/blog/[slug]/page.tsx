@@ -69,15 +69,15 @@ export default async function ArticlePage({
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
           {pick(
             l,
-            "Lance ton parcours guidé et découvre l'expérience INTIMY.",
-            "Start your guided journey and discover the INTIMY experience.",
+            "Réservez votre première séance, en toute confidentialité.",
+            "Book your first session, in full confidentiality.",
           )}
         </p>
         <a
           href={experienceHref(l)}
           className="experience-btn group mt-6 inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white shadow-soft transition-transform duration-300 hover:-translate-y-0.5"
         >
-          {pick(l, "Tente l'expérience", "Try the experience")}
+          {pick(l, "Prendre rendez-vous", "Book an appointment")}
           <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
         </a>
       </div>

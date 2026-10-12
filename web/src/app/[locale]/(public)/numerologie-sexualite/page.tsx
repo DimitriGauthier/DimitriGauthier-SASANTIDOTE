@@ -4,8 +4,7 @@ import { isLocale, type Locale, pick } from "@/lib/i18n";
 import { href } from "@/lib/site";
 import { getContentPage } from "@/lib/data";
 import { Prose } from "@/components/ui";
-import { PageHero, SplitSection, FeatureGrid, QuoteBlock, CTABanner, SectionHeading, Pill } from "@/components/sections";
-import { Compass, Calendar, Fingerprint, Sparkles, Hash } from "lucide-react";
+import { PageHero, SplitSection, QuoteBlock, CTABanner } from "@/components/sections";
 
 export async function generateMetadata({
   params,
@@ -15,11 +14,11 @@ export async function generateMetadata({
   const { locale } = await params;
   const l: Locale = isLocale(locale) ? locale : "fr";
   return {
-    title: pick(l, "Numérologie & sexualité", "Numerology & sexuality"),
+    title: pick(l, "Numérologie salomique", "Salomic numerology"),
     description: pick(
       l,
-      "Comment la numérologie éclaire ton chemin de vie, tes cycles et ton rapport à l'intimité.",
-      "How numerology sheds light on your life path, your cycles and your relationship to intimacy.",
+      "Comment la numérologie salomique éclaire votre chemin de vie, vos cycles et votre rapport à l'intimité.",
+      "How salomic numerology sheds light on your life path, your cycles and your relationship to intimacy.",
     ),
   };
 }
@@ -37,20 +36,12 @@ export default async function NumerologyPage({
   return (
     <article>
       <PageHero
-        eyebrow={pick(l, "Symboles & sens", "Symbols & meaning")}
-        title={pick(l, "Numérologie & sexualité", "Numerology & sexuality")}
+        title={pick(l, "Numérologie salomique", "Salomic numerology")}
         sub={pick(
           l,
-          "Un langage de symboles pour éclairer ton chemin de vie, tes cycles et ta manière d'aimer.",
-          "A language of symbols to light up your life path, your cycles and your way of loving.",
+          "La sexualité repose sur trois piliers : le corps, l'éducation, la pensée. La numérologie salomique permet de lire ces trois dimensions à travers les nombres, révélant l'origine des blocages éducatifs et des dysfonctionnements mentaux qui influencent le désir. Elle offre ainsi une clé précise pour situer et dénouer le blocage.",
+          "Sexuality rests on three pillars: the body, upbringing, thought. Salomic numerology reads these three dimensions through numbers, revealing the origin of educational blocks and mental dysfunctions that influence desire. It thus offers a precise key to locate and untie the block.",
         )}
-        badges={
-          <>
-            <Pill icon={<Hash className="h-4 w-4" />}>{pick(l, "Chemin de vie", "Life path")}</Pill>
-            <Pill icon={<Calendar className="h-4 w-4" />}>{pick(l, "Cycles", "Cycles")}</Pill>
-            <Pill icon={<Compass className="h-4 w-4" />}>{pick(l, "Éclairage, pas prédiction", "Insight, not prediction")}</Pill>
-          </>
-        }
       />
 
       {html ? (
@@ -62,28 +53,6 @@ export default async function NumerologyPage({
       ) : (
         <>
           <SplitSection
-            image="/img/cabinet-2.jpg"
-            imageAlt=""
-            eyebrow={pick(l, "En quoi ça consiste", "What it is")}
-            title={pick(l, "Un langage de symboles", "A language of symbols")}
-          >
-            <p>
-              {pick(
-                l,
-                "La numérologie est un langage de symboles. À partir de ta date de naissance et de ton nom, elle dessine une carte : tes élans, tes forces, tes cycles, les périodes où l'on avance et celles où l'on se recentre.",
-                "Numerology is a language of symbols. From your date of birth and your name, it draws a map: your drives, your strengths, your cycles, the periods when we move forward and those when we refocus.",
-              )}
-            </p>
-            <p>
-              {pick(
-                l,
-                "Sur le plan intime, cet éclairage aide à comprendre ta manière d'aimer, de désirer, de te lier.",
-                "On an intimate level, this insight helps you understand how you love, desire and connect.",
-              )}
-            </p>
-          </SplitSection>
-
-          <SplitSection
             reverse
             image="/img/cabinet-3.jpg"
             imageAlt=""
@@ -93,54 +62,17 @@ export default async function NumerologyPage({
             <p>
               {pick(
                 l,
-                "C'est la méthode que j'utilise. Une approche complète pour comprendre ta personnalité, tes motivations et les complexités de tes réactions, comme celles de ton environnement.",
-                "This is the method I use. A complete approach to understanding your personality, your motivations and the complexities of your reactions, as well as those of your environment.",
-              )}
-            </p>
-            <p>
-              {pick(
-                l,
-                "Elle éclaire aussi les cycles qui s'ouvrent devant toi et t'aide à anticiper tes actions, pour avancer avec plus de clarté et de sérénité.",
-                "It also sheds light on the cycles opening ahead of you and helps you anticipate your actions, so you can move forward with more clarity and calm.",
+                "Globalement, c'est une méthode complète pour comprendre la personnalité, les motivations et les complexités de nos réactions et celles de notre environnement.",
+                "Broadly, it is a complete method to understand personality, motivations and the complexities of our reactions and those of our environment.",
               )}
             </p>
           </SplitSection>
 
-          <FeatureGrid
-            cols={4}
-            tone="soft"
-            heading={
-              <SectionHeading eyebrow={pick(l, "Ce que ça t'apporte", "What it brings you")} title={pick(l, "Ce que la numérologie apporte", "What numerology brings")} />
-            }
-            items={[
-              {
-                icon: <Calendar className="h-6 w-6" />,
-                title: pick(l, "Tes cycles", "Your cycles"),
-                body: pick(l, "Mieux comprendre tes cycles et tes moments-clés.", "Better understanding your cycles and key moments."),
-              },
-              {
-                icon: <Fingerprint className="h-6 w-6" />,
-                title: pick(l, "Ce qui te ressemble", "What resembles you"),
-                body: pick(l, "Repérer ce qui te ressemble vraiment.", "Spotting what truly resembles you."),
-              },
-              {
-                icon: <Sparkles className="h-6 w-6" />,
-                title: pick(l, "Du sens", "Meaning"),
-                body: pick(l, "Donner du sens à tes blocages et à tes élans.", "Giving meaning to your blocks and drives."),
-              },
-              {
-                icon: <Compass className="h-6 w-6" />,
-                title: pick(l, "Des choix alignés", "Aligned choices"),
-                body: pick(l, "Poser des choix plus alignés, dans ta vie et ton couple.", "Making more aligned choices, in your life and your relationship."),
-              },
-            ]}
-          />
-
-          <QuoteBlock tone="warm">
+          <QuoteBlock tone="warm" cite="Dimitri Gauthier">
             {pick(
               l,
-              "La numérologie ne remplace pas le travail thérapeutique : elle l'accompagne, en donnant du sens à ce que tu traverses.",
-              "Numerology doesn't replace therapeutic work: it supports it, giving meaning to what you're going through.",
+              "La numérologie salomique accompagne le travail thérapeutique en donnant du sens à ce que vous traversez.",
+              "Salomic numerology supports therapeutic work by giving meaning to what you are going through.",
             )}
           </QuoteBlock>
         </>
@@ -149,7 +81,6 @@ export default async function NumerologyPage({
       <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Envie d'y voir plus clair ?", "Want to see more clearly?")}
-        sub={pick(l, "Réserve une séance et donnons du sens à ton chemin.", "Book a session and let's give meaning to your path.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </article>

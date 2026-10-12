@@ -5,8 +5,8 @@ import type { Locale } from "./i18n";
 export const siteConfig = {
   practitionerName: "Dimitri Gauthier",
   tagline: {
-    fr: "Sexothérapie · La TRAME® · Numérologie",
-    en: "Sex therapy · The TRAME® · Numerology",
+    fr: "Sexothérapie · La TRAME® · Numérologie salomique",
+    en: "Sex therapy · The TRAME® · Salomic numerology",
   },
   phone: "+262 692 52 72 86",
   whatsappDigits: "262692527286", // pour wa.me (sans + ni espaces)
@@ -19,17 +19,17 @@ export const siteConfig = {
   instagram: "https://instagram.com/dimitrigauthier",
   // Positionnement : accompagnement en visio partout dans le monde (FR/EN), cabinet à La Réunion.
   zone: {
-    fr: "En visio partout dans le monde · cabinet à La Réunion",
-    en: "Online worldwide · in-person in Réunion Island",
+    fr: "En visio partout dans le monde",
+    en: "Online worldwide",
   },
   // Description de référence pour le SEO (balise <meta description>, Open Graph).
   seoDescription: {
-    fr: "Dimitri Gauthier, sexothérapeute. Consultations en visioconférence partout dans le monde, en français ou en anglais : sexothérapie, La TRAME®, numérologie. Cabinet également à La Réunion.",
-    en: "Dimitri Gauthier, sex therapist. Online video sessions worldwide, in French or English: sex therapy, The TRAME®, numerology. In-person practice also in Réunion Island.",
+    fr: "Dimitri Gauthier, sexothérapeute. Consultations en visioconférence partout dans le monde, en français ou en anglais : sexothérapie, La TRAME®, numérologie salomique.",
+    en: "Dimitri Gauthier, sex therapist. Online video sessions worldwide, in French or English: sex therapy, The TRAME®, salomic numerology.",
   },
   keywords: {
-    fr: ["sexothérapeute", "sexothérapie", "consultation en visio", "thérapie de couple", "La TRAME", "numérologie", "en ligne", "français", "anglais", "La Réunion"],
-    en: ["sex therapist", "sex therapy", "online video session", "couples therapy", "The TRAME", "numerology", "online", "French", "English", "Réunion Island"],
+    fr: ["sexothérapeute", "sexothérapie", "consultation en visio", "thérapie de couple", "La TRAME", "numérologie salomique", "en ligne", "français", "anglais", "La Réunion"],
+    en: ["sex therapist", "sex therapy", "online video session", "couples therapy", "The TRAME", "salomic numerology", "online", "French", "English", "Réunion Island"],
   },
   currency: "EUR",
   legalEntity: {

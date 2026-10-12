@@ -11,10 +11,6 @@ import Reveal from "@/components/Reveal";
 import AnimatedCard from "@/components/AnimatedCard";
 import { Eyebrow } from "@/components/ui";
 
-// Motif « cœurs » en filigrane (repris du hero de la home).
-const HEART_PATTERN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54' viewBox='0 0 54 54'%3E%3Cpath d='M27 37C27 37 16 29.5 16 22C16 18.1 19 15.6 22.3 16.8C24.4 17.5 27 20 27 20C27 20 29.6 17.5 31.7 16.8C35 15.6 38 18.1 38 22C38 29.5 27 37 27 37Z' fill='%23AE5F47'/%3E%3C/svg%3E\")";
-
 type SectionTone = "plain" | "soft" | "warm";
 const sectionBg: Record<SectionTone, string> = {
   plain: "",
@@ -32,7 +28,7 @@ export function Pill({ icon, children }: { icon?: ReactNode; children: ReactNode
   );
 }
 
-/** Héros de page : full-bleed, blobs, filigrane cœurs. Photo & CTA optionnels. */
+/** Héros de page : full-bleed, blobs doux. Photo & CTA optionnels. */
 export function PageHero({
   eyebrow,
   title,
@@ -55,11 +51,6 @@ export function PageHero({
   const bg = tone === "warm" ? "bg-gradient-warm" : "bg-gradient-soft";
   return (
     <header className={`full-bleed relative -mt-16 overflow-hidden ${bg}`}>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{ backgroundImage: HEART_PATTERN, backgroundSize: "54px 54px" }}
-      />
       <span aria-hidden className="blob animate-blob absolute -left-24 top-8 h-72 w-72 rounded-full bg-primary/20" />
       <span
         aria-hidden

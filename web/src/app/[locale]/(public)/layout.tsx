@@ -7,7 +7,6 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SiteSplash from "@/components/SiteSplash";
-import FloatingHearts from "@/components/FloatingHearts";
 import ExperienceCTA from "@/components/ExperienceCTA";
 
 export default async function PublicLayout({
@@ -23,7 +22,6 @@ export default async function PublicLayout({
   const name = settings?.practitioner_name ?? siteConfig.practitionerName;
   return (
     <>
-      <FloatingHearts />
       <SiteSplash
         name={name}
         tagline={siteConfig.tagline[l]}
@@ -35,8 +33,8 @@ export default async function PublicLayout({
       <WhatsAppButton settings={settings} locale={l} />
       <ExperienceCTA
         href={experienceHref(l)}
-        label={pick(l, "Tente l'expérience", "Try the experience")}
-        hint={pick(l, "Ton parcours guidé t'attend", "Your guided journey awaits")}
+        label={pick(l, "Prendre rendez-vous", "Book an appointment")}
+        hint={pick(l, "Votre première séance vous attend", "Your first session awaits")}
         closeLabel={pick(l, "Fermer", "Close")}
       />
     </>

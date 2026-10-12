@@ -30,36 +30,29 @@ const FAQ: QA[] = [
   {
     q: { fr: "Comment se déroule une séance ?", en: "How does a session work?" },
     a: {
-      fr: "Chaque séance a lieu en visio. On commence par un temps d'écoute, puis on avance avec les outils les plus adaptés à ta situation : sexothérapie, la TRAME® ou numérologie.",
-      en: "Each session is online. We start with a time of listening, then move forward with the tools best suited to your situation: sex therapy, the TRAME® or numerology.",
+      fr: "Une séance dure 1h15 en individuel et 1h30 en couple, en visioconférence.",
+      en: "A session lasts 1h15 individually and 1h30 as a couple, by video.",
     },
   },
   {
     q: { fr: "Est-ce confidentiel ?", en: "Is it confidential?" },
     a: {
-      fr: "Oui, totalement. Ce qui se dit en séance reste entre nous. Tes données personnelles sont traitées avec le plus grand soin, conformément au RGPD.",
-      en: "Yes, completely. What is said in session stays between us. Your personal data is handled with the utmost care, in line with the GDPR.",
-    },
-  },
-  {
-    q: { fr: "Faut-il venir en couple ?", en: "Do we need to come as a couple?" },
-    a: {
-      fr: "Non. J'accompagne aussi bien les personnes seules que les couples. Tu choisis le format qui te convient au moment de la réservation.",
-      en: "No. I support individuals as well as couples. You choose the format that suits you when booking.",
+      fr: "Chaque séance se déroule dans un cadre confidentiel et sans jugement.",
+      en: "Every session takes place in a confidential, non-judgmental setting.",
     },
   },
   {
     q: { fr: "Combien de séances sont nécessaires ?", en: "How many sessions are needed?" },
     a: {
-      fr: "Cela dépend de chacun. Certaines situations se dénouent en quelques séances, d'autres demandent un suivi plus long. On en parle ensemble, sans jamais rien t'imposer.",
-      en: "It depends on each person. Some situations resolve in a few sessions, others call for longer follow-up. We discuss it together, never imposing anything on you.",
+      fr: "Le nombre de séances nécessaires dépend de chacun. Certaines situations se dénouent en quelques séances, d'autres demandent un suivi plus long.",
+      en: "The number of sessions needed depends on each person. Some situations resolve in a few sessions, others call for longer follow-up.",
     },
   },
   {
     q: { fr: "Comment se passe le paiement ?", en: "How does payment work?" },
     a: {
-      fr: "Le paiement se fait en ligne, de façon sécurisée, au moment où tu confirmes ton créneau. Le tarif s'affiche clairement avant que tu valides.",
-      en: "Payment is made online, securely, when you confirm your slot. The price is shown clearly before you validate.",
+      fr: "Pour toute séance, le paiement se fait en ligne, de façon sécurisée, au moment de la confirmation du rendez-vous.",
+      en: "For every session, payment is made online, securely, when the appointment is confirmed.",
     },
   },
 ];
@@ -77,7 +70,6 @@ export default async function FaqPage({
       <PageHero
         eyebrow={pick(l, "FAQ", "FAQ")}
         title={pick(l, "Questions fréquentes", "Frequently asked questions")}
-        sub={pick(l, "Tout ce que tu veux savoir avant de commencer.", "Everything you want to know before starting.")}
       />
 
       <section className="full-bleed py-20 sm:py-24">
@@ -105,7 +97,7 @@ export default async function FaqPage({
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {pick(
                     l,
-                    "Écris-moi, je te réponds avec plaisir. Ou réserve directement ta première séance.",
+                    "Écrivez-moi, je vous réponds avec plaisir. Ou réservez directement votre première séance.",
                     "Write to me, I'll be glad to answer. Or book your first session directly.",
                   )}
                 </p>
@@ -157,8 +149,8 @@ export default async function FaqPage({
             <p className="mx-auto mt-4 max-w-xl leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Chaque histoire est unique. Ces quelques lignes ne remplacent pas un vrai échange, à ton rythme et en toute confidentialité.",
-                "Every story is unique. These few lines can't replace a real conversation, at your pace and in full confidentiality.",
+                "Les réponses sont déjà en vous. Mon rôle consiste à vous les révéler.",
+                "The answers are already within you. My role is simply to reveal them to you.",
               )}
             </p>
             <Link
@@ -166,7 +158,7 @@ export default async function FaqPage({
               className="group mt-7 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-[hsl(var(--gold))] bg-[length:180%_auto] bg-left px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft transition-all duration-500 hover:-translate-y-0.5 hover:bg-right"
             >
               <Sparkles className="h-4 w-4 transition-transform duration-500 group-hover:rotate-12" />
-              {pick(l, "Tente l'expérience", "Try the experience")}
+              {pick(l, "Prendre rendez-vous", "Book an appointment")}
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </Link>
           </Reveal>

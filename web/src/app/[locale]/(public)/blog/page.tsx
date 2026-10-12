@@ -22,8 +22,8 @@ export async function generateMetadata({
     title: pick(l, "Blog", "Blog"),
     description: pick(
       l,
-      "Articles et réflexions sur la sexualité, le couple, la TRAME® et la numérologie.",
-      "Articles and reflections on sexuality, couples, the TRAME® and numerology.",
+      "Articles et réflexions sur la sexualité, le couple, la TRAME® et la numérologie salomique.",
+      "Articles and reflections on sexuality, couples, the TRAME® and salomic numerology.",
     ),
   };
 }
@@ -44,8 +44,8 @@ export default async function BlogPage({
         title={pick(l, "Réflexions & ressources", "Reflections & resources")}
         sub={pick(
           l,
-          "Des articles pour comprendre, prendre du recul et avancer : sexualité, couple, la TRAME® et numérologie.",
-          "Articles to understand, step back and move forward: sexuality, couples, the TRAME® and numerology.",
+          "Je vous propose ici mes réflexions ainsi que des articles qui m'ont marqués, en espérant qu'ils pourront vous éclairer.",
+          "Here I share my reflections and the articles that have left their mark on me, in the hope they can shed some light for you.",
         )}
       />
 
@@ -55,7 +55,7 @@ export default async function BlogPage({
           href={experienceHref(l)}
           className="experience-btn group mx-auto mt-10 flex w-full max-w-md items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-semibold text-white shadow-soft transition-transform duration-300 hover:-translate-y-0.5"
         >
-          {pick(l, "Tente l'expérience", "Try the experience")}
+          {pick(l, "Prendre rendez-vous", "Book an appointment")}
           <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
         </a>
       </div>
@@ -119,7 +119,7 @@ export default async function BlogPage({
       <CTABanner
         href={href(l, "reservation")}
         title={pick(l, "Envie d'en parler ?", "Want to talk about it?")}
-        sub={pick(l, "Réserve une séance et avançons ensemble, à ton rythme.", "Book a session and let's move forward together, at your own pace.")}
+        sub={pick(l, "Réservez une séance et avançons ensemble, à votre rythme.", "Book a session and let's move forward together, at your own pace.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </div>

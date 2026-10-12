@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  MapPin,
   Video,
   MessageCircle,
   Heart,
@@ -20,10 +19,6 @@ import Reveal from "@/components/Reveal";
 import AnimatedCard from "@/components/AnimatedCard";
 import DimitriGuide from "@/components/DimitriGuide";
 
-// Motif « cœurs » en filigrane pour le fond du hero (posé à très faible opacité).
-const HEART_PATTERN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54' viewBox='0 0 54 54'%3E%3Cpath d='M27 37C27 37 16 29.5 16 22C16 18.1 19 15.6 22.3 16.8C24.4 17.5 27 20 27 20C27 20 29.6 17.5 31.7 16.8C35 15.6 38 18.1 38 22C38 29.5 27 37 27 37Z' fill='%23AE5F47'/%3E%3C/svg%3E\")";
-
 export async function generateMetadata({
   params,
 }: {
@@ -34,13 +29,13 @@ export async function generateMetadata({
   return {
     title: pick(
       l,
-      "Dimitri Gauthier · Sexothérapie, la TRAME® & numérologie",
-      "Dimitri Gauthier · Sex therapy, the TRAME® & numerology",
+      "Dimitri Gauthier · Sexothérapie, la TRAME® & numérologie salomique",
+      "Dimitri Gauthier · Sex therapy, the TRAME® & salomic numerology",
     ),
     description: pick(
       l,
-      "Sexothérapeute pour homme, femme et couple. Une approche qui relie tête, corps et cœur : sexothérapie, la TRAME® et numérologie. Consultations en visio.",
-      "Sex therapist for men, women and couples. An approach connecting mind, body and heart: sex therapy, the TRAME® and numerology. Online sessions.",
+      "Sexothérapeute pour homme, femme, couple et adolescent. Une approche qui relie tête, corps et cœur : sexothérapie, la TRAME® et numérologie salomique. Consultations en visio.",
+      "Sex therapist for men, women, couples and teenagers. An approach connecting mind, body and heart: sex therapy, the TRAME® and salomic numerology. Online sessions.",
     ),
   };
 }
@@ -60,7 +55,7 @@ export default async function HomePage({
       title: pick(l, "Sexothérapie", "Sex therapy"),
       body: pick(
         l,
-        "Un espace pour parler sans tabou de ce qui bloque : panne, désir, plaisir, communication dans le couple. On avance à ton rythme.",
+        "Un espace pour parler sans tabou de ce qui bloque : panne, désir, plaisir, communication dans le couple. On avance à votre rythme.",
         "A space to talk without taboo about what blocks you: performance, desire, pleasure, communication within the couple. We move at your pace.",
       ),
     },
@@ -75,10 +70,10 @@ export default async function HomePage({
     },
     {
       icon: Compass,
-      title: pick(l, "Numérologie", "Numerology"),
+      title: pick(l, "Numérologie salomique", "Salomic numerology"),
       body: pick(
         l,
-        "Un éclairage sur ton chemin de vie pour mieux comprendre tes élans, tes cycles et ce qui te ressemble vraiment.",
+        "Un éclairage sur votre chemin de vie pour mieux comprendre vos élans, vos cycles et ce qui vous ressemble vraiment.",
         "Insight into your life path to better understand your drives, your cycles and what truly resembles you.",
       ),
     },
@@ -97,7 +92,7 @@ export default async function HomePage({
       title: pick(l, "Femme", "Women"),
       body: pick(
         l,
-        "Désir, plaisir, douleurs, rapport au corps. Un accompagnement bienveillant et à ton écoute.",
+        "Désir, plaisir, douleurs, rapport au corps. Un accompagnement bienveillant et à votre écoute.",
         "Desire, pleasure, pain, relationship to the body. Caring support that listens to you.",
       ),
     },
@@ -124,12 +119,6 @@ export default async function HomePage({
     <div className="-my-16">
       {/* ── Hero ───────────────────────────────────────────── */}
       <section className="full-bleed relative flex min-h-[92vh] items-center overflow-hidden bg-gradient-warm">
-        {/* Motif « cœurs » très léger, en filigrane clair */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{ backgroundImage: HEART_PATTERN, backgroundSize: "54px 54px" }}
-        />
         {/* Taches douces pour animer le dégradé */}
         <div className="blob animate-blob absolute -left-24 top-20 h-72 w-72 rounded-full bg-primary/20" />
         <div
@@ -144,16 +133,17 @@ export default async function HomePage({
               {siteConfig.tagline[l]}
             </p>
             <h1 className="animate-fade-up text-balance font-serif text-5xl font-medium leading-[1.05] text-foreground sm:text-6xl">
-              {pick(l, "S'accomplir pleinement, dans sa vie comme dans son ", "Fully flourish, in your life as in your ")}
+              {pick(l, "Éclairer votre ", "Light up your ")}
               <em className="text-gradient not-italic">
                 {pick(l, "intimité", "intimacy")}
               </em>
+              {pick(l, " pour vous réaliser pleinement", " to fully realize yourself")}
             </h1>
             <p className="animate-fade-up mx-auto mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground md:mx-0">
               {pick(
                 l,
-                "Je suis Dimitri Gauthier, sexothérapeute. J'accompagne les hommes, les femmes et les couples à mettre des mots sur ce qui coince et à réaligner la tête, le corps et le cœur.",
-                "I'm Dimitri Gauthier, sex therapist. I support men, women and couples in putting words to what's stuck and realigning mind, body and heart.",
+                "Je suis Dimitri Gauthier. Je vous propose un espace d'écoute pour réconcilier l'esprit, le corps, le cœur et le désir.",
+                "I am Dimitri Gauthier. I offer you a space to be heard, to reconcile the mind, the body, the heart and desire.",
               )}
             </p>
             <div className="animate-fade-up mt-10 flex flex-col items-center gap-4 md:items-start">
@@ -162,22 +152,12 @@ export default async function HomePage({
                 className="experience-btn group inline-flex items-center gap-3 rounded-full px-9 py-4 text-base font-semibold text-primary-foreground transition-transform duration-300 hover:-translate-y-1 sm:px-12 sm:py-5 sm:text-lg"
               >
                 <Sparkles className="h-5 w-5" />
-                {pick(l, "Tente l'expérience", "Try the experience")}
+                {pick(l, "Prendre rendez-vous", "Book an appointment")}
                 <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
-              <p className="text-xs text-muted-foreground">
-                {pick(l, "Un parcours guidé de 2 minutes, simple, confidentiel et sans engagement", "A 2-minute guided journey: simple, confidential, no commitment")}
-              </p>
-              <Link href={href(l, "mon-approche")} className="story-link text-sm font-medium text-primary">
-                {pick(l, "Ou découvrir mon approche d'abord", "Or discover my approach first")}
-              </Link>
             </div>
 
             <div className="animate-fade-up mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-muted-foreground md:justify-start">
-              <span className="inline-flex items-center gap-2">
-                <MapPin size={16} className="text-primary" />
-                {pick(l, "Saint-Denis & Saint-Pierre", "Saint-Denis & Saint-Pierre")}
-              </span>
               <span className="inline-flex items-center gap-2">
                 <Video size={16} className="text-primary" />
                 {pick(l, "Consultations en visio", "Online sessions")}
@@ -238,7 +218,7 @@ export default async function HomePage({
               {pick(l, "Faire connaissance", "Let's meet")}
             </p>
             <h2 className="mt-3 font-serif text-4xl font-medium text-foreground">
-              {pick(l, "Un accompagnement humain, sans tabou", "Human support, without taboo")}
+              {pick(l, "Un accompagnement humain, sans tabou et sans jugement", "Human support, without taboo or judgment")}
             </h2>
             <div className="mt-5 space-y-4 leading-relaxed text-muted-foreground">
               <p>
@@ -246,13 +226,6 @@ export default async function HomePage({
                   l,
                   "Ce qui touche à l'intime se vit souvent dans le silence. Mon rôle est d'ouvrir un espace de parole simple et respectueux, où l'on peut poser ce qui pèse et avancer pas à pas.",
                   "What touches the intimate is often lived in silence. My role is to open a simple, respectful space where you can put down what weighs on you and move forward, step by step.",
-                )}
-              </p>
-              <p>
-                {pick(
-                  l,
-                  "Je reçois à La Réunion, en cabinet à Saint-Denis et Saint-Pierre, ainsi qu'en visio partout ailleurs.",
-                  "I welcome you on Réunion Island, at my practices in Saint-Denis and Saint-Pierre, as well as online everywhere else.",
                 )}
               </p>
             </div>
@@ -289,7 +262,7 @@ export default async function HomePage({
             <p className="mx-auto mt-4 max-w-2xl leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Tout commence par là : vouloir. Quand une personne le veut vraiment, elle se donne tous les moyens. Mon rôle n'est pas de vouloir à ta place, mais de créer les conditions pour que tu avances.",
+                "Tout commence par là : vouloir. Quand une personne le veut vraiment, elle se donne tous les moyens. Mon rôle n'est pas de vouloir à votre place, mais de créer les conditions pour que vous avanciez.",
                 "It all starts there: to will. When a person truly wants it, they give themselves every means. My role isn't to want in your place, but to create the conditions for you to move forward.",
               )}
             </p>
@@ -336,7 +309,7 @@ export default async function HomePage({
               <p className="font-serif text-xl leading-relaxed text-foreground sm:text-2xl">
                 {pick(
                   l,
-                  "Mon rôle, en tant qu'accompagnant, est d'accueillir, d'écouter, d'observer, d'éclairer ton chemin, et de libérer le mouvement de l'ÊTRE bien qui vient de l'intérieur de toi.",
+                  "Mon rôle, en tant qu'accompagnant, est d'accueillir, d'écouter, d'observer, d'éclairer votre chemin, et de libérer le mouvement de l'ÊTRE bien qui vient de l'intérieur de vous.",
                   "My role, as a companion, is to welcome, to listen, to observe, to light up your path, and to free the movement of the well-BEING that comes from within you.",
                 )}
               </p>
@@ -359,7 +332,7 @@ export default async function HomePage({
             <p className="mt-4 leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Ces trois outils ne s'opposent pas : ils se complètent. En alignant la tête, le corps et le cœur, on remet toute ta vie en mouvement.",
+                "Ces trois outils ne s'opposent pas : ils se complètent. En alignant la tête, le corps et le cœur, on remet toute votre vie en mouvement.",
                 "These three tools don't compete: they complement each other. By aligning mind, body and heart, we set your whole life back in motion.",
               )}
             </p>
@@ -423,7 +396,7 @@ export default async function HomePage({
             <p className="mt-4 leading-relaxed text-muted-foreground">
               {pick(
                 l,
-                "Chacun avance avec son histoire. L'accompagnement s'adapte à qui tu es et à ce que tu traverses.",
+                "Chacun avance avec son histoire. L'accompagnement s'adapte à qui vous êtes et à ce que vous traversez.",
                 "Everyone moves forward with their own story. Support adapts to who you are and what you're going through.",
               )}
             </p>
@@ -570,13 +543,13 @@ export default async function HomePage({
       {/* ── Dimitri accompagne le défilement (prise de confiance) ── */}
       <DimitriGuide
         name={siteConfig.practitionerName}
-        role={pick(l, "Ton accompagnant", "Your companion")}
+        role={pick(l, "Votre accompagnant", "Your companion")}
         steps={[
           {
             id: "guide-intro",
             caption: pick(
               l,
-              "Ravi de t'accueillir. Ici, on avance à ton rythme, sans jugement.",
+              "Ravi de vous accueillir. Ici, on avance à votre rythme, sans jugement.",
               "Glad to welcome you. Here, we move at your pace, without judgment.",
             ),
           },
@@ -584,7 +557,7 @@ export default async function HomePage({
             id: "guide-manifeste",
             caption: pick(
               l,
-              "Mon rôle : créer les conditions pour que tu puisses te changer toi-même.",
+              "Mon rôle : créer les conditions pour que vous puissiez vous changer vous-même.",
               "My role: creating the conditions for you to change yourself.",
             ),
           },
@@ -592,7 +565,7 @@ export default async function HomePage({
             id: "guide-piliers",
             caption: pick(
               l,
-              "Tête, corps et cœur : trois clés que je combine selon qui tu es.",
+              "Tête, corps et cœur : trois clés que je combine selon qui vous êtes.",
               "Mind, body and heart: three keys I combine to fit who you are.",
             ),
           },
@@ -600,24 +573,24 @@ export default async function HomePage({
             id: "guide-cadre",
             caption: pick(
               l,
-              "Un cadre doux et confidentiel, en cabinet comme en visio.",
-              "A gentle, confidential setting, in person or online.",
+              "Un cadre doux et confidentiel, en visioconférence.",
+              "A gentle, confidential setting, by video.",
             ),
           },
           {
             id: "guide-pourqui",
             caption: pick(
               l,
-              "Homme, femme ou couple : ton histoire guide l'accompagnement.",
-              "Man, woman or couple: your story guides the support.",
+              "Homme, femme, couple ou adolescent : votre histoire guide l'accompagnement.",
+              "Man, woman, couple or teenager: your story guides the support.",
             ),
           },
           {
             id: "guide-accompagnements",
             caption: pick(
               l,
-              "On choisit ensemble l'accompagnement qui te correspond.",
-              "Together we choose the support that fits you.",
+              "Trouvons l'accompagnement qui vous correspond.",
+              "Let's find the support that fits you.",
             ),
           },
           {

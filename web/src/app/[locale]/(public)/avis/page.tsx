@@ -100,8 +100,8 @@ export default async function ReviewsPage({
 
       <CTABanner
         href={href(l, "reservation")}
-        title={pick(l, "Envie de commencer ton chemin ?", "Ready to begin your journey?")}
-        sub={pick(l, "Réserve ta première séance en toute confidentialité.", "Book your first session in full confidentiality.")}
+        title={pick(l, "Envie de commencer votre chemin ?", "Ready to begin your journey?")}
+        sub={pick(l, "Réservez votre première séance en toute confidentialité.", "Book your first session in full confidentiality.")}
         cta={pick(l, "Prendre rendez-vous", "Book an appointment")}
       />
     </div>

@@ -67,7 +67,7 @@ export default function ManageBooking(props: Props) {
 
   async function confirmReschedule() {
     if (!selected) {
-      setError(pick(locale, "Choisis un nouveau créneau.", "Choose a new slot."));
+      setError(pick(locale, "Choisissez un nouveau créneau.", "Choose a new slot."));
       return;
     }
     setBusy(true);
