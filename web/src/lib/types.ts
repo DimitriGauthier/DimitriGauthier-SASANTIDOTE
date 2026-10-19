@@ -1,6 +1,6 @@
 // Types DB — reflètent supabase/migrations/0001_init.sql (variantes _en pour l'i18n).
 
-export type Audience = "homme" | "femme" | "couple" | "tous";
+export type Audience = "homme" | "femme" | "couple" | "adolescent" | "tous";
 export type BookingStatus = "hold" | "scheduled" | "completed" | "cancelled" | "no_show";
 export type PaymentStatus = "created" | "paid" | "failed" | "refunded";
 export type ReviewStatus = "invited" | "submitted" | "published" | "hidden";

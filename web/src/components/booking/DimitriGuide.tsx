@@ -8,10 +8,10 @@
 
 import { Heart } from "lucide-react";
 import { DimitriAvatar } from "@/components/DimitriAvatar";
-import { HommeAvatar, FemmeAvatar, CoupleAvatar } from "@/components/booking/ProfileAvatars";
+import { HommeAvatar, FemmeAvatar, CoupleAvatar, AdolescentAvatar } from "@/components/booking/ProfileAvatars";
 import type { Audience } from "@/lib/types";
 
-const PROSPECT_AVATAR = { homme: HommeAvatar, femme: FemmeAvatar, couple: CoupleAvatar } as const;
+const PROSPECT_AVATAR = { homme: HommeAvatar, femme: FemmeAvatar, couple: CoupleAvatar, adolescent: AdolescentAvatar } as const;
 
 function prospectAvatarFor(audience?: Audience | null) {
   if (audience && audience in PROSPECT_AVATAR) {

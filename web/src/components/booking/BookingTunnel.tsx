@@ -21,7 +21,7 @@ import type { Audience, Service, Topic, Question, QuestionCondition, Slot } from
 import { getSlots, createHold, EdgeTimeoutError } from "@/lib/edge";
 import { formatPrice, formatDuration, formatDayLabel, formatTime, reunionDayKey } from "@/lib/format";
 import DimitriGuide from "@/components/booking/DimitriGuide";
-import { HommeAvatar, FemmeAvatar, CoupleAvatar } from "@/components/booking/ProfileAvatars";
+import { HommeAvatar, FemmeAvatar, CoupleAvatar, AdolescentAvatar } from "@/components/booking/ProfileAvatars";
 import { DimitriAvatar } from "@/components/DimitriAvatar";
 
 type Props = {
@@ -37,6 +37,7 @@ type ClientInfo = {
   email: string;
   phone: string;
   note: string;
+  guardian: string; // responsable légal (requis si profil adolescent)
 };
 
 type Screen =
@@ -48,8 +49,8 @@ type Screen =
   | { k: "contact" }
   | { k: "slot" };
 
-const AUDIENCES = ["homme", "femme", "couple"] as const satisfies readonly Audience[];
-const AUDIENCE_AVATAR = { homme: HommeAvatar, femme: FemmeAvatar, couple: CoupleAvatar } as const;
+const AUDIENCES = ["homme", "femme", "couple", "adolescent"] as const satisfies readonly Audience[];
+const AUDIENCE_AVATAR = { homme: HommeAvatar, femme: FemmeAvatar, couple: CoupleAvatar, adolescent: AdolescentAvatar } as const;
 
 function matchesAudience(audiences: Audience[], a: Audience): boolean {
   return audiences.includes(a) || audiences.includes("tous");
@@ -116,7 +117,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
   const [serviceId, setServiceId] = useState<string | null>(null);
   const [topicId, setTopicId] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
-  const [client, setClient] = useState<ClientInfo>({ first_name: "", last_name: "", email: "", phone: "", note: "" });
+  const [client, setClient] = useState<ClientInfo>({ first_name: "", last_name: "", email: "", phone: "", note: "", guardian: "" });
   const [consent, setConsent] = useState(false);
 
   const [slots, setSlots] = useState<Slot[] | null>(null);
@@ -278,6 +279,10 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
       setError(pick(locale, "Un numéro de téléphone est requis.", "A phone number is required."));
       return false;
     }
+    if (audience === "adolescent" && !client.guardian.trim()) {
+      setError(pick(locale, "Le responsable légal est obligatoire pour un mineur.", "A legal guardian is required for a minor."));
+      return false;
+    }
     if (!consent) {
       setError(pick(locale, "Merci d'accepter la politique de confidentialité.", "Please accept the privacy policy."));
       return false;
@@ -324,7 +329,15 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
           last_name: client.last_name.trim(),
           email: client.email.trim(),
           phone: client.phone.trim() || undefined,
-          note: client.note.trim() || undefined,
+          note:
+            [
+              audience === "adolescent" && client.guardian.trim()
+                ? `Responsable légal : ${client.guardian.trim()}.`
+                : "",
+              client.note.trim(),
+            ]
+              .filter(Boolean)
+              .join(" ") || undefined,
         },
         answers: visibleQuestions.map((q) => ({
           question_id: q.id,
@@ -515,7 +528,7 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             <p className="mb-6 text-sm text-muted-foreground">
               {pick(locale, "Aucune bonne ou mauvaise réponse, choisissez ce qui vous ressemble.", "No right or wrong answer, pick what feels like you.")}
             </p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
               {AUDIENCES.map((a) => {
                 const Avatar = AUDIENCE_AVATAR[a];
                 const active = audience === a;
@@ -543,7 +556,13 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
                       className={`h-16 w-16 transition-transform duration-300 sm:h-[84px] sm:w-[84px] ${active ? "animate-float" : "group-hover:scale-105"}`}
                     />
                     <span className="font-serif text-sm text-foreground sm:text-lg">
-                      {a === "homme" ? t.tunnel.profileMan : a === "femme" ? t.tunnel.profileWoman : t.tunnel.profileCouple}
+                      {a === "homme"
+                        ? t.tunnel.profileMan
+                        : a === "femme"
+                          ? t.tunnel.profileWoman
+                          : a === "couple"
+                            ? t.tunnel.profileCouple
+                            : t.tunnel.profileTeen}
                     </span>
                   </button>
                 );
@@ -669,6 +688,12 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
                 <TextInput label={t.common.email} type="email" value={client.email} onChange={(v) => setClient({ ...client, email: v })} required />
                 <TextInput label={t.tunnel.phone} type="tel" value={client.phone} onChange={(v) => setClient({ ...client, phone: v })} required />
               </div>
+              {audience === "adolescent" ? (
+                <div>
+                  <TextInput label={t.tunnel.guardian} value={client.guardian} onChange={(v) => setClient({ ...client, guardian: v })} required />
+                  <p className="mt-1 text-xs text-muted-foreground">{t.tunnel.guardianHelp}</p>
+                </div>
+              ) : null}
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-foreground">{t.tunnel.note}</label>
                 <textarea

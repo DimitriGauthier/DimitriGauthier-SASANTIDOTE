@@ -329,3 +329,81 @@ export function CoupleAvatar({ size = 84, active = false, className = "" }: Avat
     </svg>
   );
 }
+
+// ─────────────────────────────────────────────────────────────
+// Adolescent (profil jeune, neutre — pull doré, visage juvénile)
+// ─────────────────────────────────────────────────────────────
+export function AdolescentAvatar({ size = 84, active = false, className = "" }: AvatarProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 120 120" role="img" aria-label="Adolescent" className={className}>
+      <defs>
+        <clipPath id="av-ado-clip">
+          <circle cx="60" cy="60" r="58" />
+        </clipPath>
+      </defs>
+
+      <g clipPath="url(#av-ado-clip)">
+        <rect x="0" y="0" width="120" height="120" fill="hsl(var(--secondary))" />
+
+        <g>
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            dur="5.2s"
+            repeatCount="indefinite"
+            values="0 0; 0 -1.1; 0 0"
+          />
+
+          {/* Buste (pull) */}
+          <path d="M14 120 C14 95 34 86 60 86 C86 86 106 95 106 120 Z" fill="hsl(var(--gold))" />
+          {/* Encolure */}
+          <path d="M50 87 C54 96 66 96 70 87 L70 94 C64 100 56 100 50 94 Z" fill="hsl(var(--deep))" opacity="0.2" />
+
+          {/* Cou */}
+          <rect x="53" y="72" width="14" height="18" rx="7" fill={SKIN_SHADOW} />
+          {/* Oreilles */}
+          <circle cx="38" cy="57" r="4.6" fill={SKIN} />
+          <circle cx="82" cy="57" r="4.6" fill={SKIN} />
+          {/* Tête (un peu plus grande = plus jeune) */}
+          <ellipse cx="60" cy="53" rx="25" ry="27" fill={SKIN} />
+
+          {/* Cheveux (frange jeune, légèrement en bataille) */}
+          <path
+            d="M35 54 C33 29 49 19 60 19 C71 19 88 29 85 54 C81 42 74 38 68 40 C72 45 72 50 70 53 C66 44 57 43 51 47 C49 50 48 52 47 54 C44 46 40 46 35 54 Z"
+            fill={HAIR}
+          />
+
+          {/* Sourcils */}
+          <path d="M46 48 C49 46 53 46 56 48" fill="none" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M64 48 C67 46 71 46 74 48" fill="none" stroke={HAIR} strokeWidth="2.4" strokeLinecap="round" />
+
+          {/* Yeux (clignement) */}
+          <ellipse cx="51" cy="53" rx="2.9" ry="2.9" fill={HAIR}>
+            <Blink dur="4.9s" />
+          </ellipse>
+          <ellipse cx="69" cy="53" rx="2.9" ry="2.9" fill={HAIR}>
+            <Blink dur="4.9s" />
+          </ellipse>
+
+          {/* Joues (jeunesse) */}
+          <circle cx="47" cy="60" r="3.2" fill="hsl(var(--primary) / 0.2)" />
+          <circle cx="73" cy="60" r="3.2" fill="hsl(var(--primary) / 0.2)" />
+
+          {/* Nez */}
+          <path d="M60 55 C59.5 58 59 60 58 61" fill="none" stroke={SKIN_SHADOW} strokeWidth="1.8" strokeLinecap="round" />
+          {/* Sourire */}
+          <path d="M51 65 C56 70 64 70 69 65" fill="none" stroke={SMILE} strokeWidth="2.5" strokeLinecap="round" />
+        </g>
+      </g>
+
+      <circle
+        cx="60"
+        cy="60"
+        r="58"
+        fill="none"
+        stroke={active ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.22)"}
+        strokeWidth={active ? "3" : "2"}
+      />
+    </svg>
+  );
+}

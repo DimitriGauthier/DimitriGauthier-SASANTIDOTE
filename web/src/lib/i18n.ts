@@ -25,7 +25,7 @@ type Dict = {
     string
   >;
   tunnel: Record<
-    "title" | "stepProfile" | "stepTopic" | "stepForm" | "stepContact" | "stepSlot" | "profileMan" | "profileWoman" | "profileCouple" | "chooseTopic" | "yourAnswers" | "yourInfo" | "firstName" | "lastName" | "phone" | "note" | "consent" | "chooseSlot" | "noSlots" | "pay" | "holdInfo",
+    "title" | "stepProfile" | "stepTopic" | "stepForm" | "stepContact" | "stepSlot" | "profileMan" | "profileWoman" | "profileCouple" | "profileTeen" | "guardian" | "guardianHelp" | "chooseTopic" | "yourAnswers" | "yourInfo" | "firstName" | "lastName" | "phone" | "note" | "consent" | "chooseSlot" | "noSlots" | "pay" | "holdInfo",
     string
   >;
   booking: Record<"confirmedTitle" | "confirmedBody" | "cancelledTitle" | "cancelledBody", string>;
@@ -71,6 +71,9 @@ const fr: Dict = {
     profileMan: "Homme",
     profileWoman: "Femme",
     profileCouple: "Couple",
+    profileTeen: "Adolescent",
+    guardian: "Responsable légal (nom et téléphone)",
+    guardianHelp: "Pour un rendez-vous avec un mineur, l'accord d'un responsable légal est obligatoire.",
     chooseTopic: "Choisissez votre motif de consultation",
     yourAnswers: "Vos réponses",
     yourInfo: "Vos coordonnées",
@@ -139,6 +142,9 @@ const en: Dict = {
     profileMan: "Man",
     profileWoman: "Woman",
     profileCouple: "Couple",
+    profileTeen: "Teenager",
+    guardian: "Legal guardian (name and phone)",
+    guardianHelp: "For an appointment with a minor, a legal guardian's consent is required.",
     chooseTopic: "Choose your reason for consultation",
     yourAnswers: "Your answers",
     yourInfo: "Your details",
