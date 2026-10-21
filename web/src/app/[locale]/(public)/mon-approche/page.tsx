@@ -70,20 +70,20 @@ export default async function ApproachPage({
             image="/img/detail.jpg"
             imageAlt=""
             eyebrow={pick(l, "Le point de départ", "The starting point")}
-            title={pick(l, "S'accomplir, c'est un tout", "Flourishing is a whole")}
+            title={pick(l, "La sexualité ne se vit jamais seule", "Sexuality is never lived in isolation")}
           >
             <p>
               {pick(
                 l,
-                "S'accomplir pleinement, ce n'est pas régler un seul problème isolé. C'est un ensemble : le sentimental, le professionnel, le sexuel. Très souvent, ce qui se joue dans la sexualité n'est pas la cause mais la conséquence. La vraie racine est ailleurs.",
-                "Fully flourishing isn't about fixing one isolated problem. It's a whole: emotional life, work, sexuality. Very often, what plays out in sexuality isn't the cause but the consequence. The real root lies elsewhere.",
+                "Ce qui se joue dans votre intimité n'est presque jamais un problème isolé. Très souvent, un blocage sexuel n'est pas la cause : c'est la conséquence de quelque chose de plus profond, dans votre histoire, vos émotions ou votre rapport à vous-même.",
+                "What plays out in your intimacy is almost never an isolated problem. Very often, a sexual block isn't the cause: it's the consequence of something deeper, in your history, your emotions or your relationship with yourself.",
               )}
             </p>
             <p>
               {pick(
                 l,
-                "C'est pour ça que je combine trois outils. Non pas pour les empiler, mais pour créer une réelle synergie et vous permettre de vous réaligner vous-même.",
-                "That's why I combine three tools. Not to stack them, but to create a real synergy so you can realign yourself.",
+                "Mon point de départ, c'est donc vous, dans votre ensemble. On regarde ce qui pèse vraiment, pour agir à la racine et pas seulement sur le symptôme.",
+                "So my starting point is you, as a whole. We look at what truly weighs on you, to act at the root and not only on the symptom.",
               )}
             </p>
           </SplitSection>

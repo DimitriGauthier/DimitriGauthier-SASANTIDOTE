@@ -730,11 +730,24 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
           <section>
             <h2 className="mb-2 font-serif text-2xl font-medium text-foreground sm:text-3xl">{t.tunnel.chooseSlot}</h2>
             {service ? (
-              <p className="mb-6 text-sm text-muted-foreground">
+              <p className="mb-4 text-sm text-muted-foreground">
                 {pick(locale, service.title, service.title_en)} · {formatDuration(service.duration_min, locale)} ·{" "}
                 <span className="font-medium text-foreground">{formatPrice(service.price_cents, service.currency, locale)}</span>
               </p>
             ) : null}
+
+            {/* Barre d'action « collante » en haut : « Valider le créneau » reste
+                toujours visible, sans avoir à faire défiler jusqu'en bas. */}
+            <div className="sticky top-0 z-20 -mx-4 mb-5 flex items-center justify-between gap-3 border-b border-border/50 bg-background/92 px-4 py-3 backdrop-blur-sm sm:top-2 sm:mx-0 sm:rounded-2xl sm:border sm:shadow-card">
+              <button type="button" onClick={goBack} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
+                <ArrowLeft className="h-4 w-4" /> {t.common.back}
+              </button>
+              <button type="button" onClick={pay} disabled={submitting || !selectedSlot} className={`${primaryBtn} disabled:opacity-50`}>
+                {submitting ? t.common.loading : t.tunnel.pay}
+              </button>
+            </div>
+
+            {error ? <p className="mb-4 text-sm text-destructive">{error}</p> : null}
 
             {loadingSlots ? (
               <p className="text-sm text-muted-foreground">{t.common.loading}</p>
@@ -767,16 +780,6 @@ export default function BookingTunnel({ locale, services, topics, questions }: P
             )}
 
             <p className="mt-6 text-xs text-muted-foreground">{t.tunnel.holdInfo}</p>
-            {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-
-            <div className="mt-8 flex items-center justify-between">
-              <button type="button" onClick={goBack} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary">
-                <ArrowLeft className="h-4 w-4" /> {t.common.back}
-              </button>
-              <button type="button" onClick={pay} disabled={submitting || !selectedSlot} className={`${primaryBtn} disabled:opacity-50`}>
-                {submitting ? t.common.loading : t.tunnel.pay}
-              </button>
-            </div>
           </section>
         ) : null}
       </div>
